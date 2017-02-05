@@ -1,0 +1,21 @@
+div[data-tinymce] {
+   height: initial;
+   max-height: 400px;
+   overflow-y: auto;
+   overflow-x: hidden;
+ }
+
+div[data-tinymce-lite] {
+  height: initial;
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.single-dropzone {
+  height: 50px;
+}
+
+.headline_image_preview {
+  width: 80%;
+}

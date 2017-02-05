@@ -1,0 +1,59 @@
+{% extends 'General/base.html' %}
+{% block content %}
+
+<div id="home-slider" class="owl-carousel">
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+  <div><img src="/assets/images/sample.jpg" /></div>
+</div>
+
+<div class="content-wrapper">
+
+
+    <div class="container">
+
+        <div class="content">
+            
+
+            <div class="zoo-featured container-trans">
+                
+                <div class="page-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-723.5 4015.359 297.383 93.922">
+                        <path class="dark-green" d="M-54.242-43.563,243.141-56.852l-9.4,93.922h-282.2Z" transform="translate(-669.258 4072.211)"/>
+                    </svg>
+                    <h1 class="iron"><span class="wrap">Zoo features<span class="underline white"></span></span></h1>
+                </div>
+                
+                <div class="item-1 item">
+                    <div class="image brown">
+                        <div class="img" style="background-image:url(/assets/images/sample.jpg)"></div>
+                    </div>
+                    <a href="#" class="big-button brown border-dark-green moon"><span class="silhouette">></span>Gift packages</a>
+                </div>
+                <div class="item-2 item">
+                    <div class="image red">
+                        <div class="img" style="background-image:url(/assets/images/sample.jpg)"></div>
+                    </div>
+                    <a href="#" class="big-button red border-dark-green moon"><span class="silhouette">></span>Animal experiences</a>
+                </div>
+                <div class="item-3 item">
+                    <div class="image blue">
+                        <div class="img" style="background-image:url(/assets/images/sample.jpg)"></div>
+                    </div>
+                    <a href="#" class="big-button blue border-dark-green moon"><span class="silhouette">></span>Play & adventure</a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% include 'General/partials/follow-us.html'%}
+
+{% endblock content %}

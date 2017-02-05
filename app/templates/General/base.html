@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'General/metahead.html' %}
+    {% block head %}{% endblock %}
+    {% include 'General/partials/onload.html' %}
+</head>
+<body class="{% for c in page.body_class %}{{c}} {% endfor %}">
+{% include 'General/partials/modal.html' %}
+{% include 'General/partials/header.html' %}
+{% include 'General/partials/menu.html' %}
+
+    {% block title %}{% endblock %}
+    {% block content %}{% endblock %}
+    {% block footer %}{% endblock %}
+
+{#
+    {% if page.isAuthed %}
+    {% include 'General/partials/frontadmin.html' %}
+    {% endif %}
+#}
+{% include 'General/partials/footer.html' %}
+{% include 'General/partials/livereload.html' %}
+{% include 'General/partials/onready.html' %}
+
+</body>
+</html>

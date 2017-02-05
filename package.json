@@ -1,7 +1,7 @@
 {
-  "name": "music",
+  "name": "album",
   "version": "1.0.0",
-  "description": "Music",
+  "description": "Album CMS on FatFree",
   "main": "GruntFile.js",
   "directories": {
     "test": "tests"
@@ -25,12 +25,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/minde/music.git"
+    "url": "https://github.com/MindeVieras/album.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/minde/music/issues"
+    "url": "https://github.com/MindeVieras/album/issues"
   },
-  "homepage": "https://gitlab.com/minde/music#README"
+  "homepage": "https://github.com/MindeVieras/album#README"
 }

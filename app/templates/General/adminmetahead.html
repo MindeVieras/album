@@ -1,0 +1,23 @@
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{header.title|raw }}</title>
+{% if page.environment != 'production' %}
+<meta name="robots" content="noindex, nofollow" />
+{% endif %}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="application-name" content="Album CMS" />
+<meta property="title" content="{{page.meta.title}}" />
+<meta name="description" content="{{page.meta.desc}}"  />
+
+{% if header.canonical is defined %}
+<link rel="canonical" href="{{header.canonical}}"/>
+{% endif %}
+<link rel="shortcut icon" href="{{ page.base_url }}/favicon.ico" type="image/x-icon">
+<link rel="icon" href="{{ page.base_url }}/favicon.ico" type="image/x-icon">
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" type="text/css" href="{{ page.base_url }}/assets/css/albumasadmin.min.css">
+
+<script src="{{ page.base_url }}/assets/js/albumas.js" type="text/javascript"></script>
+<script src="{{ page.base_url }}/assets/js/albumasadmin.js" type="text/javascript"></script>

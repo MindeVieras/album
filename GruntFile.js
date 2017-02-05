@@ -22,10 +22,10 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                    './assets/css/music.min.css': [
+                    './assets/css/albumas.min.css': [
                         './build/css/compiled.sass.css'
                     ],
-                    './assets/css/musicadmin.min.css': [
+                    './assets/css/albumasadmin.min.css': [
                         "./build/css/admin.sass.css",
                         './bower_components/bootstrap/dist/css/bootstrap.css',
                     ]
@@ -36,13 +36,13 @@ module.exports = function(grunt) {
         uglify: {
             dev: {
                 files: {
-                    './assets/js/music.js': [
+                    './assets/js/albumas.js': [
                         './build/js/_bower.js',
                         './app/assets/javascript/3rdParty/*.js',
-                        './app/assets/javascript/Music/**/*.js'
+                        './app/assets/javascript/Albumas/**/*.js'
                     ],
-                    './assets/js/musicadmin.js': [
-                        './app/assets/javascript/MusicAdmin/**/*.js',
+                    './assets/js/albumasadmin.js': [
+                        './app/assets/javascript/AlbumasAdmin/**/*.js',
                         './bower_components/tinymce/themes/inlite/theme.js',
                         './bower_components/tinymce/plugins/table/plugin.js',
                         './bower_components/tinymce/plugins/image/plugin.js',
@@ -62,8 +62,8 @@ module.exports = function(grunt) {
             },
             prod: {
                 files: {
-                    './assets/js/music.min.js': [
-                        './assets/js/music.js'
+                    './assets/js/albumas.min.js': [
+                        './assets/js/albumas.js'
                     ]
                 },
                 options: {
@@ -81,8 +81,8 @@ module.exports = function(grunt) {
                 separator: ';'
             },
             dist: {
-                src: ['./app/assets/javascript/first.js', './build/js/_bower.js','./build/js/music.js' ],
-                dest: './build/js/music.min.js'
+                src: ['./app/assets/javascript/first.js', './build/js/_bower.js','./build/js/albumas.js' ],
+                dest: './build/js/albumas.min.js'
             }
         },
         bower_concat: {

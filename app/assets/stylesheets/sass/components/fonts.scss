@@ -1,0 +1,40 @@
+@font-face {
+	font-family: 'Helvetica-nz';
+  src: url('font/helvetica.eot');
+  src: url('font/helvetica.eot#iefix') format('embedded-opentype'),
+  url('font/helvetica.ttf') format('truetype'),
+  url('font/helvetica.woff') format('woff'),
+  url('font/helvetica.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Iron';
+  src: url('font/iron-brine.eot');
+  src: url('font/iron-brine.eot#iefix') format('embedded-opentype'),
+  url('font/iron-brine.ttf') format('truetype'),
+  url('font/iron-brine.woff') format('woff'),
+  url('font/iron-brine.svg') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Moon-flower';
+  src: url('font/moon-flower-bold.eot');
+  src: url('font/moon-flower-bold.eot#iefix') format('embedded-opentype'),
+  url('font/moon-flower-bold.ttf') format('truetype'),
+  url('font/moon-flower-bold.woff') format('woff'),
+  url('font/moon-flower-bold.svg') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
+[class^="iron"], [class*=" iron"] {
+	font-family: 'Iron' !important;
+}
+
+[class^="moon"], [class*=" moon"] {
+	font-family: 'Moon-flower' !important;
+}

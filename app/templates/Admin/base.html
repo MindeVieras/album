@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'General/adminmetahead.html' %}
+
+    <link rel="stylesheet" href="{{ page.base_url }}/assets/css/musicadmin.min.css">
+    <script src="{{ page.base_url }}/assets/js/musicadmin.js" type="text/javascript"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+{% include 'General/partials/modal.html' %}
+{% include 'General/partials/dropzone-preview.html' %}
+{% include 'Admin/menu.html' %}
+
+<div id="main-content">
+    {% block title %}{% endblock %}
+    {% block content %}{% endblock %}
+</div>
+<div id="main-content-footer">
+    {% block footer %}{% endblock %}
+</div>
+{% include 'General/partials/livereload.html' %}
+{% include 'General/partials/onready.html' %}
+</body>
+</html>

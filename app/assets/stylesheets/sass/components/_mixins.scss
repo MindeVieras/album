@@ -1,0 +1,124 @@
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie); //IE8
+}
+@mixin linearGradient($top, $bottom){
+    background: $top; /* Old browsers */
+    background: -moz-linear-gradient(top, $top 0%, $bottom 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$top), color-stop(100%,$bottom)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, $top 0%,$bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, $top 0%,$bottom 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, $top 0%,$bottom 100%); /* IE10+ */
+    background: linear-gradient(to bottom, $top 0%,$bottom 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+@mixin rotate($angle) {
+	-webkit-transform: rotate($angle + deg);
+	-moz-transform: rotate($angle + deg);
+	-ms-transform: rotate($angle + deg);
+	transform: rotate($angle + deg);
+}
+@mixin origin($val1, $val2) {
+	-webkit-transform-origin: $val1 $val2;
+	-moz-transform-origin: $val1 $val2;
+  -ms-transform-origin: $val1 $val2;
+  transform-origin: $val1 $val2;
+}
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
+%clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+@mixin vertical-align($position) {
+  position: $position;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+@mixin box-sizing() {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+@keyframes anticlockwise {
+  0% {
+    transform: rotate(0deg);
+		transform-origin: 50% 50%;
+	}
+  100% {
+    transform: rotate(-360deg);
+		transform-origin: 50% 50%;
+	}
+}
+@mixin scale($number) {
+	-webkit-transform: scale($number);
+	-moz-transform: scale($number);
+	-ms-transform: scale($number);
+	transform: scale($number);
+}
+@keyframes float {
+  0% {
+    -webkit-transform: translateY(0);
+  	-moz-transform: translateY(0);
+  	-ms-transform: translateY(0);
+  	transform: translateY(0);
+	}
+  50% {
+    -webkit-transform: translateY(200%);
+  	-moz-transform: translateY(200%);
+  	-ms-transform: translateY(200%);
+  	transform: translateY(200%);
+	}
+  100% {
+    -webkit-transform: translateY(0);
+  	-moz-transform: translateY(0);
+  	-ms-transform: translateY(0);
+  	transform: translateY(0);
+	}
+}
+
+$white: #ffffff;
+$black: #000000;
+$grey: #95989a;
+$green: #9bc31c;
+$dark-green: #1c8370;
+$orange: #fb8c00;
+$blue: #0593a4;
+$light-blue: #6EC6D8;
+$brown: #7d801b;
+$red: #a9230c;

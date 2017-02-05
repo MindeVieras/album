@@ -1,0 +1,35 @@
+{% extends 'Admin/base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Admin User Manager</h1>
+    <br>
+    <table class="table table-hover table-bordered table-condensed .table-responsive">
+        <thead>
+        <tr>
+            <th>Username</th>
+            <th>Display Name</th>
+            <th>Access Level</th>
+            <th>Last Login</th>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+        <tr {% if row.active == 0 %} class="text-muted"{% endif %}>
+            <td>{{row.username}}</td>
+            <td>{{row.display_name}}</td>
+            <td>
+                {% if row.access_level == 100 %}Administrator{% endif %}
+                {% if row.access_level == 50 %}Editor{% endif %}
+            </td>
+            <td><time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time></td>
+            <td>
+                <button type="button" class="btn btn-primary pull-right"  data-remote="/admin/user/edit/id/{{row.id}}">Edit</button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary " data-remote="/admin/user/add">Add User</button>
+</div>
+{% endblock content%}
