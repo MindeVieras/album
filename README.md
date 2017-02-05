@@ -1,3 +1,3 @@
-# album
+# Album
 
 album on FatFree

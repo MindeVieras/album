@@ -1,0 +1,37 @@
+{
+  "name": "music",
+  "authors": [
+    "Minde Vieras <minde@mindelis.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery-timeago": "timeago#^1.5.3",
+    "uuid.js": "^3.3.0",
+    "ladda-bootstrap": "^0.1.0",
+    "moment": "^2.14.1",
+    "jquery": "^3.1.0",
+    "tinymce": "^4.4.3",
+    "jquery-typewatch": "^2.2.2",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.42",
+    "dropzone": "^4.3.0",
+    "tinymce-placeholder-attribute": "^0.1.6",
+    "bootstrap-switch": "^3.3.2",
+    "owl.carousel": "owl-carousel2#^2.2.0",
+    "jquery-ui": "^1.12.1"
+  },
+  "resolutions": {
+    "jquery": "^3.1.0"
+  }
+}
