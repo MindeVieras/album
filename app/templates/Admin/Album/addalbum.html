@@ -1,0 +1,165 @@
+{% extends 'General/modalbase.html' %}
+{% set modaltitle = 'Add a new Album' %}
+{% block content %}
+<div class="modal-body">
+
+    <form id="add_album">
+
+        <div class="form-group">
+            <label for="album_name">Name</label>
+            <input type="text" class="form-control" id="album_name" name ="album_name" placeholder="Name...">
+            <small class="form-text text-muted">URL: {{page.base_url}}<span class="slugholder">{{item.url}}</span></small>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="start_date">Start Date</label>
+                <div class='input-group date' id='start_date'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-group col-xs-6">
+                <label for="end_date">End Date</label>
+                <div class='input-group date' id='end_date'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+            <label for="album_images">Photos</label>
+            <div class="progress">
+                <div class="progress-bar album-photos-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+            </div>
+            </div>
+            <div class="dropzone-previews row"></div>
+            <div class="form-control album-dropzone" data-image="" id="album_images"><span class="dz-message">Drop file or click here here</span></div>
+        </div>
+
+        <div id="img_urls"></div>
+        <div id="album_markers"></div>
+
+        <label for="location_name">Location</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
+            <span class="input-group-btn">
+                <button class="btn btn-default" id="geocode_location_name" type="button">Find</button>
+            </span>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="album_map"></div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="album_body">Body</label>
+            <div class="form-control" data-tinymce id="album_body"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="private">Private?</label>
+            <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" checked>
+        </div>
+
+        <script type="text/javascript">
+
+            $(function () {
+                $('#start_date').datetimepicker({
+                        format: 'DD-MM-YYYY, HH:mm:ss',
+                        date: moment()
+                    }
+                );
+                $('#end_date').datetimepicker({
+                        format: 'DD-MM-YYYY, HH:mm:ss',
+                        date: moment(),
+                        useCurrent: false
+                    }
+                );
+
+                $('#start_date').on('dp.change', function (e) {
+                    $('#end_date').data("DateTimePicker").minDate(e.date);
+                });
+                $("#end_date").on("dp.change", function (e) {
+                    $('#start_date').data("DateTimePicker").maxDate(e.date);
+                });
+
+
+                $('.album-dropzone').dropzone(
+                    {
+                        init: function() {
+                            this.on("addedfile", function(file) {
+                              console.log('added');
+                              //$('.single-dropzone').hide();
+                            });
+                            this.on("success", function(file, response) {
+                              var field = $('#img_urls');
+                              //$('.album-dropzone').attr('data-image', response.location);
+                              field.append('<input name="img_url[]" class="hidden img_url" value="'+response.location+'">');
+
+                            });
+                            this.on("removedfile", function(file) {
+                                //$('.single-dropzone').show();
+                                console.log(file);
+                                $('.single-dropzone').attr('data-image', '');
+                            });
+                            this.on("maxfilesreached", function(file) {
+                              //this.removeFile(file);
+                            });
+              
+                            this.on("totaluploadprogress", function (progress) {
+                              console.log(parseInt(progress));
+                              $('.album-photos-progress').attr('aria-valuenow', progress).css('width', progress+'%');
+                            });
+
+                            this.on("error", function(file, message) { 
+                              console.log(message);
+                              this.removeFile(file); 
+                            });
+
+                        },
+                        url:'/api/image',
+                        uploadMoultiple: true,
+                        maxFiles: 1000,
+                        headers: { 'Accept': "*/*" },
+                        previewsContainer: '.dropzone-previews',
+                        previewTemplate: $('.dz-preview').html(),
+                        addRemoveLinks: true
+                    }
+                );
+
+
+            });
+
+        </script>
+<!-- 
+        <div class="form-group">
+            <label for="album_artist">Artist</label>
+            <select class="form-control" id="album_artist">
+                {% for a in artists %}
+                <option value="{{a.id}}">{{a.artist_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+ -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&callback=PhotobumAdmin.createAlbumMap"
+    async defer></script>
+    </form>
+</div>
+{% endblock content %}
+{% block footer %}
+<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+<button type="button" class="btn btn-success" data-function="PhotobumAdmin.addAlbum">Save</button>
+{% endblock footer %}

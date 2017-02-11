@@ -6,9 +6,10 @@ module.exports = function(grunt) {
     //Initializing the configuration object
     grunt.initConfig({
         jshint: {
-            all: ['Gruntfile.js', './app/assets/javascript/**/*.js'],
+            all: ['./app/assets/javascript/**/*.js'],
             options: {
-                force: true
+                force: true,
+                shadow: true
             }
         },
         sass: {
@@ -22,10 +23,10 @@ module.exports = function(grunt) {
         cssmin: {
             combine: {
                 files: {
-                    './assets/css/albumas.min.css': [
+                    './assets/css/photobum.min.css': [
                         './build/css/compiled.sass.css'
                     ],
-                    './assets/css/albumasadmin.min.css': [
+                    './assets/css/photobumadmin.min.css': [
                         "./build/css/admin.sass.css",
                         './bower_components/bootstrap/dist/css/bootstrap.css',
                     ]
@@ -36,13 +37,13 @@ module.exports = function(grunt) {
         uglify: {
             dev: {
                 files: {
-                    './assets/js/albumas.js': [
+                    './assets/js/photobum.js': [
                         './build/js/_bower.js',
                         './app/assets/javascript/3rdParty/*.js',
-                        './app/assets/javascript/Albumas/**/*.js'
+                        './app/assets/javascript/Photobum/**/*.js'
                     ],
-                    './assets/js/albumasadmin.js': [
-                        './app/assets/javascript/AlbumasAdmin/**/*.js',
+                    './assets/js/photobumadmin.js': [
+                        './app/assets/javascript/PhotobumAdmin/**/*.js',
                         './bower_components/tinymce/themes/inlite/theme.js',
                         './bower_components/tinymce/plugins/table/plugin.js',
                         './bower_components/tinymce/plugins/image/plugin.js',
@@ -62,8 +63,8 @@ module.exports = function(grunt) {
             },
             prod: {
                 files: {
-                    './assets/js/albumas.min.js': [
-                        './assets/js/albumas.js'
+                    './assets/js/photobum.min.js': [
+                        './assets/js/photobum.js'
                     ]
                 },
                 options: {
@@ -81,8 +82,8 @@ module.exports = function(grunt) {
                 separator: ';'
             },
             dist: {
-                src: ['./app/assets/javascript/first.js', './build/js/_bower.js','./build/js/albumas.js' ],
-                dest: './build/js/albumas.min.js'
+                src: ['./app/assets/javascript/first.js', './build/js/_bower.js','./build/js/photobum.js' ],
+                dest: './build/js/photobum.min.js'
             }
         },
         bower_concat: {
@@ -121,6 +122,43 @@ module.exports = function(grunt) {
                 configuration: 'phpunit.xml'
             }
         },
+        'ftp-deploy': {
+            build: {
+            auth: {
+              host: '194.135.87.101',
+              port: 21,
+              authKey: 'key1'
+            },
+            src: '/Users/mindevieras/sites/album/',
+            dest: '/public_html/album',
+            exclusions: [
+                '/Users/mindevieras/sites/album/**/.DS_Store',
+                '/Users/mindevieras/sites/album/**/Thumbs.db',
+                '/Users/mindevieras/sites/album/.git',
+                '/Users/mindevieras/sites/album/app/assets',
+                '/Users/mindevieras/sites/album/.sass-cache',
+                '/Users/mindevieras/sites/album/bower_components',
+                '/Users/mindevieras/sites/album/build',
+                '/Users/mindevieras/sites/album/uploads/**',
+                '/Users/mindevieras/sites/album/media/**',
+                '/Users/mindevieras/sites/album/node_modules',
+                '/Users/mindevieras/sites/album/vendor',
+                '/Users/mindevieras/sites/album/.ftppass',
+                '/Users/mindevieras/sites/album/.gitignore',
+                '/Users/mindevieras/sites/album/bower.json',
+                '/Users/mindevieras/sites/album/composer.json',
+                '/Users/mindevieras/sites/album/composer.lock',
+                '/Users/mindevieras/sites/album/GruntFile.js',
+                '/Users/mindevieras/sites/album/LICENSE',
+                '/Users/mindevieras/sites/album/LocalConfig.php',
+                '/Users/mindevieras/sites/album/LocalConfig.sample.php',
+                '/Users/mindevieras/sites/album/package.json',
+                '/Users/mindevieras/sites/album/README.md',
+                '/Users/mindevieras/sites/album/app/assets/js/photobum.js.map',
+                '/Users/mindevieras/sites/album/app/assets/js/photobumadmin.js.map',
+                ]
+            }
+        },
         watch: {
             js: {
                 files: ['./app/assets/javascript/**/*.js', './app/templates/**/*.html'],
@@ -141,7 +179,6 @@ module.exports = function(grunt) {
             }
         }
     });
-
     // Task definition
     grunt.task.run('notify_hooks');
 
@@ -158,13 +195,18 @@ module.exports = function(grunt) {
         'cssmin'
     ]);
 
+    grunt.registerTask('hint', [
+        'jshint'
+    ]);
+
     grunt.registerTask('deploy', [
         'bower_concat',
         'uglify:dev',
         'uglify:prod',
         'concat',
         'sass',
-        'cssmin'
+        'cssmin',
+        'ftp-deploy'
     ]);
 
     grunt.registerTask('metrics', [

@@ -1,0 +1,40 @@
+{% extends 'Admin/base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Albums Manager</h1>
+    <br>
+    <table class="table table-hover table-bordered table-condensed table-responsive" data-table="true">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Media</th>
+            <th>Created</th>
+            <td></td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+        <tr {% if row.private == 0 %} class="text-muted"{% endif %}>
+            {% set media = row.media %}
+            <td>{{row.name}}</td>
+
+            <td>
+            {% for m in media %}
+                <img width="30" src="{{m}}">
+            {% endfor %}
+            </td>
+            <td><time data-no-date="Never" data-utc="{{row.created}}" class="localdate timeago" datetime="{{row.created}}"></time></td>
+            <td>
+                <button type="button" class="btn btn-primary pull-right" data-size="wide" data-remote="/admin/albums/edit/id/{{row.id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger pull-right" data-id="{{row.id}}" data-name="{{row.name}}" data-function="PhotobumAdmin.deleteAlbum"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <a type="button" class="btn btn-default pull-right" rel="noopener noreferrer" target="_blank" href="{{row.url}}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary " data-size="wide" data-remote="/admin/albums/add">Add Album</button>
+
+</div>
+
+{% endblock content%}

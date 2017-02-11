@@ -4,7 +4,7 @@
 $loader = require 'vendor/autoload.php';
 $loader->add('', 'app/classes');
 
-\Albumas\Config::bootstrap();
+\Photobum\Config::bootstrap();
 
 
 
@@ -16,7 +16,7 @@ $f3->route(
         if ($f3->get('VERB')=='post') {
             ddd($_POST);
         }
-        $controller = sprintf('\Albumas\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
+        $controller = sprintf('\Photobum\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
         loadController($controller);
     }
 );
@@ -24,7 +24,7 @@ $f3->route(
 $f3->route(
     'GET|POST|PUT|DELETE /admin/@controller/@method',
     function ($f3) {
-        $controller = sprintf('\Albumas\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
+        $controller = sprintf('\Photobum\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
         $method = $f3->get('PARAMS.method');
         loadController($controller, $method);
     }
@@ -33,7 +33,7 @@ $f3->route(
 $f3->route(
     'GET|POST|PUT|DELETE /admin/@controller/@method/*',
     function ($f3) {
-        $controller = sprintf('\Albumas\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
+        $controller = sprintf('\Photobum\Admin\%s', ucfirst($f3->get('PARAMS.controller')));
         $method = $f3->get('PARAMS.method');
         $paramStr = str_replace(sprintf('/admin2/%s/%s/', $f3->get('PARAMS.controller'), $f3->get('PARAMS.method')), '', $f3->get('PATH'));
         $params = explode('/', $paramStr);
@@ -44,7 +44,7 @@ $f3->route(
 $f3->route(
     'GET /admin',
     function () {
-        loadController('\Albumas\Admin\Admin', 'home');
+        loadController('\Photobum\Admin\Admin', 'home');
     }
 );
 
