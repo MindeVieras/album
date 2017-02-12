@@ -1,7 +1,34 @@
 {% extends 'Admin/base.html' %}
 {% block content %}
+
+{% set dir_status = dir_status %}
+
 <div class="container">
     <h1>Reports</h1>
-</div>
+    <br>
+    <table class="table table-bordered table-condensed table-responsive" data-table="true">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Message</th>
+        </tr>
+        </thead>
+        <tbody>
 
+            <tr>
+                <td>Directory status</td>
+                <td>
+                    <ul class="list-group">
+                    {% for d in dir_status %}
+                        <li class="list-group-item list-group-item-{% if d.ack == 'ok' %}success{% else %}danger{% endif %}">
+                            {{d.name}}<span class="pull-right">{{d.status}}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
 {% endblock content%}
