@@ -17,6 +17,7 @@ RewriteCond %{REQUEST_URI} !^/favicon.ico
 RewriteCond %{REQUEST_URI} !^/sitemap
 RewriteCond %{REQUEST_URI} !^/admin
 RewriteCond %{REQUEST_URI} !^/media
+RewriteCond %{REQUEST_URI} !^/uploads
 RewriteCond %{REQUEST_URI} !^/assets
 RewriteCond %{REQUEST_URI} !^/app/assets
 RewriteCond %{REQUEST_URI} !^/robots\.txt

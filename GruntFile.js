@@ -135,16 +135,28 @@ module.exports = function(grunt) {
                 '/Users/mindevieras/sites/album/**/.DS_Store',
                 '/Users/mindevieras/sites/album/**/Thumbs.db',
                 '/Users/mindevieras/sites/album/.git',
-                '/Users/mindevieras/sites/album/app/assets',
                 '/Users/mindevieras/sites/album/.sass-cache',
+
+                '/Users/mindevieras/sites/album/app/assets',
+
+                '/Users/mindevieras/sites/album/app/assets/images/**',
+                '/Users/mindevieras/sites/album/app/assets/fonts/**',
+                '/Users/mindevieras/sites/album/app/assets/deps/**',
+                '/Users/mindevieras/sites/album/assets/js/photobum.js.map',
+                '/Users/mindevieras/sites/album/assets/js/photobumadmin.js.map',
+
                 '/Users/mindevieras/sites/album/bower_components',
+                '/Users/mindevieras/sites/album/node_modules',
+
                 '/Users/mindevieras/sites/album/build',
                 '/Users/mindevieras/sites/album/uploads/**',
-                '/Users/mindevieras/sites/album/media/**',
-                '/Users/mindevieras/sites/album/node_modules',
+                '/Users/mindevieras/sites/album/media/albums/**',
+                '/Users/mindevieras/sites/album/media/styles/**',
                 '/Users/mindevieras/sites/album/vendor',
+
                 '/Users/mindevieras/sites/album/.ftppass',
                 '/Users/mindevieras/sites/album/.gitignore',
+                '/Users/mindevieras/sites/album/npm-debug.log',
                 '/Users/mindevieras/sites/album/bower.json',
                 '/Users/mindevieras/sites/album/composer.json',
                 '/Users/mindevieras/sites/album/composer.lock',
@@ -154,8 +166,6 @@ module.exports = function(grunt) {
                 '/Users/mindevieras/sites/album/LocalConfig.sample.php',
                 '/Users/mindevieras/sites/album/package.json',
                 '/Users/mindevieras/sites/album/README.md',
-                '/Users/mindevieras/sites/album/app/assets/js/photobum.js.map',
-                '/Users/mindevieras/sites/album/app/assets/js/photobumadmin.js.map',
                 ]
             }
         },

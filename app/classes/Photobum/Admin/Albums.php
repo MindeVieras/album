@@ -164,11 +164,6 @@ class Albums extends Admin{
         General::flushJsonResponse([ack=>'Error', 'msg'=>'Could not delete item']);
     }
 
-    private function getLocations($id){
-        $locations = $this->db->exec("SELECT id, lat, lng from locations WHERE album_id = '$id'");
-        return $locations;
-    }
-
     private function getAlbums(){
 
         $albums = $this->db->exec('SELECT 
@@ -184,14 +179,7 @@ class Albums extends Admin{
             $d['name'] = $a['album_name'];
             $d['url'] = $a['url'];
             $d['created'] = $a['created'];
-
-            $media = $this->getMedia($a['id']);
-            $i = 0;
-            foreach ($media as $m) {
-                $medi[] = $m['file_url'];
-                if (++$i == 4) break;
-            }
-            $d['media'] = $medi;
+            $d['media'] = $this->getMedia($a['id']);
 
             $data[] = $d;
         }
@@ -200,8 +188,20 @@ class Albums extends Admin{
     }
 
     private function getMedia($id){
+
         $media = $this->db->exec("SELECT file_url from media WHERE album_id = '$id'");
-        return $media;
+        
+        $i = 0;
+        foreach ($media as $m) {
+            $medi[] = $m['file_url'];
+            if (++$i == 3) break;
+        }
+        return $medi;
+    }
+
+    private function getLocations($id){
+        $locations = $this->db->exec("SELECT id, lat, lng from locations WHERE album_id = '$id'");
+        return $locations;
     }
 
     // private function getArtists($personalise = false)

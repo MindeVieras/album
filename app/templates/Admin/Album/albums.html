@@ -26,7 +26,7 @@
             <td><time data-no-date="Never" data-utc="{{row.created}}" class="localdate timeago" datetime="{{row.created}}"></time></td>
             <td>
                 <button type="button" class="btn btn-primary pull-right" data-size="wide" data-remote="/admin/albums/edit/id/{{row.id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                <button type="button" class="btn btn-danger pull-right" data-id="{{row.id}}" data-name="{{row.name}}" data-function="PhotobumAdmin.deleteAlbum"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-danger pull-right" data-id="{{row.id}}" data-url="{{row.url}}" data-name="{{row.name}}" data-function="PhotobumAdmin.deleteAlbum"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <a type="button" class="btn btn-default pull-right" rel="noopener noreferrer" target="_blank" href="{{row.url}}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
             </td>
         </tr>

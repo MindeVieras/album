@@ -19,7 +19,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     <li><a style="pointer-events:none;" href="{{page.approot}}pfcclean">No tools yet</a></li>
-                    <li><a href="{{page.approot}}import">Importer</a></li>
+                    <li><a href="{{page.approot}}reports">Reports</a></li>
                     {% if page.user.access_level >= 100 %}
                         <li><a href="{{page.approot}}pagemeta">Page Meta</a></li>
                     {% endif %}
@@ -27,7 +27,8 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/admin/logout">Logout</a></li>
+            <li><a href="/admin/settings"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
+            <li><a href="/admin/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
         </ul>
         <p class="navbar-text navbar-right ">Signed in as {{page.user.display_name}}</p>
     </div>

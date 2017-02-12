@@ -86,6 +86,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
 };
 
 PhotobumAdmin.deleteAlbum = function (info, btn) {
+    console.log(info);
     Photobum.dialog({
         message: 'Comfirm deletion of ' + info.name + '<br/>You know you can just unpublish from the edit screen right?',
         title: "<i class=\"foreground news fa fa-exclamation-circle pad-right\"></i>Warning",
