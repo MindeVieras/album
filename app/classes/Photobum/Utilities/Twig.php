@@ -33,16 +33,6 @@ class Twig extends \Twig_Environment
         parent::__construct($loader, $laSettings);
         $this->addExtension(new \Twig_Extensions_Extension_Text());
         $this->addGlobal('on_ready', null);
-//        if ($debug) {
-//            $func = new \Twig_SimpleFunction('kint', array('\Kint', 'dump'));
-//        } else {
-//            $func = new \Twig_SimpleFunction(
-//                'kint',
-//                function () {
-//                    return;
-//                }
-//            );
-//        }
 
         $func = new \Twig_SimpleFunction(
             'img',
@@ -54,6 +44,23 @@ class Twig extends \Twig_Environment
             }
         );
         $this->addFunction($func);
+        
+        $func = new \Twig_SimpleFunction(
+            'get_ini',
+            function ($name) {
+                $ini = ini_get($name);
+                return $ini;
+            }
+        );
+        $this->addFunction($func);
+        
+        // $func = new \Twig_SimpleFunction(
+        //     'ini_set',
+        //     function ($name, $val) {
+        //         ini_set($name, $val);
+        //     }
+        // );
+        // $this->addFunction($func);
 
         $func = new \Twig_SimpleFunction(
             'd',
@@ -63,6 +70,8 @@ class Twig extends \Twig_Environment
                 }
             }
         );
+        $this->addFunction($func);
+
         $func = new \Twig_SimpleFunction(
             'ddd',
             function ($var) {

@@ -1,12 +1,9 @@
 <?php
 
-
 $loader = require 'vendor/autoload.php';
 $loader->add('', 'app/classes');
 
 \Photobum\Config::bootstrap();
-
-
 
 $f3 = \Base::instance();
 
