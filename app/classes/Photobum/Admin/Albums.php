@@ -91,7 +91,7 @@ class Albums extends Admin{
 
                 // save image urls
                 $ds = DIRECTORY_SEPARATOR;
-                $date = new DateTime($data['start_date']);
+                $date = new DateTime($item['start_date']);
                 $year = $date->format('Y');
                 $name = \Web::instance()->slug($item['name']);
                 foreach ($item['album_images'] as $val) {
