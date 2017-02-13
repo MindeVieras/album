@@ -13,5 +13,6 @@ $f3->map('/api/test', '\Photobum\API\Test');
 $f3->route('GET /api/utilities/generateslug', '\Photobum\API\Utilities->generateSlug');
 $f3->route('POST /api/utilities/get-file-size', '\Photobum\API\Utilities->getFileSize');
 $f3->route('POST /api/utilities/rename-files', '\Photobum\API\Utilities->renameFiles');
+$f3->route('POST /api/utilities/delete-files', '\Photobum\API\Utilities->deleteAlbumDir');
 $f3->route('POST /api/utilities/get-file-size-remote', '\Photobum\API\Utilities->getFileSizeRemote');
 $f3->run();

@@ -175,8 +175,15 @@ class Albums extends Admin{
                                             ORDER BY created DESC LIMIT 10');
 
         foreach ($albums as $a) {
+
+            $ds = DIRECTORY_SEPARATOR;
+            $date = new DateTime($a['start_date']);
+            $year = $date->format('Y');
+            $slug = \Web::instance()->slug($a['album_name']);
+
             $d['id'] = $a['id'];
             $d['name'] = $a['album_name'];
+            $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$slug;
             $d['url'] = $a['url'];
             $d['created'] = $a['created'];
             $d['media'] = $this->getMedia($a['id']);

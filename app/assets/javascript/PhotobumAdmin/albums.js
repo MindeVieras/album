@@ -74,7 +74,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
                 Photobum.closeModal(true);
             }
             else {
-                $('.alertholder').text(data.res).addClass('alert').addClass('alert-danger');
+                $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');
                 Photobum.initView();
                 Photobum.scrollToTopOfModal();
             }
@@ -102,6 +102,7 @@ PhotobumAdmin.deleteAlbum = function (info, btn) {
                 dataFunction: "PhotobumAdmin.doDeleteAlbum",
                 additionalData: {
                     item: info.id,
+                    dir: info.dir,
                     ladda: true
                 },
                 dismiss: false
@@ -117,6 +118,22 @@ PhotobumAdmin.doDeleteAlbum = function (info, btn) {
         data: JSON.stringify({id: info.item}),
         dataType: 'json',
         success: function (data) {
+            console.log(data);
+            dir_data = {
+                dir: info.dir,
+            };
+            $.ajax({
+                type: "POST",
+                data: dir_data,
+                url: '/api/utilities/delete-files',
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
             if (data.ack == 'OK') {
                 $('.dismissalertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeAllModals(true);

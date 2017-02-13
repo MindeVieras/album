@@ -60,6 +60,64 @@ class Utilities extends APIController
 
     }
 
+    public function deleteAlbumDir(){
+        
+        if ($this->f3->get('VERB') == 'POST') {
+            $ack = 'ok';
+            $data = $this->f3->get('POST');
+
+            $this->rrmdir($data['dir']);
+
+
+            // $name = \Web::instance()->slug($data['name']);
+            // $date = new DateTime($data['start_date']);
+            // $year = $date->format('Y');
+
+            // $files = $data['album_images'];
+            
+            // $ds = DIRECTORY_SEPARATOR;
+            // $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+
+            // $i = 1;
+
+            // if (!empty($files)){
+
+            //     foreach ($files as $f) {
+            //         $tmp_file = $f['value'];
+
+            //         $file_name = basename($tmp_file);
+            //         if (!file_exists($file_path)) {
+            //             mkdir($file_path, 0777, true);
+            //         }
+
+            //         rename($tmp_file, $file_path.$ds.$file_name);
+            //     };
+            // }
+
+        }
+        General::flushJsonResponse([
+            'ack' => $ack,
+            'msg' => $data
+        ]);
+
+    }
+
+
+            public function rrmdir($dir) {
+                if (is_dir($dir)) {
+                $objects = scandir($dir);
+                foreach ($objects as $object) {
+                  if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") 
+                       rrmdir($dir."/".$object); 
+                    else unlink   ($dir."/".$object);
+                  }
+                }
+                reset($objects);
+                rmdir($dir);
+                }
+            }
+
     public function getFileSize()
     {
         
