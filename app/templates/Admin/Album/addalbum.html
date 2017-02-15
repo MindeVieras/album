@@ -54,16 +54,13 @@
         <div id="img_urls"></div>
         <div id="album_markers"></div>
 
-        <label for="location_name">Location</label>
-        <div class="input-group">
+        <div class="form-group">
+            <label for="location_name">Location</label>
             <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
-            <span class="input-group-btn">
-                <button class="btn btn-default" id="geocode_location_name" type="button">Find</button>
-            </span>
         </div>
         
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="panel panel-default panel-map">
+            <div class="">
                 <div id="album_map"></div>
             </div>
         </div>
@@ -160,7 +157,7 @@
 
 
  -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&callback=PhotobumAdmin.createAlbumMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&libraries=places&callback=PhotobumAdmin.createAlbumMap"
     async defer></script>
     </form>
 </div>

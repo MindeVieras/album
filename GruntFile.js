@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     './assets/css/photobumadmin.min.css': [
                         "./build/css/admin.sass.css",
                         './bower_components/bootstrap/dist/css/bootstrap.css',
+                        './bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                     ]
                 }
             }
@@ -51,7 +52,8 @@ module.exports = function(grunt) {
                         './bower_components/tinymce/plugins/paste/plugin.js',
                         './bower_components/tinymce/plugins/contextmenu/plugin.js',
                         './bower_components/tinymce/plugins/textpattern/plugin.js',
-                        './bower_components/tinymce/plugins/autolink/plugin.js'
+                        './bower_components/tinymce/plugins/autolink/plugin.js',
+                        './bower_components/bootstrap-switch/dist/js/bootstrap-switch.js'
                     ]
                 },
                 options: {

@@ -1,6 +1,4 @@
 PhotobumAdmin.albumsReady = function() {
-
-    console.log('albums Ready');
     var options = {
         callback: function (value) {
             data = {
@@ -13,7 +11,6 @@ PhotobumAdmin.albumsReady = function() {
                 data: data,
                 dataType: 'json',
                 success: function (response) {
-                    console.log(response.url);
                     $('.slugholder').text(response.url);
                 },
                 error: function (xhr){
@@ -31,7 +28,7 @@ PhotobumAdmin.albumsReady = function() {
 };
 
 PhotobumAdmin.viewAlbums = function() {
-    console.log('Viewing albums');
+    //console.log('Viewing albums');
 };
 
 PhotobumAdmin.addAlbum = function (info, btn) {
@@ -57,19 +54,19 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         dataType: "json",
         success: function (data) {
             console.log(data);
-            $.ajax({
-                type: "POST",
-                data: form_data,
-                url: '/api/utilities/rename-files',
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function(xhr){
-                    console.log(xhr);
-                }
-            });
-            if (data.ack == 'OK') {
+            if (data.ack == 'ok') {
+                $.ajax({
+                    type: "POST",
+                    data: form_data,
+                    url: '/api/utilities/rename-files',
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function(xhr){
+                        console.log(xhr);
+                    }
+                });
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal(true);
             }
@@ -145,19 +142,19 @@ PhotobumAdmin.doDeleteAlbum = function (info, btn) {
 };
 
 PhotobumAdmin.createAlbumMap = function(){
-    
+
     var field = $('#album_markers');
     var map;
-    clickIndex = 0;
     map = new google.maps.Map(document.getElementById('album_map'), {
         center: {lat: -34.397, lng: 150.644},
-        zoom: 12,
+        zoom: 15,
         scrollwheel: false,
         clickableIcons: false,
         mapTypeId: 'terrain'
     });
 
     // This event listener calls addMarker() when the map is clicked.
+    clickIndex = 0;
     google.maps.event.addListener(map, 'click', function(event) {
 
         clickIndex++;
@@ -167,7 +164,42 @@ PhotobumAdmin.createAlbumMap = function(){
         field.append('<input name="album_loc[]" data-index="'+clickIndex+'" class="hidden album_loc" value="'+loc+'">');
     });
     
-    // add static markers
+    // Address autocomplete
+    var input = document.getElementById('location_name');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function() {
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+            window.alert("Autocomplete's returned place contains no geometry");
+            return;
+        }
+
+        map.setCenter(place.geometry.location);
+        // map.setZoom(15);
+
+        // var ac_marker = new google.maps.Marker({
+        //     position: place.geometry.location,
+        //     map: map,
+        //     draggable: true,
+        // });
+        // loc = place.geometry.location.lat()+','+place.geometry.location.lng();
+        // field.append('<input name="album_loc[]" data-index="2000000" class="album_loc" value="'+loc+'">');
+
+        // google.maps.event.addListener(ac_marker, 'dblclick', function(event) {
+        //     ac_marker.setMap(null);
+        //     $('.album_loc[data-index="2000000"]').remove();
+
+        // });
+
+        // google.maps.event.addListener(ac_marker, 'dragend', function(event) {
+        //     $('.album_loc[data-index="2000000"]').val(event.latLng.lat()+','+event.latLng.lng());
+
+        // });
+
+    });
+
+    // add static markers in edit mode
     if($('.album_loc').length){    
         $('.album_loc').each(function(i){
 
@@ -218,26 +250,7 @@ PhotobumAdmin.createAlbumMap = function(){
             $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
 
         });
-    };
-
-    // $('#geocode_location_name').on('click', function(e){
-        
-    //     e.preventDefault();
-
-    //     GMaps.geocode({
-    //       address: input.val(),
-    //       callback: function(results, status){
-    //         if(status=='OK'){
-    //           var latlng = results[0].geometry.location;
-    //           map.setCenter(latlng.lat(), latlng.lng());
-    //           map.addMarker({
-    //             lat: latlng.lat(),
-    //             lng: latlng.lng()
-    //           });
-    //         }
-    //       }
-    //     });
-    // });
+    };      
 };
 
 PhotobumAdmin.clearImage = function(info, btn) {

@@ -50,12 +50,15 @@ class Utilities extends APIController
 
                     rename($tmp_file, $file_path.$ds.$file_name);
                 };
+                $msg = count($files).' files renamed.';
+            } else {
+                $msg = 'No files suplied';
             }
 
         }
         General::flushJsonResponse([
             'ack' => $ack,
-            'msg' => $files
+            'msg' => $msg
         ]);
 
     }

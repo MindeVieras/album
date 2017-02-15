@@ -50,7 +50,7 @@ class Albums extends Admin{
 
             if ($editMode) {
                 $this->model->load(['id=?', $item['id']]);
-
+                
                 $id = $item['id'];
                 // update url
                 $url = General::makeUrl($this->model->album_name, 'albums');
@@ -94,14 +94,16 @@ class Albums extends Admin{
                 $date = new DateTime($item['start_date']);
                 $year = $date->format('Y');
                 $name = \Web::instance()->slug($item['name']);
-                foreach ($item['album_images'] as $val) {
-                    $urls = $this->initOrm('media', true);
-                    //$urls->load(['id=?', $item['id']]);
-                    $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
-                    $urls->album_id = $this->model->id;
-                    $urls->save();
+                if(!empty($item['album_images'])){
+                    foreach ($item['album_images'] as $val) {
+                        $urls = $this->initOrm('media', true);
+                        //$urls->load(['id=?', $item['id']]);
+                        $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
+                        $urls->album_id = $this->model->id;
+                        $urls->save();
 
-                    $res_urls[] = $val['value'];
+                        $res_urls[] = $val['value'];
+                    }
                 }
                 // save urls
                 $url = General::makeUrl($this->model->album_name, 'albums');
@@ -113,7 +115,7 @@ class Albums extends Admin{
             }
 
 
-            $data = ['ack' => 'OK', 'res' => $item['locations']];
+            $data = ['ack' => 'ok', 'res' => $item['locations']];
             General::flushJsonResponse($data);
 
         }else{
