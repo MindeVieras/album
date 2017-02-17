@@ -59,10 +59,35 @@
         </div>
 
         <div class="form-group">
+            <label for="album_body">Persons</label>
+
+            {% set cols = 3 %}
+            {% for p in persons %}
+
+                {% if loop.index0 % cols == 0 %}
+                    <div class="row">
+                {% endif %}
+                <div class="col-xs-3">
+                    <div class="checkbox">
+                        <label>
+                            <input {% if p.checked == 1 %}checked{% endif %} class="album_persons" name="persons[]" type="checkbox" value="{{p.person_id}}"> {{p.person_name}}
+                        </label>
+                    </div>
+                </div>
+
+                {% if (loop.index0 % cols == cols - 1 or loop.last) %}
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+        <div class="form-group">
             <label for="private">Private?</label>
             <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" {% if item.private == 1 %}checked{% endif %}>
         </div>
-        
+
         <script type="text/javascript">
 
             $(function () {
@@ -89,26 +114,8 @@
             });
 
         </script>
-<!-- 
-        <div class="form-group">
-            <label for="headline_image">Headline Image</label>
-            <div class="dropzone-previews"><img class="headline_image_preview" src="{{item.headline_image}}"><a data-function="CreationAdmin.clearHeadlineImage">Remove</a></div>
-            <div style="display:none;" class="form-control single-dropzone " data-image="{{item.headline_image}}" id="headline_image"><span class="dz-message">Drop file or click here here</span></div>
-        </div>
 
-        <div class="form-group">
-            <label for="attrib_id">Attribution</label>
-            <select class="form-control" id="attrib_id">
-                {% for a in authors %}
-                <option value="{{a.id}}" {% if a.id == item.attribution_id%}selected{% endif %}>{{a.attribution_name}}</option>
-                {% endfor %}
-            </select>
-        </div>
-
-        </div> -->
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&libraries=places&callback=PhotobumAdmin.createAlbumMap"
-    async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&libraries=places&callback=PhotobumAdmin.createAlbumMap" async defer></script>
     </form>
 </div>
 {% endblock content %}

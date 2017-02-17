@@ -42,18 +42,18 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         location_name: $('#add_album #location_name').val(),
         locations: $('#add_album .album_loc').serializeArray(),
         album_images: $('#add_album .img_url').serializeArray(),
-        // hilite_para: tinyMCE.get('hilite_para').getContent(),
+        album_persons: $('#add_album .album_persons').serializeArray(),
         body: tinyMCE.get('album_body').getContent(),
         private: $('#add_album #private').bootstrapSwitch('state')
     };
-    console.log(form_data);
+    //console.log(form_data);
     $.ajax({
         type: "POST",
         data: form_data,
         url: '/admin/albums/add',
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.ack == 'ok') {
                 $.ajax({
                     type: "POST",
@@ -111,11 +111,10 @@ PhotobumAdmin.deleteAlbum = function (info, btn) {
 PhotobumAdmin.doDeleteAlbum = function (info, btn) {
     $.ajax({
         type: "DELETE",
-        url: '/admin/albums/delete/id/' + info.item,
+        url: '/admin/albums/delete/id/'+info.item,
         data: JSON.stringify({id: info.item}),
         dataType: 'json',
         success: function (data) {
-            console.log(data);
             dir_data = {
                 dir: info.dir,
             };

@@ -44,12 +44,26 @@ class Albums extends Admin{
                 General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Album date is required']);
             }
 
+            $ds = DIRECTORY_SEPARATOR;
+            
+            $date = new DateTime($item['start_date']);
+            $year = $date->format('Y');
+            $name = \Web::instance()->slug($item['name']);
+            
             $this->model->reset();
 
             $editMode = $item['id'] ? true : false;
 
             if ($editMode) {
                 $this->model->load(['id=?', $item['id']]);
+
+                $old_name = \Web::instance()->slug($this->model->album_name);
+                if($old_name != $name){
+                    $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
+                    $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+                    //exec("mv \'.$oldname.\' \'.$newname.\'");
+                    $this->rcopy($oldname, $newname);
+                }
                 
                 $id = $item['id'];
                 // update url
@@ -64,6 +78,8 @@ class Albums extends Admin{
 
                 // remove locations before it gats saved
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
+                // remove persons relations before save
+                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
             }
 
             $this->model->album_name = $item['name'];
@@ -85,15 +101,21 @@ class Albums extends Admin{
                     $locs->album_id = $this->model->id;
                     $locs->save();
                 }
-            }            
+            }
+            // save persons
+            if (!empty($item['album_persons'])){
+
+                foreach ($item['album_persons'] as $per) {
+                    $pers = $this->initOrm('persons_rel', true);            
+                    $pers->person_id = $per['value'];
+                    $pers->album_id = $this->model->id;
+                    $pers->save();
+                }
+            }
             
             if (!$editMode) {
 
                 // save image urls
-                $ds = DIRECTORY_SEPARATOR;
-                $date = new DateTime($item['start_date']);
-                $year = $date->format('Y');
-                $name = \Web::instance()->slug($item['name']);
                 if(!empty($item['album_images'])){
                     foreach ($item['album_images'] as $val) {
                         $urls = $this->initOrm('media', true);
@@ -121,27 +143,26 @@ class Albums extends Admin{
         }else{
             $template = $this->twig->loadTemplate('Admin/Album/addalbum.html');
             echo $template->render([
-                //'artists' => $this->getArtists(),
+                'persons' => $this->getPersons(0),
                 'page' => $this->page
             ]);
         }
     }
 
-    public function edit($params)
-    {
+    public function edit($params){
         $this->auth();
         $this->model->load(['id=?', $params['id']]);
         $template = $this->twig->loadTemplate('Admin/Album/editalbum.html');
         echo $template->render([
             'locations' => $this->getLocations($params['id']),
             'media' => $this->getMedia($params['id']),
+            'persons' => $this->getPersons($params['id']),
             'item' => $this->model->cast(),
             'page' => $this->page
         ]);
     }
 
-    public function delete($params)
-    {
+    public function delete($params){
         $this->auth();
         if ($this->f3->get('VERB') == 'DELETE') {
             $id = $params['id'];
@@ -157,11 +178,11 @@ class Albums extends Admin{
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
                 // remove media urls
                 $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
+                // remove persons relations
+                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
 
                 General::flushJsonResponse([ack=>'OK']);
             }
-
-
         }
         General::flushJsonResponse([ack=>'Error', 'msg'=>'Could not delete item']);
     }
@@ -212,21 +233,55 @@ class Albums extends Admin{
         $locations = $this->db->exec("SELECT id, lat, lng from locations WHERE album_id = '$id'");
         return $locations;
     }
+   // Function to remove folders and files 
+    private function rrmdir($dir) {
+        if (is_dir($dir)) {
+            $files = scandir($dir);
+            foreach ($files as $file)
+                if ($file != "." && $file != "..") rrmdir("$dir/$file");
+            rmdir($dir);
+        }
+        else if (file_exists($dir)) unlink($dir);
+    }
 
-    // private function getArtists($personalise = false)
-    // {
-    //     $authors = $this->db->exec('select id, artist_name from artists WHERE artist_name != \'\' ORDER by artist_name ');
-    //     if ($personalise) {
-    //         $me = $this->page['user']['id'];
-    //         foreach($authors as $k => $v) {
-    //             if ($v['id'] == $me) {
-    //                 $authors[$k]['name'] = sprintf('%s (YOU)', $v['attribution_name']);
-    //                 return $authors;
-    //             }
-    //         }
-    //     }
-    //     return $authors;
-    //     //return 'artistsss goes herere';
-    // }
+    // Function to Copy folders and files       
+    private function rcopy($src, $dst) {
+        if (file_exists ( $dst ))
+            rrmdir ( $dst );
+        if (is_dir ( $src )) {
+            mkdir ( $dst );
+            $files = scandir ( $src );
+            foreach ( $files as $file )
+                if ($file != "." && $file != "..")
+                    rcopy ( "$src/$file", "$dst/$file" );
+        } else if (file_exists ( $src ))
+            copy ( $src, $dst );
+    }
+
+    private function getPersons($id){
+        $persons = $this->db->exec("SELECT id, person_name FROM persons ORDER BY person_name");
+        if ($id == 0){
+            return $persons;
+        } else {
+            foreach ($persons as $p) {
+                $d['person_id'] = $p['id'];
+                $d['person_name'] = $p['person_name'];
+                $d['checked'] = $this->personChecked($id, $p['id']);
+                $data[] = $d;
+            }
+            return $data;
+        }
+    }
+
+    private function personChecked($album_id, $person_id){
+        
+        $persons = $this->db->exec("SELECT id FROM persons_rel WHERE album_id = '$album_id' AND person_id = '$person_id'");
+        if(!empty($persons)){
+            $is_chcked = 1;
+        } else {
+            $is_chcked = 0;
+        }
+        return $is_chcked;
+    }
 
 }
