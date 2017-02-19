@@ -64,6 +64,21 @@ class Albums extends Admin{
                     //exec("mv \'.$oldname.\' \'.$newname.\'");
                     $this->rcopy($oldname, $newname);
                 }
+
+
+
+                // save image urls
+                if(!empty($item['album_images'])){
+                    foreach ($item['album_images'] as $val) {
+                        $urls = $this->initOrm('media', true);
+                        $urls->load(['id=?', $item['id']]);
+                        $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
+                        $urls->album_id = $this->model->id;
+                        $urls->save();
+
+                        $res_urls[] = $val['value'];
+                    }
+                }
                 
                 $id = $item['id'];
                 // update url
@@ -119,7 +134,6 @@ class Albums extends Admin{
                 if(!empty($item['album_images'])){
                     foreach ($item['album_images'] as $val) {
                         $urls = $this->initOrm('media', true);
-                        //$urls->load(['id=?', $item['id']]);
                         $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
                         $urls->album_id = $this->model->id;
                         $urls->save();
@@ -155,7 +169,7 @@ class Albums extends Admin{
         $template = $this->twig->loadTemplate('Admin/Album/editalbum.html');
         echo $template->render([
             'locations' => $this->getLocations($params['id']),
-            'media' => $this->getMedia($params['id']),
+            'media' => $this->getMedia($params['id'], 1000),
             'persons' => $this->getPersons($params['id']),
             'item' => $this->model->cast(),
             'page' => $this->page
@@ -190,12 +204,12 @@ class Albums extends Admin{
     private function getAlbums(){
 
         $albums = $this->db->exec('SELECT 
-                                                albums.*,
-                                                urls.url
-                                            FROM
-                                                albums
-                                                JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
-                                            ORDER BY created DESC LIMIT 10');
+                                        albums.*,
+                                        urls.url
+                                    FROM
+                                        albums
+                                        JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
+                                    ORDER BY created DESC LIMIT 10');
 
         foreach ($albums as $a) {
 
@@ -209,7 +223,7 @@ class Albums extends Admin{
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$slug;
             $d['url'] = $a['url'];
             $d['created'] = $a['created'];
-            $d['media'] = $this->getMedia($a['id']);
+            $d['media'] = $this->getMedia($a['id'], 3);
 
             $data[] = $d;
         }
@@ -217,14 +231,12 @@ class Albums extends Admin{
         return $data;
     }
 
-    private function getMedia($id){
+    private function getMedia($id, $limit){
 
-        $media = $this->db->exec("SELECT file_url from media WHERE album_id = '$id'");
+        $media = $this->db->exec("SELECT file_url from media WHERE album_id = '$id' LIMIT $limit");
         
-        $i = 0;
         foreach ($media as $m) {
             $medi[] = $m['file_url'];
-            if (++$i == 3) break;
         }
         return $medi;
     }

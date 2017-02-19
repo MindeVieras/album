@@ -34,6 +34,36 @@
             </div>
         </div>
         
+
+        <div class="form-group">
+            <label for="album_images">Photos</label>
+            <div class="row"><small class="col-xs-12 form-text text-muted">
+                Max files: {{get_ini('max_file_uploads')}}&nbsp;|
+                Max upload size: {{get_ini('upload_max_filesize')}}&nbsp;|
+                Max post size: {{get_ini('post_max_size')}}&nbsp;|
+                Memory limit: {{get_ini('memory_limit')}}
+            </small></div>
+            <div class="progress">
+                <div class="progress-bar album-photos-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">
+            </div>
+            </div>
+            <div class="dropzone-previews row">
+                {% for m in media %}
+                <div class="dz-details col-xs-6">
+                    <img data-dz-thumbnail src="{{m}}" width="120" height="120" />
+                </div>
+            {% endfor %}
+            </div>
+            <div class="form-control album-dropzone" data-image="" id="album_images"><span class="dz-message">Drop file or click here here</span></div>
+        </div>
+        {% set index = 1000000 %}
+        <div id="img_urls">
+            {% for m in media %}
+                {% set index = index + 1 %}
+                <input class="db_img_url" data-index="{{index}}" name="db_img_url[]" value="{{page.base_path}}{{m}}">
+            {% endfor %}
+        </div>
+
         {% set index = 1000000 %}
         <div id="album_markers">
             {% for l in locations %}
@@ -80,7 +110,6 @@
                 {% endif %}
 
             {% endfor %}
-
         </div>
 
         <div class="form-group">
@@ -111,6 +140,56 @@
                 $("#end_date").on("dp.change", function (e) {
                     $('#start_date').data("DateTimePicker").maxDate(e.date);
                 });
+
+                $('.album-dropzone').dropzone(
+                    {
+                        init: function() {
+                            i = 0;
+                            this.on("addedfile", function(file) {
+                              console.log('added');
+                              //$('.single-dropzone').hide();
+                            });
+                            this.on("success", function(file, response) {
+                              var field = $('#img_urls');
+                              console.log(response);
+                              //$('.album-dropzone').attr('data-image', response.location);
+                              field.append('<input class="img_url" name="img_url[]" value="'+response.location+'">');
+
+                            });
+                            this.on("removedfile", function(file) {
+                                //$('.single-dropzone').show();
+                                //i++;
+                                console.log(file);
+                                console.log(i);
+
+                                index = i+1000000;
+                                $('.img_url[data-index="'+index+'"]').remove();
+                                //$('.single-dropzone').attr('data-image', '');
+                            });
+                            this.on("maxfilesreached", function(file) {
+                              //this.removeFile(file);
+                            });
+              
+                            this.on("totaluploadprogress", function (progress) {
+                              console.log(parseInt(progress));
+                              $('.album-photos-progress').attr('aria-valuenow', progress).css('width', progress+'%');
+                            });
+
+                            this.on("error", function(file, message) { 
+                              console.log(message);
+                              this.removeFile(file); 
+                            });
+
+                        },
+                        url:'/api/image',
+                        uploadMoultiple: true,
+                        maxFiles: 1000,
+                        headers: { 'Accept': "*/*" },
+                        previewsContainer: '.dropzone-previews',
+                        previewTemplate: $('.dz-preview').html(),
+                        addRemoveLinks: true
+                    }
+                );
             });
 
         </script>

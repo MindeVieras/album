@@ -19,6 +19,7 @@ class Admin extends Base
         $this->twig = new Twig();
         $this->page = array(
             'base_url' => Config::get('BASE_URL'),
+            'base_path' => rtrim(Config::get('BASE_PATH'), '/'),
             'environment' => Config::get('ENVIRONMENT'),
             'session' => $_SESSION,
             'approot' => '/admin/',
