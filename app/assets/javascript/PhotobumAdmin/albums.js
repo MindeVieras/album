@@ -252,8 +252,83 @@ PhotobumAdmin.createAlbumMap = function(){
     };      
 };
 
-PhotobumAdmin.clearImage = function(info, btn) {
-    $('.dropzone-previews').html('');
-    $('.album-dropzone').show();
-    $('.album-dropzone').attr('data-image', '');
+PhotobumAdmin.albumDropzone = function(){
+
+    var field = $('#img_urls');
+
+    $(".start-upload").hide();
+    $(".cancel-all").hide();
+
+    var previewNode = document.querySelector("#template");
+    previewNode.id = "";
+    
+    var previewTemplate = previewNode.parentNode.innerHTML;
+    previewNode.parentNode.removeChild(previewNode);
+    
+    var myDropzone = new Dropzone(document.body, {
+        url: "/api/image",
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: previewTemplate,
+        headers: { 'Accept': "*/*" },
+        autoQueue: false,
+        previewsContainer: "#previews",
+        clickable: ".fileinput-button"
+    });
+    
+    i = 1;
+    myDropzone.on("addedfile", function(file) {
+        $(".start-upload").show();
+        $(".cancel-all").show();
+        var preview = $(file.previewElement);
+        preview.attr('data-index', i++);
+        
+        var button = preview.find('.start');
+        button.click(function() {
+            myDropzone.enqueueFile(file);
+        });
+    });
+
+    myDropzone.on("success", function(file, response) {
+        console.log(file.previewElement);
+        indx = $(file.previewElement).attr('data-index');
+        field.append('<input name="img_url[]" data-index="'+indx+'" class="hidden img_url" value="'+response.location+'">');
+    });
+
+    myDropzone.on("removedfile", function(file) {
+        indx = $(file.previewElement).attr('data-index');
+        $('.img_url[data-index="'+indx+'"]').remove();
+    });
+
+    myDropzone.on("totaluploadprogress", function(progress) {
+      //document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+    });
+
+    myDropzone.on("sending", function(file) {
+      // Show the total progress bar when upload starts
+      //document.querySelector("#total-progress").style.opacity = "1";
+      // And disable the start button
+      //file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+    });
+
+    myDropzone.on("queuecomplete", function(progress) {
+      //document.querySelector("#total-progress").style.opacity = "0";
+    });
+
+    $(".start-upload").click(function() {
+      myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+    });
+    $(".cancel-all").click(function() {
+      myDropzone.removeAllFiles(true);
+      $(".start-upload").hide();
+      $(this).hide();
+    });
+}
+
+PhotobumAdmin.clearAlbumImage = function(info, btn) {
+    console.log(info);
+    // $('.dropzone-previews').html('');
+    // $('.album-dropzone').show();
+    // $('.album-dropzone').attr('data-image', '');
 };
