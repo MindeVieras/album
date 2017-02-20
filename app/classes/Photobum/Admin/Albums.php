@@ -64,21 +64,6 @@ class Albums extends Admin{
                     //exec("mv \'.$oldname.\' \'.$newname.\'");
                     $this->rcopy($oldname, $newname);
                 }
-
-
-
-                // save image urls
-                if(!empty($item['album_images'])){
-                    foreach ($item['album_images'] as $val) {
-                        $urls = $this->initOrm('media', true);
-                        $urls->load(['id=?', $item['id']]);
-                        $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
-                        $urls->album_id = $this->model->id;
-                        $urls->save();
-
-                        $res_urls[] = $val['value'];
-                    }
-                }
                 
                 $id = $item['id'];
                 // update url
@@ -95,6 +80,8 @@ class Albums extends Admin{
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
                 // remove persons relations before save
                 $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
+                // remove media urls before save
+                $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
             }
 
             $this->model->album_name = $item['name'];
@@ -128,19 +115,20 @@ class Albums extends Admin{
                 }
             }
             
+            // save image urls
+            if(!empty($item['album_images'])){
+                foreach ($item['album_images'] as $val) {
+                    $urls = $this->initOrm('media', true);
+                    $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
+                    $urls->album_id = $this->model->id;
+                    $urls->save();
+
+                    $res_urls[] = $val['value'];
+                }
+            }
+            
             if (!$editMode) {
 
-                // save image urls
-                if(!empty($item['album_images'])){
-                    foreach ($item['album_images'] as $val) {
-                        $urls = $this->initOrm('media', true);
-                        $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
-                        $urls->album_id = $this->model->id;
-                        $urls->save();
-
-                        $res_urls[] = $val['value'];
-                    }
-                }
                 // save urls
                 $url = General::makeUrl($this->model->album_name, 'albums');
                 $urls = $this->initOrm('urls', true);

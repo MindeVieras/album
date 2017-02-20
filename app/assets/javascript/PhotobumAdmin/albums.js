@@ -268,7 +268,7 @@ PhotobumAdmin.albumDropzone = function(){
     var myDropzone = new Dropzone(document.body, {
         url: "/api/image",
         thumbnailWidth: 80,
-        thumbnailHeight: 80,
+        thumbnailHeight: 60,
         parallelUploads: 20,
         previewTemplate: previewTemplate,
         headers: { 'Accept': "*/*" },
@@ -323,6 +323,12 @@ PhotobumAdmin.albumDropzone = function(){
       myDropzone.removeAllFiles(true);
       $(".start-upload").hide();
       $(this).hide();
+    });
+
+    $('.remove-media-file').click(function(){
+        index = $(this).attr('data-index');
+        $('.img_url[data-index="'+index+'"]').remove();
+        $(this).closest('.list-group-item').remove();
     });
 }
 
