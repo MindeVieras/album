@@ -291,7 +291,7 @@ PhotobumAdmin.albumDropzone = function(){
     });
 
     myDropzone.on("success", function(file, response) {
-        console.log(file.previewElement);
+        //console.log(file.previewElement);
         indx = $(file.previewElement).attr('data-index');
         field.append('<input name="img_url[]" data-index="'+indx+'" class="hidden img_url" value="'+response.location+'">');
     });

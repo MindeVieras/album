@@ -20,13 +20,13 @@ class Utilities extends APIController
 
     }
 
-    public function renameFiles()
-    {
+    public function renameFiles(){
         
         if ($this->f3->get('VERB') == 'POST') {
             $ack = 'ok';
             $data = $this->f3->get('POST');
 
+            $id = $data['id'];
             $name = \Web::instance()->slug($data['name']);
             $date = new DateTime($data['start_date']);
             $year = $date->format('Y');
@@ -50,6 +50,27 @@ class Utilities extends APIController
 
                     rename($tmp_file, $file_path.$ds.$file_name);
                 };
+
+                // get files from DB
+                $db_files_url = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                foreach ($db_files_url as $df) {
+                    $db_files[] = basename($df['file_url']);
+                }
+
+                // get files form DIR
+                $scanned_dir = array_diff(scandir($file_path), array('..', '.'));
+                foreach ($scanned_dir as $sc) {
+                    $dir_files[] = $sc;
+                }
+
+                // compare arrays and get unwated files
+                $unwanted_files = array_diff($dir_files, $db_files);
+
+                // remove unwanted files
+                foreach ($unwanted_files as $uf) {
+                    unlink($file_path.$ds.$uf);
+                }
+    
                 $msg = count($files).' files renamed.';
             } else {
                 $msg = 'No files suplied';
@@ -57,10 +78,9 @@ class Utilities extends APIController
 
         }
         General::flushJsonResponse([
-            'ack' => $ack,
-            'msg' => $msg
+            'ack' => $files,
+            'msg' => $ats
         ]);
-
     }
 
     public function deleteAlbumDir(){
