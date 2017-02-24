@@ -5,10 +5,13 @@ namespace Photobum\API;
 
 use Photobum\Utilities\General;
 use \DateTime;
+//use \Image;
 
-class Utilities extends APIController
-{
+use Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
 
+class Utilities extends APIController{
 
     public function generateSlug()
     {
@@ -35,22 +38,43 @@ class Utilities extends APIController
             
             $ds = DIRECTORY_SEPARATOR;
             $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+            $file_path_style = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.'styles';
+            $styles = $this->db->exec("SELECT * FROM media_styles");
 
             $i = 1;
 
             if (!empty($files)){
 
+                $imagine = new Imagine\Gd\Imagine();
+                
                 foreach ($files as $f) {
                     $tmp_file = $f['value'];
 
                     $file_name = basename($tmp_file);
+
+                    // make media DIR
                     if (!file_exists($file_path)) {
                         mkdir($file_path, 0777, true);
                     }
 
+                    // make image styles
+                    foreach ($styles as $style) {
+
+                        // make media styles DIR's
+                        if (!file_exists($file_path_style.$ds.$style['name'])) {
+                            mkdir($file_path_style.$ds.$style['name'], 0777, true);
+                        }
+
+                        $image = $imagine->open($tmp_file);
+
+                        $image->thumbnail(new Box($style['width'], $style['height']))
+                            ->save($file_path_style.$ds.$style['name'].$ds.$file_name);
+                        
+                    }
+                    // move files
                     rename($tmp_file, $file_path.$ds.$file_name);
                 };
-
+                
                 // get files from DB
                 $db_files_url = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
                 foreach ($db_files_url as $df) {
@@ -78,8 +102,8 @@ class Utilities extends APIController
 
         }
         General::flushJsonResponse([
-            'ack' => $files,
-            'msg' => $ats
+            'ack' => $ack,
+            'msg' => $msg
         ]);
     }
 
@@ -89,33 +113,9 @@ class Utilities extends APIController
             $ack = 'ok';
             $data = $this->f3->get('POST');
 
-            $this->rrmdir($data['dir']);
-
-
-            // $name = \Web::instance()->slug($data['name']);
-            // $date = new DateTime($data['start_date']);
-            // $year = $date->format('Y');
-
-            // $files = $data['album_images'];
-            
-            // $ds = DIRECTORY_SEPARATOR;
-            // $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
-
-            // $i = 1;
-
-            // if (!empty($files)){
-
-            //     foreach ($files as $f) {
-            //         $tmp_file = $f['value'];
-
-            //         $file_name = basename($tmp_file);
-            //         if (!file_exists($file_path)) {
-            //             mkdir($file_path, 0777, true);
-            //         }
-
-            //         rename($tmp_file, $file_path.$ds.$file_name);
-            //     };
-            // }
+            //$this->rrmdir($data['dir']);
+            $command = 'rm -Rf '.$data['dir'];
+            shell_exec($command);
 
         }
         General::flushJsonResponse([
@@ -125,64 +125,4 @@ class Utilities extends APIController
 
     }
 
-
-            public function rrmdir($dir) {
-                if (is_dir($dir)) {
-                $objects = scandir($dir);
-                foreach ($objects as $object) {
-                  if ($object != "." && $object != "..") {
-                    if (filetype($dir."/".$object) == "dir") 
-                       rrmdir($dir."/".$object); 
-                    else unlink   ($dir."/".$object);
-                  }
-                }
-                reset($objects);
-                rmdir($dir);
-                }
-            }
-
-    public function getFileSize()
-    {
-        
-        if ($this->f3->get('VERB') == 'POST') {
-            $ack = 'ok';
-            $size = 0;
-            $data = $this->f3->get('POST');
-            $file_url = $data['file_url'];
-
-            if (file_exists($file_url)){
-                $size = filesize($file_url);
-            }
-        }
-        General::flushJsonResponse([
-            'ack' => $ack,
-            'msg' => $size
-        ]);
-
-    }
-
-    public function getFileSizeRemote(){
-        if ($this->f3->get('VERB') == 'POST') {
-            $ack = 'ok';
-            $data = $this->f3->get('POST');
-            $url = $data['file_url_remote'];
-
-            $ch = curl_init($url);
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-            curl_setopt($ch, CURLOPT_HEADER, TRUE);
-            curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-
-            $data = curl_exec($ch);
-            $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-
-            curl_close($ch);
-        }
-      
-        General::flushJsonResponse([
-            'ack' => $ack,
-            'msg' => $size
-        ]);
-
-    }
 }

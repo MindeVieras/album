@@ -46,7 +46,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         body: tinyMCE.get('album_body').getContent(),
         private: $('#add_album #private').bootstrapSwitch('state')
     };
-    //console.log(form_data);
+    console.log(form_data);
     $.ajax({
         type: "POST",
         data: form_data,
@@ -61,7 +61,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
                     url: '/api/utilities/rename-files',
                     dataType: "json",
                     success: function (data) {
-                        console.log(data);
+                        //console.log(data);
                     },
                     error: function(xhr){
                         console.log(xhr);
@@ -83,7 +83,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
 };
 
 PhotobumAdmin.deleteAlbum = function (info, btn) {
-    console.log(info);
+    //console.log(info);
     Photobum.dialog({
         message: 'Comfirm deletion of ' + info.name + '<br/>You know you can just unpublish from the edit screen right?',
         title: "<i class=\"foreground news fa fa-exclamation-circle pad-right\"></i>Warning",
@@ -279,6 +279,14 @@ PhotobumAdmin.albumDropzone = function(){
     
     i = 1;
     myDropzone.on("addedfile", function(file) {
+        //console.log(file);
+        EXIF.getData(file, function() {
+            var make = EXIF.getTag(this, 'Make');
+            var model = EXIF.getTag(this, 'Model');
+
+            $(file.previewElement).find('.make-model').text(make+' ('+model+')');
+        });
+        console.log(file);
         $(".start-upload").show();
         $(".cancel-all").show();
         var preview = $(file.previewElement);

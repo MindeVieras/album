@@ -36,11 +36,15 @@ class Twig extends \Twig_Environment
 
         $func = new \Twig_SimpleFunction(
             'img',
-            function ($var) {
-                if (HOST_TYPE == 'local') {
-                    return $var;
-                }
-                return $var;
+            function ($url, $style) {
+                $ds = DIRECTORY_SEPARATOR;
+                $name = basename($url);
+                $path = dirname($url);
+                $path_style = $path.$ds.'styles'.$ds.$style.$ds.$name;
+                // if (HOST_TYPE == 'local') {
+                //     return $var;
+                // }
+                return $path_style;
             }
         );
         $this->addFunction($func);

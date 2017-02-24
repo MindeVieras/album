@@ -126,7 +126,7 @@ class Albums extends Admin{
                     $res_urls[] = $val['value'];
                 }
             }
-            
+
             if (!$editMode) {
 
                 // save urls
@@ -224,9 +224,26 @@ class Albums extends Admin{
         $media = $this->db->exec("SELECT file_url from media WHERE album_id = '$id' LIMIT $limit");
         
         foreach ($media as $m) {
-            $medi[] = $m['file_url'];
+            $medi['url'] = $m['file_url'];
+            $medi['name'] = basename($m['file_url']);
+            if(file_exists(getcwd().$m['file_url'])){            
+                $file_size = filesize(getcwd().$m['file_url']);
+                $medi['size'] = General::formatSizeUnits($file_size);
+
+                $exif = exif_read_data(getcwd().$m['file_url']);
+                if($exif['DateTimeOriginal']){
+                    $ex_date = new DateTime($exif['DateTimeOriginal']);
+                    $date = $ex_date->format('Y-m-d H:i:s');
+                    $medi['date_taken'] = $date;
+                }
+                $medi['camera'] = $exif['Make'].' ( '.substr($exif['Model'], 0, 10).' )';
+                //$medi['date_taken'] = $exif;
+            }
+
+
+            $md[] = $medi;
         }
-        return $medi;
+        return $md;
     }
 
     private function getLocations($id){

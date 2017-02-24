@@ -29,7 +29,8 @@
     "tinymce-placeholder-attribute": "^0.1.6",
     "bootstrap-switch": "^3.3.2",
     "owl.carousel": "owl-carousel2#^2.2.0",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1",
+    "exif-js": "^2.1.1"
   },
   "resolutions": {
     "jquery": "^3.1.0"

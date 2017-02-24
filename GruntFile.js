@@ -40,6 +40,7 @@ module.exports = function(grunt) {
                 files: {
                     './assets/js/photobum.js': [
                         './build/js/_bower.js',
+                        './bower_components/exif-js/exif.js',
                         './app/assets/javascript/3rdParty/*.js',
                         './app/assets/javascript/Photobum/**/*.js'
                     ],

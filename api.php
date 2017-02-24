@@ -15,4 +15,5 @@ $f3->route('POST /api/utilities/get-file-size', '\Photobum\API\Utilities->getFil
 $f3->route('POST /api/utilities/rename-files', '\Photobum\API\Utilities->renameFiles');
 $f3->route('POST /api/utilities/delete-files', '\Photobum\API\Utilities->deleteAlbumDir');
 $f3->route('POST /api/utilities/get-file-size-remote', '\Photobum\API\Utilities->getFileSizeRemote');
+$f3->route('POST /api/utilities/generate-styles', '\Photobum\API\Utilities->generateImageStyles');
 $f3->run();
