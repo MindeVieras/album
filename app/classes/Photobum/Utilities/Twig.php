@@ -41,9 +41,7 @@ class Twig extends \Twig_Environment
                 $name = basename($url);
                 $path = dirname($url);
                 $path_style = $path.$ds.'styles'.$ds.$style.$ds.$name;
-                // if (HOST_TYPE == 'local') {
-                //     return $var;
-                // }
+
                 return $path_style;
             }
         );
