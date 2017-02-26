@@ -36,34 +36,30 @@ class Albums extends Admin{
         if ($this->f3->get('VERB') == 'POST') {
             $item = $this->f3->get('POST');
 
-            if (!$item['name'] ) {
-                General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Album name is required']);
-            }
+            if(!$item['name']){General::flushJsonResponse(['ack'=>'error', 'msg'=>'Album name is required']);}
 
-            if (!$item['start_date'] ) {
-                General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Album date is required']);
-            }
+            if(!$item['start_date']){General::flushJsonResponse(['ack'=>'error', 'msg'=>'Album date is required']);}
+
+            $this->model->reset();
 
             $ds = DIRECTORY_SEPARATOR;
             
             $date = new DateTime($item['start_date']);
             $year = $date->format('Y');
             $name = \Web::instance()->slug($item['name']);
-            
-            $this->model->reset();
 
             $editMode = $item['id'] ? true : false;
 
             if ($editMode) {
                 $this->model->load(['id=?', $item['id']]);
 
-                $old_name = \Web::instance()->slug($this->model->album_name);
-                if($old_name != $name){
-                    $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
-                    $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
-                    //exec("mv \'.$oldname.\' \'.$newname.\'");
-                    $this->rcopy($oldname, $newname);
-                }
+                // $old_name = \Web::instance()->slug($this->model->album_name);
+                // if($old_name != $name){
+                //     $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
+                //     $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+                //     //exec("mv \'.$oldname.\' \'.$newname.\'");
+                //     $this->rcopy($oldname, $newname);
+                // }
                 
                 $id = $item['id'];
                 // update url
@@ -94,7 +90,6 @@ class Albums extends Admin{
 
             // save locations
             if (!empty($item['locations'])){
-
                 foreach ($item['locations'] as $loc) {
                     $latLng = explode(',', $loc['value']);
                     $locs = $this->initOrm('locations', true);            
@@ -106,7 +101,6 @@ class Albums extends Admin{
             }
             // save persons
             if (!empty($item['album_persons'])){
-
                 foreach ($item['album_persons'] as $per) {
                     $pers = $this->initOrm('persons_rel', true);            
                     $pers->person_id = $per['value'];
@@ -114,7 +108,6 @@ class Albums extends Admin{
                     $pers->save();
                 }
             }
-            
             // save image urls
             if(!empty($item['album_images'])){
                 foreach ($item['album_images'] as $val) {
@@ -137,7 +130,6 @@ class Albums extends Admin{
                 $urls->type_id = $this->model->id;
                 $urls->save();
             }
-
 
             $data = ['ack' => 'ok', 'res' => $item['locations']];
             General::flushJsonResponse($data);
@@ -183,7 +175,7 @@ class Albums extends Admin{
                 // remove persons relations
                 $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
 
-                General::flushJsonResponse([ack=>'OK']);
+                General::flushJsonResponse(['ack' => 'ok']);
             }
         }
         General::flushJsonResponse([ack=>'Error', 'msg'=>'Could not delete item']);
@@ -208,6 +200,7 @@ class Albums extends Admin{
 
             $d['id'] = $a['id'];
             $d['name'] = $a['album_name'];
+            $d['date'] = $date->format('Y-m-d H:i:s');
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$slug;
             $d['url'] = $a['url'];
             $d['created'] = $a['created'];

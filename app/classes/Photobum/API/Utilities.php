@@ -122,7 +122,6 @@ class Utilities extends APIController{
             'ack' => $ack,
             'msg' => $data
         ]);
-
     }
 
 }

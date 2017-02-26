@@ -28,3 +28,4 @@ php_value max_file_uploads 1000
 php_value memory_limit 2G
 php_value upload_max_filesize 1G
 php_value post_max_size 4G
+php_value max_execution_time 3600

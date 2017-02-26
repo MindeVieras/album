@@ -130,7 +130,7 @@ PhotobumAdmin.doDeleteAlbum = function (info, btn) {
                     console.log(xhr);
                 }
             });
-            if (data.ack == 'OK') {
+            if (data.ack == 'ok') {
                 $('.dismissalertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeAllModals(true);
             } else {
