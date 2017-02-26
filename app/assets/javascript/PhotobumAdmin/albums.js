@@ -46,7 +46,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         body: tinyMCE.get('album_body').getContent(),
         private: $('#add_album #private').bootstrapSwitch('state')
     };
-    console.log(form_data);
+    //console.log(form_data);
     $.ajax({
         type: "POST",
         data: form_data,

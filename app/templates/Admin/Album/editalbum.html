@@ -49,7 +49,7 @@
             {% for m in media %}
             <div class="list-group-item list-group-item-info"><div class="row">
                 <div class="col-xs-2">
-                    <span class="preview"><img src="{{m.url}}" width="80" height="60" /></span>
+                    <span class="preview"><img src="{{img(m.url, 'thumbnail')}}" height="60" class="img-thumbnail" /></span>
                 </div>
 
                 <div class="col-xs-5">
