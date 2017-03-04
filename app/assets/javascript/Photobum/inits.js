@@ -68,8 +68,6 @@ Photobum.initEditors = function() {
 
 Photobum.initDropzone = function() {
 
-    var clearDropzone;
-
     $('#add_album').dropzone({
         init: function() {
 
@@ -137,50 +135,6 @@ Photobum.initDropzone = function() {
         $('.img_url[data-index="'+index+'"]').remove();
         $(this).closest('.list-group-item').remove();
     });
-    // $('.avatar-dropzone').dropzone(
-    //     {
-    //         init: function() {
-    //             this.on("addedfile", function(file) {
-    //               console.log('added');
-    //               //$('.single-dropzone').hide();
-    //             });
-    //             this.on("success", function(file, response) {
-
-    //               console.log('success');
-    //               console.log(response);
-    //                 $('.single-dropzone').attr('data-image', response.location);
-    //             });
-    //             this.on("removedfile", function(file) {
-    //                 //$('.single-dropzone').show();
-    //                 console.log(file);
-    //                 $('.single-dropzone').attr('data-image', '');
-    //             });
-    //             this.on("maxfilesreached", function(file) {
-    //               //this.removeFile(file);
-    //             });
-  
-    //             // File upload Progress
-    //             this.on("totaluploadprogress", function (progress) {
-    //               console.log("progress ", progress);
-    //               //$('.roller').width(progress + '%');
-    //             });
-
-    //             this.on("error", function(file, message) { 
-    //               console.log(message);
-    //               this.removeFile(file); 
-    //             });
-
-    //         },
-    //         url:'/api/image',
-    //         uploadMoultiple: true,
-    //         maxFiles: 1000,
-    //         headers: { 'Accept': "*/*" },
-    //         previewsContainer: '.dropzone-previews',
-    //         previewTemplate: $('.dz-preview').html(),
-    //         addRemoveLinks: true
-    //     }
-    // );
-
 };
 
 Photobum.initSliders = function () {
