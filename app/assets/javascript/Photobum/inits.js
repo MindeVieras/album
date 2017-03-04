@@ -8,11 +8,6 @@ Photobum.initView = function() {
     Photobum.initSwitches();
     Photobum.initEditors();
     Photobum.initDropzone();
-    Photobum.initSliders();
-    Photobum.initAccordions();
-    Photobum.initSpinners();
-    Photobum.initDatepicker();
-    Photobum.initBackToTop();
 };
 
 Photobum.initSwitches = function() {
@@ -135,85 +130,4 @@ Photobum.initDropzone = function() {
         $('.img_url[data-index="'+index+'"]').remove();
         $(this).closest('.list-group-item').remove();
     });
-};
-
-Photobum.initSliders = function () {
-  // HOME PAGE slider
-  $('#home-slider').owlCarousel({
-    nav: true,
-    navText: ['<','>'],
-    dots: false,
-    loop: true,
-    touchDrag: true,
-    mouseDrag: true,
-    items: 1
-  });
-  // EVENT HOME PAGE slider
-  $('#event-slider').owlCarousel({
-    nav: true,
-    navText: ['<','>'],
-    dots: false,
-    loop: true,
-    touchDrag: true,
-    mouseDrag: true,
-    items: 1
-  });
-  // Adopt An Animal slider
-  $('#adopt-animal-slider').owlCarousel({
-    nav: false,
-    navText: ['',''],
-    dots: true,
-    loop: true,
-    touchDrag: true,
-    mouseDrag: true,
-    items: 1
-  });
-};
-
-Photobum.initSpinners = function () {
-  // INPUT number Jquery UI spinner
-  $('.spinner').spinner({
-    min: 0
-  });
-  
-  $(".spinner").on( "spin", function( event, ui ) {
-
-    if (ui.value > 0){
-      $(this).closest('.animal').find('.silhouette').css('color', '#9bc31c');
-      $(this).parent().find('.ui-spinner-button').css('background-color', '#9bc31c');
-    } else if (ui.value === 0){
-      $(this).closest('.animal').find('.silhouette').css('color', '#1c8370');
-      $(this).parent().find('.ui-spinner-button').css('background-color', '#1c8370');
-    }
-  });
-  
-};
-
-Photobum.initDatepicker = function () {
-  // Datepicker
-  $('.datepicker').datepicker();
-  
-};
-
-Photobum.initAccordions = function () {
-  // FAQS Accordion
-  $('#faqs-accordion').accordion({
-    collapsible: true
-  });
-  // Get In Touch Accordion
-  $('#get-in-touch-accordion').accordion({
-    collapsible: true
-  });
-};
-
-Photobum.initBackToTop = function () {
-  // Back to top Button
-  if($('#back-to-top').length) {
-    $('#back-to-top').on('click', function (e) {
-      e.preventDefault();
-      $('html,body').animate({
-        scrollTop: 0
-      }, 700);
-    });
-  }
 };
