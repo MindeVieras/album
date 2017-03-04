@@ -119,32 +119,6 @@
             <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" checked>
         </div>
 
-        <script type="text/javascript">
-            $(function () {
-                $('#start_date').datetimepicker({
-                        format: 'DD-MM-YYYY, HH:mm:ss',
-                        date: moment()
-                    }
-                );
-                $('#end_date').datetimepicker({
-                        format: 'DD-MM-YYYY, HH:mm:ss',
-                        date: moment(),
-                        useCurrent: false
-                    }
-                );
-
-                $('#start_date').on('dp.change', function (e) {
-                    $('#end_date').data("DateTimePicker").minDate(e.date);
-                });
-                $("#end_date").on("dp.change", function (e) {
-                    $('#start_date').data("DateTimePicker").maxDate(e.date);
-                });
-
-            });
-
-        </script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&libraries=places&callback=PhotobumAdmin.createAlbumMap" async defer></script>
     </form>
 </div>
 {% endblock content %}

@@ -139,114 +139,114 @@ PhotobumAdmin.doDeleteAlbum = function (info, btn) {
     });
 };
 
-PhotobumAdmin.createAlbumMap = function(){
+// PhotobumAdmin.createAlbumMap = function(){
 
-    var field = $('#album_markers');
-    var map;
-    map = new google.maps.Map(document.getElementById('album_map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 15,
-        scrollwheel: false,
-        clickableIcons: false,
-        mapTypeId: 'terrain'
-    });
+//     var field = $('#album_markers');
+//     var map;
+//     map = new google.maps.Map(document.getElementById('album_map'), {
+//         center: {lat: -34.397, lng: 150.644},
+//         zoom: 15,
+//         scrollwheel: false,
+//         clickableIcons: false,
+//         mapTypeId: 'terrain'
+//     });
 
-    // This event listener calls addMarker() when the map is clicked.
-    clickIndex = 0;
-    google.maps.event.addListener(map, 'click', function(event) {
+//     // This event listener calls addMarker() when the map is clicked.
+//     clickIndex = 0;
+//     google.maps.event.addListener(map, 'click', function(event) {
 
-        clickIndex++;
-        addMarker(event.latLng, map, clickIndex);
+//         clickIndex++;
+//         addMarker(event.latLng, map, clickIndex);
 
-        loc = event.latLng.lat()+','+event.latLng.lng();
-        field.append('<input name="album_loc[]" data-index="'+clickIndex+'" class="hidden album_loc" value="'+loc+'">');
-    });
+//         loc = event.latLng.lat()+','+event.latLng.lng();
+//         field.append('<input name="album_loc[]" data-index="'+clickIndex+'" class="hidden album_loc" value="'+loc+'">');
+//     });
     
-    // Address autocomplete
-    var input = document.getElementById('location_name');
-    var autocomplete = new google.maps.places.Autocomplete(input);
+//     // Address autocomplete
+//     var input = document.getElementById('location_name');
+//     var autocomplete = new google.maps.places.Autocomplete(input);
 
-    autocomplete.addListener('place_changed', function() {
-        var place = autocomplete.getPlace();
-        if (!place.geometry) {
-            window.alert("Autocomplete's returned place contains no geometry");
-            return;
-        }
+//     autocomplete.addListener('place_changed', function() {
+//         var place = autocomplete.getPlace();
+//         if (!place.geometry) {
+//             window.alert("Autocomplete's returned place contains no geometry");
+//             return;
+//         }
 
-        map.setCenter(place.geometry.location);
-        // map.setZoom(15);
+//         map.setCenter(place.geometry.location);
+//         // map.setZoom(15);
 
-        // var ac_marker = new google.maps.Marker({
-        //     position: place.geometry.location,
-        //     map: map,
-        //     draggable: true,
-        // });
-        // loc = place.geometry.location.lat()+','+place.geometry.location.lng();
-        // field.append('<input name="album_loc[]" data-index="2000000" class="album_loc" value="'+loc+'">');
+//         // var ac_marker = new google.maps.Marker({
+//         //     position: place.geometry.location,
+//         //     map: map,
+//         //     draggable: true,
+//         // });
+//         // loc = place.geometry.location.lat()+','+place.geometry.location.lng();
+//         // field.append('<input name="album_loc[]" data-index="2000000" class="album_loc" value="'+loc+'">');
 
-        // google.maps.event.addListener(ac_marker, 'dblclick', function(event) {
-        //     ac_marker.setMap(null);
-        //     $('.album_loc[data-index="2000000"]').remove();
+//         // google.maps.event.addListener(ac_marker, 'dblclick', function(event) {
+//         //     ac_marker.setMap(null);
+//         //     $('.album_loc[data-index="2000000"]').remove();
 
-        // });
+//         // });
 
-        // google.maps.event.addListener(ac_marker, 'dragend', function(event) {
-        //     $('.album_loc[data-index="2000000"]').val(event.latLng.lat()+','+event.latLng.lng());
+//         // google.maps.event.addListener(ac_marker, 'dragend', function(event) {
+//         //     $('.album_loc[data-index="2000000"]').val(event.latLng.lat()+','+event.latLng.lng());
 
-        // });
+//         // });
 
-    });
+//     });
 
-    // add static markers in edit mode
-    if($('.album_loc').length){    
-        $('.album_loc').each(function(i){
+//     // add static markers in edit mode
+//     if($('.album_loc').length){    
+//         $('.album_loc').each(function(i){
 
-            latLng = $(this).val().split(',');
-            var st_marker = new google.maps.Marker({
-                position: {lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])},
-                map: map,
-                draggable: true,
-            });
+//             latLng = $(this).val().split(',');
+//             var st_marker = new google.maps.Marker({
+//                 position: {lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])},
+//                 map: map,
+//                 draggable: true,
+//             });
 
-            i++;
-            google.maps.event.addListener(st_marker, 'dblclick', function(event) {
-                st_marker.setMap(null);
-                index = i+1000000;
-                $('.album_loc[data-index="'+index+'"]').remove();
+//             i++;
+//             google.maps.event.addListener(st_marker, 'dblclick', function(event) {
+//                 st_marker.setMap(null);
+//                 index = i+1000000;
+//                 $('.album_loc[data-index="'+index+'"]').remove();
 
-            });
+//             });
 
-            google.maps.event.addListener(st_marker, 'dragend', function(event) {
-                index = i+1000000;
-                $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
+//             google.maps.event.addListener(st_marker, 'dragend', function(event) {
+//                 index = i+1000000;
+//                 $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
 
-            });
+//             });
 
-        });
-        map.setCenter({lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])});
-    }
+//         });
+//         map.setCenter({lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])});
+//     }
 
 
 
-    // Adds a marker to the map.
-    addMarker = function(location, map, index) {
+//     // Adds a marker to the map.
+//     addMarker = function(location, map, index) {
         
-        var marker = new google.maps.Marker({
-            position: location,
-            map: map,
-            draggable: true,
-        });
+//         var marker = new google.maps.Marker({
+//             position: location,
+//             map: map,
+//             draggable: true,
+//         });
 
-        google.maps.event.addListener(marker, 'dblclick', function(event) {
-            marker.setMap(null);
-            $('.album_loc[data-index="'+index+'"]').remove();
+//         google.maps.event.addListener(marker, 'dblclick', function(event) {
+//             marker.setMap(null);
+//             $('.album_loc[data-index="'+index+'"]').remove();
 
-        });
+//         });
 
-        google.maps.event.addListener(marker, 'dragend', function(event) {
+//         google.maps.event.addListener(marker, 'dragend', function(event) {
 
-            $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
+//             $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
 
-        });
-    };      
-};
+//         });
+//     };      
+// };

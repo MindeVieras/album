@@ -6,8 +6,10 @@ Photobum.initFrontend = function() {
 Photobum.initView = function() {
     Photobum.localize();
     Photobum.initSwitches();
+    Photobum.initDatepicker();
     Photobum.initEditors();
     Photobum.initDropzone();
+    Photobum.initMap();
 };
 
 Photobum.initSwitches = function() {
@@ -28,6 +30,33 @@ Photobum.initSwitches = function() {
             offColor: 'danger'
         }
     );
+};
+
+Photobum.initDatepicker = function () {
+    
+    // Start Datepicker
+    $('#start_date').datetimepicker({
+            format: 'DD-MM-YYYY, HH:mm:ss',
+            date: moment()
+        }
+    );
+
+    $('#start_date').on('dp.change', function (e) {
+        $('#end_date').data("DateTimePicker").minDate(e.date);
+    });
+
+    // End Datepicker
+    $('#end_date').datetimepicker({
+            format: 'DD-MM-YYYY, HH:mm:ss',
+            date: moment(),
+            useCurrent: false
+        }
+    );
+
+    $("#end_date").on("dp.change", function (e) {
+        $('#start_date').data("DateTimePicker").maxDate(e.date);
+    });
+  
 };
 
 Photobum.initEditors = function() {
@@ -116,4 +145,117 @@ Photobum.initDropzone = function() {
         $('.img_url[data-index="'+index+'"]').remove();
         $(this).closest('.list-group-item').remove();
     });
+};
+
+Photobum.initMap = function() {
+    if($('#album_map').length){
+
+        var field = $('#album_markers');
+        var map;
+        map = new google.maps.Map(document.getElementById('album_map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 15,
+            scrollwheel: false,
+            clickableIcons: false,
+            mapTypeId: 'terrain'
+        });
+
+        // This event listener calls addMarker() when the map is clicked.
+        clickIndex = 0;
+        google.maps.event.addListener(map, 'click', function(event) {
+
+            clickIndex++;
+            addMarker(event.latLng, map, clickIndex);
+
+            loc = event.latLng.lat()+','+event.latLng.lng();
+            field.append('<input name="album_loc[]" data-index="'+clickIndex+'" class="hidden album_loc" value="'+loc+'">');
+        });
+
+        // Address autocomplete
+        var input = document.getElementById('location_name');
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function() {
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("Autocomplete's returned place contains no geometry");
+                return;
+            }
+
+            map.setCenter(place.geometry.location);
+            // map.setZoom(15);
+
+            // var ac_marker = new google.maps.Marker({
+            //     position: place.geometry.location,
+            //     map: map,
+            //     draggable: true,
+            // });
+            // loc = place.geometry.location.lat()+','+place.geometry.location.lng();
+            // field.append('<input name="album_loc[]" data-index="2000000" class="album_loc" value="'+loc+'">');
+
+            // google.maps.event.addListener(ac_marker, 'dblclick', function(event) {
+            //     ac_marker.setMap(null);
+            //     $('.album_loc[data-index="2000000"]').remove();
+
+            // });
+
+            // google.maps.event.addListener(ac_marker, 'dragend', function(event) {
+            //     $('.album_loc[data-index="2000000"]').val(event.latLng.lat()+','+event.latLng.lng());
+
+            // });
+
+        });
+
+        // add static markers in edit mode
+        if($('.album_loc').length){    
+            $('.album_loc').each(function(i){
+
+                latLng = $(this).val().split(',');
+                var st_marker = new google.maps.Marker({
+                    position: {lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])},
+                    map: map,
+                    draggable: true,
+                });
+
+                i++;
+                google.maps.event.addListener(st_marker, 'dblclick', function(event) {
+                    st_marker.setMap(null);
+                    index = i+1000000;
+                    $('.album_loc[data-index="'+index+'"]').remove();
+
+                });
+
+                google.maps.event.addListener(st_marker, 'dragend', function(event) {
+                    index = i+1000000;
+                    $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
+
+                });
+
+            });
+            map.setCenter({lat: parseFloat(latLng[0]), lng: parseFloat(latLng[1])});
+        }
+
+        // Adds a marker to the map.
+        addMarker = function(location, map, index) {
+            
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map,
+                draggable: true,
+            });
+
+            google.maps.event.addListener(marker, 'dblclick', function(event) {
+                marker.setMap(null);
+                $('.album_loc[data-index="'+index+'"]').remove();
+
+            });
+
+            google.maps.event.addListener(marker, 'dragend', function(event) {
+
+                $('.album_loc[data-index="'+index+'"]').val(event.latLng.lat()+','+event.latLng.lng());
+
+            });
+        };
+    }
+
 };
