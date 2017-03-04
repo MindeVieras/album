@@ -31,22 +31,6 @@ class General
         return date('Y-m-d H:i:s');
     }
 
-    // public static function makeUrl($title, $area)
-    // {
-    //     $f3 = \Base::instance();
-    //     $web = \Web::instance();
-    //     $slug = $web->slug($title);
-
-    //     $url = sprintf('/%s/%s', $web->slug($area), $slug);
-
-    //     //$model = new Mapper($f3->get('DB'), 'urls');
-    //     //$model->load(['url=?', $url]);
-    //     //if ($model->dry()) {
-    //         return ['url' => $url, 'slug' => $slug];
-    //     //}
-
-    // }
-
     public static function makeUrl($title, $area, $count = 0)
     {
         $f3 = \Base::instance();
@@ -64,6 +48,22 @@ class General
         } else {
             return self::makeUrl($title, $area, ++$count);
         }
+
+    }
+
+    public static function makeAlbumUrl($title)
+    {
+        $f3 = \Base::instance();
+        $web = \Web::instance();
+        $slug = $web->slug($title);
+
+        //$url = sprintf('/%s/%s', $web->slug($date), $slug);
+
+        //$model = new Mapper($f3->get('DB'), 'urls');
+        //$model->load(['url=?', $url]);
+        //if ($model->dry()) {
+        return ['url' => $slug, 'slug' => $slug];
+        //}
 
     }
 

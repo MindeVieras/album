@@ -15,12 +15,24 @@ class Utilities extends APIController{
 
     public function generateSlug()
     {
+        //         $f3 = \Base::instance();
+        // $web = \Web::instance();
+        // $slug = $web->slug($title);
+        // if ($count == 0) {
+        //     $url = sprintf('/%s/%s', $web->slug($area), $slug);
+        // } else {
+        //     $url = sprintf('/%s/%s-%d', $web->slug($area), $slug, $count);
+        // }
+        // $model = new Mapper($f3->get('DB'), 'urls');
+        // $model->load(['url=?', $url]);
+        // if ($model->dry()) {
+        //     return ['url' => $url, 'slug' => $slug];
+        // } else {
+        //     return self::makeUrl($title, $area, ++$count);
+        // }
         General::flushJsonResponse( General::makeUrl(
-            $this->f3->get('REQUEST.value'),
-            $this->f3->get('REQUEST.section')
+            $this->f3->get('REQUEST.value')
         ));
-
-
     }
 
     public function renameFiles(){

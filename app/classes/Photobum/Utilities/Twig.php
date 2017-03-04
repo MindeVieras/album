@@ -40,11 +40,9 @@ class Twig extends \Twig_Environment
                 $ds = DIRECTORY_SEPARATOR;
                 $name = basename($url);
                 $path = dirname($url);
-                $path_style = $path.$ds.'styles'.$ds.$style.$ds.$name;
-                // if (HOST_TYPE == 'local') {
-                //     return $var;
-                // }
-                return $path_style;
+                $style_path = $path.$ds.'styles'.$ds.$style.$ds.$name;
+
+                return $style_path;
             }
         );
         $this->addFunction($func);

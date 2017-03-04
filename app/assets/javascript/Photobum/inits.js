@@ -68,6 +68,75 @@ Photobum.initEditors = function() {
 
 Photobum.initDropzone = function() {
 
+    var clearDropzone;
+
+    $('#add_album').dropzone({
+        init: function() {
+
+            var dropzone = this;
+            var field = $('#img_urls');
+
+            $(".start-upload").hide();
+            $(".cancel-all").hide();
+
+            $(".cancel-all").click(function() {
+                dropzone.removeAllFiles(true);
+                $(".start-upload").hide();
+                $(this).hide();
+            });
+
+            $(".start-upload").click(function() {
+                dropzone.enqueueFiles(dropzone.getFilesWithStatus(Dropzone.ADDED));
+            });
+
+            i = 1;
+            this.on("addedfile", function(file) {
+                EXIF.getData(file, function() {
+                    var make = EXIF.getTag(this, 'Make');
+                    var model = EXIF.getTag(this, 'Model');
+
+                    $(file.previewElement).find('.make-model').text(make+' ('+model+')');
+                });
+                //console.log(file);
+                $(".start-upload").show();
+                $(".cancel-all").show();
+                var preview = $(file.previewElement);
+                preview.attr('data-index', i++);
+                
+                var button = preview.find('.start');
+                button.click(function() {
+                    dropzone.enqueueFile(file);
+                });
+            });
+            this.on("success", function(file, response) {
+                indx = $(file.previewElement).attr('data-index');
+                field.append('<input name="img_url[]" data-index="'+indx+'" class="hidden img_url" value="'+response.location+'">');
+            });
+            this.on("removedfile", function(file) {
+                indx = $(file.previewElement).attr('data-index');
+                $('.img_url[data-index="'+indx+'"]').remove();
+            });
+            this.on("error", function(file, message) { 
+              console.log(message);
+            });
+
+        },
+        url: "/api/image",
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+        parallelUploads: 20,
+        previewTemplate: $('#template').html(),
+        headers: { 'Accept': "*/*" },
+        autoQueue: false,
+        previewsContainer: "#previews",
+        clickable: ".fileinput-button"
+    });
+
+    $('.remove-media-file').click(function(){
+        index = $(this).attr('data-index');
+        $('.img_url[data-index="'+index+'"]').remove();
+        $(this).closest('.list-group-item').remove();
+    });
     // $('.avatar-dropzone').dropzone(
     //     {
     //         init: function() {
@@ -112,49 +181,6 @@ Photobum.initDropzone = function() {
     //     }
     // );
 
-    // $('.album-dropzone').dropzone(
-    //     {
-    //         init: function() {
-    //             this.on("addedfile", function(file) {
-    //               console.log('added');
-    //               //$('.single-dropzone').hide();
-    //             });
-    //             this.on("success", function(file, response) {
-    //               var field = $('#img_urls');
-    //               //$('.album-dropzone').attr('data-image', response.location);
-    //               field.append('<input name="img_url[]" class="hidden img_url" value="'+response.location+'">');
-
-    //             });
-    //             this.on("removedfile", function(file) {
-    //                 //$('.single-dropzone').show();
-    //                 console.log(file);
-    //                 $('.single-dropzone').attr('data-image', '');
-    //             });
-    //             this.on("maxfilesreached", function(file) {
-    //               //this.removeFile(file);
-    //             });
-  
-    //             // File upload Progress
-    //             this.on("totaluploadprogress", function (progress) {
-    //               console.log("progress ", progress);
-    //               //$('.roller').width(progress + '%');
-    //             });
-
-    //             this.on("error", function(file, message) { 
-    //               console.log(message);
-    //               this.removeFile(file); 
-    //             });
-
-    //         },
-    //         url:'/api/image',
-    //         uploadMoultiple: true,
-    //         maxFiles: 1000,
-    //         headers: { 'Accept': "*/*" },
-    //         previewsContainer: '.dropzone-previews',
-    //         previewTemplate: $('.dz-preview').html(),
-    //         addRemoveLinks: true
-    //     }
-    // );
 };
 
 Photobum.initSliders = function () {
