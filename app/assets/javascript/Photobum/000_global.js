@@ -33,11 +33,6 @@ var Photobum = (function() {
     };
 })();
 
-
-
-
-
-
 $(document).ready(function() {
     Dropzone.autoDiscover = false;
 

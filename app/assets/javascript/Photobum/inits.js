@@ -37,26 +37,12 @@ Photobum.initEditors = function() {
             skin_url: '/assets/deps/tinymce/skins/lightgray',
             theme: 'inlite',
 
-            plugins: 'image link paste contextmenu textpattern autolink placeholder',
-            insert_toolbar: 'quickimage',
-            selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
+            plugins: 'paste contextmenu textpattern autolink',
+            insert_toolbar: false,
+            selection_toolbar: 'bold italic | h2 h3',
             inline: true,
-            paste_data_images: true,
             selector: '#'+$(this).attr('id'),
             height: '400',
-            images_upload_url: '/api/image'
-        });
-    });
-    $("[data-tinymce-lite]").each(function(){
-        tinymce.init({
-            skin_url: '/assets/deps/tinymce/skins/lightgray',
-            theme: 'inlite',
-            plugins: 'link paste textpattern autolink placeholder',
-            selection_toolbar: 'bold italic | quicklink h2 h3 blockquote',
-            insert_toolbar: '',
-            inline: true,
-            selector: '#'+$(this).attr('id'),
-            height: '400'
         });
     });
 };

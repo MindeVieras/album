@@ -26,7 +26,6 @@
     "jquery-typewatch": "^2.2.2",
     "eonasdan-bootstrap-datetimepicker": "^4.17.42",
     "dropzone": "^4.3.0",
-    "tinymce-placeholder-attribute": "^0.1.6",
     "bootstrap-switch": "^3.3.2",
     "exif-js": "^2.1.1"
   },
