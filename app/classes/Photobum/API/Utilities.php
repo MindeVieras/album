@@ -42,6 +42,7 @@ class Utilities extends APIController{
             $data = $this->f3->get('POST');
 
             $id = $data['id'];
+
             $name = \Web::instance()->slug($data['name']);
             $date = new DateTime($data['start_date']);
             $year = $date->format('Y');
@@ -105,8 +106,12 @@ class Utilities extends APIController{
                 // remove unwanted files
                 foreach ($unwanted_files as $uf) {
                     unlink($file_path.$ds.$uf);
+                    // remove unwanted style files
+                    foreach ($styles as $style) {
+                        unlink($file_path_style.$ds.$style['name'].$ds.$uf);
+                    }
                 }
-    
+                
                 $msg = count($files).' files renamed.';
             } else {
                 $msg = 'No files suplied';
