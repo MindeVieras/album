@@ -55,14 +55,6 @@ class Albums extends Admin{
             $media_path = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
             $styles = $this->db->exec("SELECT * FROM media_styles");
             
-            $this->model->name = $item['name'];
-            $this->model->start_date = $item['start_date'];
-            $this->model->end_date = $item['end_date'];
-            $this->model->location_name = $item['location_name'];
-            $this->model->body = $item['body'];
-            $this->model->private = intval($item['private'] == 'true');
-            $this->model->save();
-
             $editMode = $item['id'] ? true : false;
 
             if ($editMode) {
@@ -74,15 +66,13 @@ class Albums extends Admin{
                 $old_name = \Web::instance()->slug($this->model->name);
                 $new_name = \Web::instance()->slug($item['name']);
 
-                // if($old_name != $name){
-                //     $r = 'not the same';
-                //     // $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
-                //     // $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
-                //     // //exec("mv \'.$oldname.\' \'.$newname.\'");
-                //     // $this->rcopy($oldname, $newname);
-                // } else {
-                //     $r = 'same';
-                // }
+                if($old_name != $name){
+                    $nameChanged = true;
+                } else {
+                    $nameChanged = false;
+                }
+
+                //sd($old_name, $new_name, $nameChanged);
 
                 // update url
                 $url = General::makeAlbumUrl($item['name'], $item['start_date']);
@@ -95,55 +85,44 @@ class Albums extends Admin{
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
                 // remove persons relations before save
                 $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
-
-                //$this->model->name = $r;
                 
                 if(!empty($item['album_images_db'])){
                     
                     // get db media files
                     $db_files_urls = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
-                    foreach ($db_files_urls as $df) {
-                        $db_files[] = basename($df['file_url']);
-                    }
                     
-                    foreach ($item['album_images_db'] as $f) {
-                        $file = $f['value'];
-                        $file_name = basename($file);
-                        $media_file = $media_path.$ds.$file_name;
-                        
-                        if(!in_array($media_file, $db_files)){
+                    $db_urls = array_map(function($row){return $row['file_url'];}, $db_files_urls);
+                    $form_urls = array_map(function($row){
+                        $url = substr($row['value'], strlen(getcwd()));
+                        return $url;
+                    }, $item['album_images_db']);
 
-                            // remove media urls before save
-                            $this->db->exec("DELETE FROM media WHERE file_url = '$media_file'");
+                    $diff = array_values(array_diff($db_urls, $form_urls));
+
+                    //sd($db_urls, $form_urls, $diff);
+                    if(!empty($diff)) {
+                        // remove media
+                        foreach ($diff as $d) {
+                            $this->db->exec("DELETE FROM media WHERE file_url = '$d'");
+                            $full_path = getcwd().$d;
+                            unlink($full_path);
+                            foreach ($styles as $style) {
+                                $path = $file_path_style.$ds.$style['name'].$ds.basename($full_path);
+                                unlink($path);
+                            }
                         }
-
                     }
                     
-                    // // clean album media dir and db
-                    // $db_files_url = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
-                    // foreach ($db_files_url as $df) {
-                    //     $db_files[] = basename($df['file_url']);
-                    // }
-                    // // get files form DIR
-                    // $scanned_dir = array_diff(scandir($file_path), array('..', '.', 'styles'));
-                    // foreach ($scanned_dir as $sc) {
-                    //     $dir_files[] = $sc;
-                    // }
-                    // // compare arrays and get unwated files
-                    // $unwanted_files = array_diff($dir_files, $db_files);
-
-                    // // remove unwanted files
-                    // foreach ($unwanted_files as $uf) {
-
-                    //     unlink($file_path.$ds.$uf);
-                    //     // remove unwanted style files
-                    //     // foreach ($styles as $style) {
-                    //     //     unlink($file_path_style.$ds.$style['name'].$ds.$uf);
-                    //     // }
-                    // }
-
                 }
             }
+
+            $this->model->name = $item['name'];
+            $this->model->start_date = $item['start_date'];
+            $this->model->end_date = $item['end_date'];
+            $this->model->location_name = $item['location_name'];
+            $this->model->body = $item['body'];
+            $this->model->private = intval($item['private'] == 'true');
+            $this->model->save();
 
             // save locations
             if (!empty($item['locations'])){

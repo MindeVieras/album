@@ -31,12 +31,12 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         success: function (data) {
             console.log(data);
             if (data.ack == 'ok') {
-                //$('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
-                //Photobum.closeModal(true);
+                $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
+                Photobum.closeModal(true);
             }
             else {
                 $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');
-                //Photobum.initView();
+                Photobum.initView();
                 Photobum.scrollToTopOfModal();
             }
         },
