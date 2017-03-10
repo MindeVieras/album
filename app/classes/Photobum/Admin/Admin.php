@@ -11,11 +11,7 @@ class Admin extends Base
 
     public function __construct()
     {
-
         parent::__construct();
-
-  
-
         $this->twig = new Twig();
         $this->page = array(
             'base_url' => Config::get('BASE_URL'),

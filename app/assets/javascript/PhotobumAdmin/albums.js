@@ -9,14 +9,15 @@ PhotobumAdmin.viewAlbums = function() {
 PhotobumAdmin.addAlbum = function (info, btn) {
     $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
 
-    var form_data = {
-        id: $('#add_album #album_id').val(),
-        name: $('#add_album #album_name').val(),
+    var data = {
+        id: $('#id').val(),
+        name: $('#name').val(),
         start_date: $('#start_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
         end_date: $('#end_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
         location_name: $('#add_album #location_name').val(),
         locations: $('#add_album .album_loc').serializeArray(),
         album_images: $('#add_album .img_url').serializeArray(),
+        album_images_db: $('#add_album .img_url_db').serializeArray(),
         album_persons: $('#add_album .album_persons').serializeArray(),
         body: tinyMCE.get('album_body').getContent(),
         private: $('#add_album #private').bootstrapSwitch('state')
@@ -24,26 +25,14 @@ PhotobumAdmin.addAlbum = function (info, btn) {
     //console.log(form_data);
     $.ajax({
         type: "POST",
-        data: form_data,
+        data: data,
         url: '/admin/albums/add',
         dataType: "json",
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             if (data.ack == 'ok') {
-                $.ajax({
-                    type: "POST",
-                    data: form_data,
-                    url: '/api/utilities/rename-files',
-                    dataType: "json",
-                    success: function (data) {
-                        //console.log(data);
-                    },
-                    error: function(xhr){
-                        console.log(xhr);
-                    }
-                });
-                $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
-                Photobum.closeModal(true);
+                //$('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
+                //Photobum.closeModal(true);
             }
             else {
                 $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');

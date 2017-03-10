@@ -8,6 +8,10 @@ use DB\SQL\Mapper;
 use Photobum\Config;
 use \DateTime;
 
+use Imagine;
+use Imagine\Image\Box;
+use Imagine\Image\Point;
+
 class Albums extends Admin{
 
     public function __construct(){
@@ -21,15 +25,13 @@ class Albums extends Admin{
     public function view($params){
         $this->auth();
         $this->twig->onReady('PhotobumAdmin.viewAlbums');
-        $template = $this->twig->loadTemplate('Admin/Album/albums.html');
+        $template = $this->twig->loadTemplate('Admin/Album/view.html');
         echo $template->render([
             'page' => $this->page,
-            //'artists' => $this->getArtists(),
             'data' => $this->getAlbums(),
             'user' => $this->user
         ]);
     }
-
 
     public function add(){
         $this->auth();
@@ -48,45 +50,100 @@ class Albums extends Admin{
             $year = $date->format('Y');
             $name = \Web::instance()->slug($item['name']);
 
-            $editMode = $item['id'] ? true : false;
-
-            if ($editMode) {
-                $this->model->load(['id=?', $item['id']]);
-
-                // $old_name = \Web::instance()->slug($this->model->album_name);
-                // if($old_name != $name){
-                //     $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
-                //     $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
-                //     //exec("mv \'.$oldname.\' \'.$newname.\'");
-                //     $this->rcopy($oldname, $newname);
-                // }
-                
-                $id = $item['id'];
-                // update url
-                $url = General::makeUrl($this->model->album_name, 'albums');
-                $urls = $this->initOrm('urls', true);
-                $urls->load(['type_id=? and type=\'album\'', $id]);
-                $urls->url = $url['url'];
-                $urls->save();
-                if ($this->model->dry()) {
-                    General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Couldn\'t edit this news item']);
-                }
-
-                // remove locations before it gats saved
-                $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
-                // remove persons relations before save
-                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
-                // remove media urls before save
-                $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
-            }
-
-            $this->model->album_name = $item['name'];
+            $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+            $file_path_style = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.'styles';
+            $media_path = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+            $styles = $this->db->exec("SELECT * FROM media_styles");
+            
+            $this->model->name = $item['name'];
             $this->model->start_date = $item['start_date'];
             $this->model->end_date = $item['end_date'];
             $this->model->location_name = $item['location_name'];
             $this->model->body = $item['body'];
             $this->model->private = intval($item['private'] == 'true');
             $this->model->save();
+
+            $editMode = $item['id'] ? true : false;
+
+            if ($editMode) {
+
+                $id = $item['id'];
+
+                $this->model->load(['id=?', $id]);
+
+                $old_name = \Web::instance()->slug($this->model->name);
+                $new_name = \Web::instance()->slug($item['name']);
+
+                // if($old_name != $name){
+                //     $r = 'not the same';
+                //     // $oldname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$old_name;
+                //     // $newname = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+                //     // //exec("mv \'.$oldname.\' \'.$newname.\'");
+                //     // $this->rcopy($oldname, $newname);
+                // } else {
+                //     $r = 'same';
+                // }
+
+                // update url
+                $url = General::makeAlbumUrl($item['name'], $item['start_date']);
+                $urls = $this->initOrm('urls', true);
+                $urls->load(['type_id=? and type=\'album\'', $id]);
+                $urls->url = $url['url'];
+                $urls->save();
+
+                // remove locations before it gats saved
+                $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
+                // remove persons relations before save
+                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
+
+                //$this->model->name = $r;
+                
+                if(!empty($item['album_images_db'])){
+                    
+                    // get db media files
+                    $db_files_urls = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                    foreach ($db_files_urls as $df) {
+                        $db_files[] = basename($df['file_url']);
+                    }
+                    
+                    foreach ($item['album_images_db'] as $f) {
+                        $file = $f['value'];
+                        $file_name = basename($file);
+                        $media_file = $media_path.$ds.$file_name;
+                        
+                        if(!in_array($media_file, $db_files)){
+
+                            // remove media urls before save
+                            $this->db->exec("DELETE FROM media WHERE file_url = '$media_file'");
+                        }
+
+                    }
+                    
+                    // // clean album media dir and db
+                    // $db_files_url = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                    // foreach ($db_files_url as $df) {
+                    //     $db_files[] = basename($df['file_url']);
+                    // }
+                    // // get files form DIR
+                    // $scanned_dir = array_diff(scandir($file_path), array('..', '.', 'styles'));
+                    // foreach ($scanned_dir as $sc) {
+                    //     $dir_files[] = $sc;
+                    // }
+                    // // compare arrays and get unwated files
+                    // $unwanted_files = array_diff($dir_files, $db_files);
+
+                    // // remove unwanted files
+                    // foreach ($unwanted_files as $uf) {
+
+                    //     unlink($file_path.$ds.$uf);
+                    //     // remove unwanted style files
+                    //     // foreach ($styles as $style) {
+                    //     //     unlink($file_path_style.$ds.$style['name'].$ds.$uf);
+                    //     // }
+                    // }
+
+                }
+            }
 
             // save locations
             if (!empty($item['locations'])){
@@ -108,22 +165,55 @@ class Albums extends Admin{
                     $pers->save();
                 }
             }
-            // save image urls
+
+            // rename files to dir and save media urls
             if(!empty($item['album_images'])){
-                foreach ($item['album_images'] as $val) {
+                
+                $imagine = new Imagine\Gd\Imagine();
+                
+                    //$id = $data['id'];
+                
+                // make media DIR
+                if (!file_exists($file_path)) {
+                    mkdir($file_path, 0777, true);
+                }
+                // make image styles DIR
+                foreach ($styles as $style) {
+                    if (!file_exists($file_path_style.$ds.$style['name'])) {
+                        mkdir($file_path_style.$ds.$style['name'], 0777, true);
+                    }
+                }
+
+                // rename files
+                foreach ($item['album_images'] as $file) {
+            
+                    $tmp_file = $file['value'];
+                    $file_name = basename($tmp_file);
+
+                    // make image styles
+                    foreach ($styles as $style) {
+
+                        $image = $imagine->open($tmp_file);
+
+                        $image->thumbnail(new Box($style['width'], $style['height']))
+                            ->save($file_path_style.$ds.$style['name'].$ds.$file_name);
+                    }
+
+                    // move files
+                    rename($tmp_file, $file_path.$ds.$file_name);
+
+                    // save media urls
                     $urls = $this->initOrm('media', true);
-                    $urls->file_url = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.basename($val['value']);
+                    $urls->file_url = $media_path.$ds.basename($tmp_file);
                     $urls->album_id = $this->model->id;
                     $urls->save();
 
-                    $res_urls[] = $val['value'];
                 }
             }
 
             if (!$editMode) {
-
-                // save urls
-                $url = General::makeUrl($this->model->album_name, 'albums');
+                // save url
+                $url = General::makeAlbumUrl($item['name'], $item['start_date']);
                 $urls = $this->initOrm('urls', true);
                 $urls->url = $url['url'];
                 $urls->type = 'album';
@@ -131,10 +221,10 @@ class Albums extends Admin{
                 $urls->save();
             }
 
-            $data = ['ack' => 'ok', 'res' => $item['locations']];
+            $data = ['ack' => 'ok', 'msg' => $item['album_images_db']];
             General::flushJsonResponse($data);
 
-        }else{
+        } else {
             $template = $this->twig->loadTemplate('Admin/Album/addalbum.html');
             echo $template->render([
                 'persons' => $this->getPersons(0),
@@ -160,23 +250,19 @@ class Albums extends Admin{
         $this->auth();
         if ($this->f3->get('VERB') == 'DELETE') {
             $id = $params['id'];
-            $this->model->load(['id=?', $id]);
-            
-            if(!$this->model->dry()){
-                
-                $this->model->erase();
-                
-                // remove url
-                $this->db->exec("DELETE FROM urls WHERE type = 'album' AND type_id = '$id'");
-                // remove media locations
-                $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
-                // remove media urls
-                $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
-                // remove persons relations
-                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
+                            
+            // remove album
+            $this->db->exec("DELETE FROM albums WHERE id = '$id'");
+            // remove url
+            $this->db->exec("DELETE FROM urls WHERE type = 'album' AND type_id = '$id'");
+            // remove media locations
+            $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
+            // remove media urls
+            $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
+            // remove persons relations
+            $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
 
-                General::flushJsonResponse(['ack' => 'ok']);
-            }
+            General::flushJsonResponse(['ack' => 'ok']);
         }
         General::flushJsonResponse([ack=>'Error', 'msg'=>'Could not delete item']);
     }
@@ -196,10 +282,10 @@ class Albums extends Admin{
             $ds = DIRECTORY_SEPARATOR;
             $date = new DateTime($a['start_date']);
             $year = $date->format('Y');
-            $slug = \Web::instance()->slug($a['album_name']);
+            $slug = \Web::instance()->slug($a['name']);
 
             $d['id'] = $a['id'];
-            $d['name'] = $a['album_name'];
+            $d['name'] = $a['name'];
             $d['date'] = $date->format('Y-m-d H:i:s');
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$slug;
             $d['url'] = $a['url'];

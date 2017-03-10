@@ -1,16 +1,18 @@
 {% extends 'General/modalbase.html' %}
-{% set modaltitle %}Edit "{{item.album_name}}"{% endset %}
+{% set modaltitle %}Edit "{{item.name}}"{% endset %}
 {% block content %}
 <div class="modal-body">
     <form id="add_album">
         
-        <input type="hidden" id="album_id" value="{{item.id}}">
+        <input type="hidden" id="id" value="{{item.id}}">
         
+        {# name field #}
         <div class="form-group">
-            <label for="album_name">Name</label>
-            <input type="text" class="form-control" id="album_name" name ="album_name" placeholder="Name..." value="{{item.album_name}}">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name ="name" placeholder="Name..." value="{{item.name}}">
         </div>
 
+        {# start , end date fields #}
         <div class="row">
             <div class="form-group col-xs-6">
                 <label for="start_date">Start Date</label>
@@ -92,10 +94,10 @@
         </div>
 
         {% set index = 1000000 %}
-        <div id="img_urls" class="hidden">
+        <div id="img_urls" class="">
             {% for m in media %}
                 {% set index = index + 1 %}
-                <input class="img_url" data-index="{{index}}" name="img_url[]" value="{{page.base_path}}{{m.url}}">
+                <input class="img_url_db" data-index="{{index}}" name="img_url[]" value="{{page.base_path}}{{m.url}}">
             {% endfor %}
         </div>
 
@@ -124,7 +126,7 @@
         </div>
 
         <div class="form-group">
-            <label for="album_body">Persons</label>
+            <label for="album_persons">Persons</label>
 
             {% set cols = 3 %}
             {% for p in persons %}
@@ -197,7 +199,7 @@
 </div>
 {% endblock content %}
 {% block footer %}
-<button type="button" class="btn btn-danger pull-left" data-id="{{item.id}}" data-name="{{item.album_name}}" data-function="PhotobumAdmin.deleteAlbum">Delete</button>
+<button type="button" class="btn btn-danger pull-left" data-id="{{item.id}}" data-name="{{item.name}}" data-function="PhotobumAdmin.deleteAlbum">Delete</button>
 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 <button type="button" class="btn btn-success" data-function="PhotobumAdmin.addAlbum">Save</button>
 {% endblock footer %}

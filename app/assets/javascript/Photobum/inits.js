@@ -118,7 +118,7 @@ Photobum.initDropzone = function() {
             });
             this.on("success", function(file, response) {
                 indx = $(file.previewElement).attr('data-index');
-                field.append('<input name="img_url[]" data-index="'+indx+'" class="hidden img_url" value="'+response.location+'">');
+                field.append('<input name="img_url[]" data-index="'+indx+'" class="img_url" value="'+response.location+'">');
             });
             this.on("removedfile", function(file) {
                 indx = $(file.previewElement).attr('data-index');
@@ -142,7 +142,7 @@ Photobum.initDropzone = function() {
 
     $('.remove-media-file').click(function(){
         index = $(this).attr('data-index');
-        $('.img_url[data-index="'+index+'"]').remove();
+        $('.img_url_db[data-index="'+index+'"]').remove();
         $(this).closest('.list-group-item').remove();
     });
 };

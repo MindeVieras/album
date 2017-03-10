@@ -8,6 +8,7 @@
 
 namespace Photobum\Utilities;
 
+use \DateTime;
 
 class General
 {
@@ -51,18 +52,44 @@ class General
 
     }
 
-    public static function makeAlbumUrl($title)
+    public static function makeAlbumUrl($name, $date)
     {
-        $f3 = \Base::instance();
+        //$f3 = \Base::instance();
         $web = \Web::instance();
-        $slug = $web->slug($title);
+        $slug = $web->slug($name);
 
-        //$url = sprintf('/%s/%s', $web->slug($date), $slug);
+        $date = new DateTime($date);
+        $year = $date->format('Y');
+        $month = $date->format('m');
+        $day = $date->format('d');
+
+        $url = sprintf('/%s/%s/%s/%s', $year, $month, $day, $slug);
 
         //$model = new Mapper($f3->get('DB'), 'urls');
         //$model->load(['url=?', $url]);
         //if ($model->dry()) {
-        return ['url' => $slug, 'slug' => $slug];
+        return ['url' => $url];
+        //}
+
+    }
+
+    public static function makeFileUrl($name, $date)
+    {
+        //$f3 = \Base::instance();
+        $web = \Web::instance();
+        $slug = $web->slug($name);
+
+        $date = new DateTime($date);
+        $year = $date->format('Y');
+        $month = $date->format('m');
+        $day = $date->format('d');
+
+        $url = sprintf('/%s/%s/%s/%s', $year, $month, $day, $slug);
+
+        //$model = new Mapper($f3->get('DB'), 'urls');
+        //$model->load(['url=?', $url]);
+        //if ($model->dry()) {
+        return ['url' => $url];
         //}
 
     }
