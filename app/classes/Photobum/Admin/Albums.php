@@ -84,14 +84,18 @@ class Albums extends Admin{
                 // remove locations before it gats saved
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
                 // remove persons relations before save
-                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
-                
+                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");    
+
+                // get db media files
+                $db_files = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
+
+
+                //sd($db_urls);
+
+                // remove unvanted media files and db
                 if(!empty($item['album_images_db'])){
-                    
-                    // get db media files
-                    $db_files_urls = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
-                    
-                    $db_urls = array_map(function($row){return $row['file_url'];}, $db_files_urls);
+
                     $form_urls = array_map(function($row){
                         $url = substr($row['value'], strlen(getcwd()));
                         return $url;
@@ -112,7 +116,12 @@ class Albums extends Admin{
                             }
                         }
                     }
-                    
+                }
+
+                if(empty($item['album_images_db'])){
+                    $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
+                    $command = 'rm -Rf '.$file_path;
+                    shell_exec($command);
                 }
             }
 

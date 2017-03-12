@@ -4,6 +4,7 @@
 <div class="modal-body">
     <form id="add_album">
         
+        {# album id #}
         <input type="hidden" id="id" value="{{item.id}}">
         
         {# name field #}
@@ -35,6 +36,7 @@
             </div>
         </div>
         
+        {# label #}
         <div class="form-group">
             <label for="album_images">Photos</label>
             <div class="row"><small class="col-xs-12 form-text text-muted">
@@ -45,8 +47,9 @@
             </small></div>
         </div>
 
-        {% set index = 1000000 %}
+        {# files in db #}
         <div class="list-group files">
+            {% set index = 1000000 %}
             {% for m in media %}
             <div class="list-group-item list-group-item-info"><div class="row">
                 <div class="col-xs-2">
@@ -73,11 +76,12 @@
             {% endfor %}
         </div>
 
-
+        {# dropzone preview #}
         <div class="list-group" class="files" id="previews">
             {% include 'General/partials/dropzone-preview.html' %}
         </div>
 
+        {# dropzone input #}
         <div class="form-group">
             <span class="btn btn-success fileinput-button dz-clickable">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -92,15 +96,26 @@
                 <span>Remove all</span>
             </span>
         </div>
-
         {% set index = 1000000 %}
-        <div id="img_urls" class="">
+        <div id="img_urls" class="hidden">
             {% for m in media %}
                 {% set index = index + 1 %}
                 <input class="img_url_db" data-index="{{index}}" name="img_url[]" value="{{page.base_path}}{{m.url}}">
             {% endfor %}
         </div>
 
+        {# location field #}
+        <div class="form-group">
+            <label for="location_name">Location</label>
+            <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
+        </div>
+        
+        {# map #}
+        <div class="panel panel-default panel-map">
+            <div class="">
+                <div id="album_map"></div>
+            </div>
+        </div>
         {% set index = 1000000 %}
         <div id="album_markers">
             {% for l in locations %}
@@ -109,22 +124,13 @@
             {% endfor %}
         </div>
 
-        <div class="form-group">
-            <label for="location_name">Location</label>
-            <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
-        </div>
-        
-        <div class="panel panel-default panel-map">
-            <div class="">
-                <div id="album_map"></div>
-            </div>
-        </div>
-
+        {# body  field #}
         <div class="form-group">
             <label for="album_body">Body</label>
             <div class="form-control" data-tinymce id="album_body">{{item.body|raw}}</div>
         </div>
 
+        {# persons selection #}
         <div class="form-group">
             <label for="album_persons">Persons</label>
 
@@ -149,6 +155,7 @@
             {% endfor %}
         </div>
 
+        {# private or not #}
         <div class="form-group">
             <label for="private">Private?</label>
             <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" {% if item.private == 1 %}checked{% endif %}>

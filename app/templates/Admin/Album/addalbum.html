@@ -40,6 +40,7 @@
             </div>
         </div>
 
+        {# label #}
         <div class="form-group">
             <label for="album_images">Photos</label>
             <div class="row"><small class="col-xs-12 form-text text-muted">
@@ -51,11 +52,12 @@
             </small></div>
         </div>
         
-        
+        {# dropzone preview #}
         <div class="list-group" class="files" id="previews">
             {% include 'General/partials/dropzone-preview.html' %}
         </div>
 
+        {# dropzone input #}
         <div class="form-group">
             <span class="btn btn-success fileinput-button dz-clickable">
                 <i class="glyphicon glyphicon-plus"></i>
@@ -70,26 +72,29 @@
                 <span>Remove all</span>
             </span>
         </div>
+        <div id="img_urls" class="hidden"></div>
 
-        <div id="img_urls"></div>
-        <div id="album_markers"></div>
-
+        {# location field #}
         <div class="form-group">
             <label for="location_name">Location</label>
             <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
         </div>
         
+        {# map #}
         <div class="panel panel-default panel-map">
             <div class="">
                 <div id="album_map"></div>
             </div>
         </div>
+        <div id="album_markers"></div>
         
+        {# body field #}
         <div class="form-group">
             <label for="album_body">Body</label>
             <div class="form-control" data-tinymce id="album_body"></div>
         </div>
 
+        {# persons selection #}
         <div class="form-group">
             <label for="album_body">Persons</label>
 
@@ -112,9 +117,9 @@
                 {% endif %}
 
             {% endfor %}
-
         </div>
 
+        {# private or not #}
         <div class="form-group">
             <label for="private">Private?</label>
             <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" checked>
