@@ -34,28 +34,28 @@ Photobum.initSwitches = function() {
 
 Photobum.initDatepicker = function () {
     
-    // Start Datepicker
-    $('#start_date').datetimepicker({
-            format: 'DD-MM-YYYY, HH:mm:ss',
-            date: moment()
-        }
-    );
+    // // Start Datepicker
+    // $('#start_date').datetimepicker({
+    //         format: 'DD-MM-YYYY, HH:mm:ss',
+    //         date: moment()
+    //     }
+    // );
 
-    $('#start_date').on('dp.change', function (e) {
-        $('#end_date').data("DateTimePicker").minDate(e.date);
-    });
+    // $('#start_date').on('dp.change', function (e) {
+    //     $('#end_date').data("DateTimePicker").minDate(e.date);
+    // });
 
-    // End Datepicker
-    $('#end_date').datetimepicker({
-            format: 'DD-MM-YYYY, HH:mm:ss',
-            date: moment(),
-            useCurrent: false
-        }
-    );
+    // // End Datepicker
+    // $('#end_date').datetimepicker({
+    //         format: 'DD-MM-YYYY, HH:mm:ss',
+    //         date: moment(),
+    //         useCurrent: false
+    //     }
+    // );
 
-    $("#end_date").on("dp.change", function (e) {
-        $('#start_date').data("DateTimePicker").maxDate(e.date);
-    });
+    // $("#end_date").on("dp.change", function (e) {
+    //     $('#start_date').data("DateTimePicker").maxDate(e.date);
+    // });
   
 };
 

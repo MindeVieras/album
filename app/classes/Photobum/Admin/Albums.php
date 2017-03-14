@@ -31,6 +31,7 @@ class Albums extends Admin{
             'data' => $this->getAlbums(),
             'user' => $this->user
         ]);
+        //ddd($this);
     }
 
     public function add(){
@@ -47,12 +48,14 @@ class Albums extends Admin{
             $ds = DIRECTORY_SEPARATOR;
             
             $date = new DateTime($item['start_date']);
-            $year = $date->format('Y');
+            $date_path = $date->format('Y'.$ds.'m'.$ds.'d');
             $name = \Web::instance()->slug($item['name']);
 
-            $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
-            $file_path_style = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$name.$ds.'styles';
-            $media_path = $ds.'media'.$ds.'albums'.$ds.$year.$ds.$name;
+            $name_date_path = $date_path.$ds.$name;
+
+            $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$name_date_path;
+            $file_path_style = getcwd().$ds.'media'.$ds.'albums'.$ds.$name_date_path.$ds.'styles';
+            $media_path = $ds.'media'.$ds.'albums'.$ds.$name_date_path;
             $styles = $this->db->exec("SELECT * FROM media_styles");
             
             $editMode = $item['id'] ? true : false;
@@ -62,17 +65,6 @@ class Albums extends Admin{
                 $id = $item['id'];
 
                 $this->model->load(['id=?', $id]);
-
-                $old_name = \Web::instance()->slug($this->model->name);
-                $new_name = \Web::instance()->slug($item['name']);
-
-                if($old_name != $name){
-                    $nameChanged = true;
-                } else {
-                    $nameChanged = false;
-                }
-
-                //sd($old_name, $new_name, $nameChanged);
 
                 // update url
                 $url = General::makeAlbumUrl($item['name'], $item['start_date']);
@@ -86,15 +78,12 @@ class Albums extends Admin{
                 // remove persons relations before save
                 $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");    
 
-                // get db media files
-                $db_files = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
-                $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
-
-
-                //sd($db_urls);
-
                 // remove unvanted media files and db
                 if(!empty($item['album_images_db'])){
+
+                    // get db media files
+                    $db_files = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                    $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
 
                     $form_urls = array_map(function($row){
                         $url = substr($row['value'], strlen(getcwd()));
@@ -112,10 +101,55 @@ class Albums extends Admin{
                             unlink($full_path);
                             foreach ($styles as $style) {
                                 $path = $file_path_style.$ds.$style['name'].$ds.basename($full_path);
-                                unlink($path);
+                                if(file_exists($path)){
+                                    unlink($path);
+                                }
                             }
                         }
                     }
+
+                    // rename dir if album name or date chaged
+                    $old_name = \Web::instance()->slug($this->model->name);
+
+                    $date = new DateTime($this->model->start_date);
+                    $old_date = $date->format('Y'.$ds.'m'.$ds.'d');
+
+                    $old_path = $old_date.$ds.$old_name;
+
+                    if($old_path != $name_date_path){
+                        $nameChanged = true;
+                    } else {
+                        $nameChanged = false;
+                    }
+
+                    if($nameChanged){
+
+                        //sd($db_files, $db_urls);
+
+                        $old = str_replace($name_date_path, $old_path, $file_path);
+
+                        // rename dir
+                        if (is_dir($old)) {
+                            if ($dh = opendir($old)) {
+
+                                // make media DIR
+                                if (!file_exists($file_path)) {
+                                    mkdir($file_path, 0777, true);
+                                }
+
+                                while (($file = readdir($dh)) !== false) {
+                                    //exclude unwanted 
+                                    if ($file==".") continue;
+                                    if ($file=="..")continue;
+                                    rename($old.$ds.$file, $file_path.$ds.$file);
+                                }
+
+                                $command = 'rm -Rf '.$old;
+                                shell_exec($command);
+                            }
+                        }
+                    }
+
                 }
 
                 if(empty($item['album_images_db'])){
@@ -269,13 +303,13 @@ class Albums extends Admin{
 
             $ds = DIRECTORY_SEPARATOR;
             $date = new DateTime($a['start_date']);
-            $year = $date->format('Y');
-            $slug = \Web::instance()->slug($a['name']);
+            $date_path = $date->format('Y'.$ds.'m'.$ds.'d');
+            $name = \Web::instance()->slug($a['name']);
 
             $d['id'] = $a['id'];
             $d['name'] = $a['name'];
             $d['date'] = $date->format('Y-m-d H:i:s');
-            $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$year.$ds.$slug;
+            $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$date_path.$ds.$name;
             $d['url'] = $a['url'];
             $d['created'] = $a['created'];
             $d['media'] = $this->getMedia($a['id'], 3);

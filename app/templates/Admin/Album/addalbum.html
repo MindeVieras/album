@@ -125,6 +125,31 @@
             <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" checked>
         </div>
 
+        <script type="text/javascript">
+            // Start Datepicker
+    $('#start_date').datetimepicker({
+            format: 'DD-MM-YYYY, HH:mm:ss',
+            date: moment()
+        }
+    );
+
+    $('#start_date').on('dp.change', function (e) {
+        $('#end_date').data("DateTimePicker").minDate(e.date);
+    });
+
+    // End Datepicker
+    $('#end_date').datetimepicker({
+            format: 'DD-MM-YYYY, HH:mm:ss',
+            date: moment(),
+            useCurrent: false
+        }
+    );
+
+    $("#end_date").on("dp.change", function (e) {
+        $('#start_date').data("DateTimePicker").maxDate(e.date);
+    });
+    </script>
+
     </form>
 </div>
 {% endblock content %}

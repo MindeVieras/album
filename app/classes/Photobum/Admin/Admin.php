@@ -23,6 +23,7 @@ class Admin extends Base
             'section' => 'home',
             'user' => $this->f3->get('SESSION.cw_cms_admin')
         );
+        //ddd($this);
     }
 
     public function home()
