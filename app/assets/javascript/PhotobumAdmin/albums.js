@@ -32,7 +32,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
             console.log(data);
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
-                //Photobum.closeModal(true);
+                Photobum.closeModal(true);
             }
             else {
                 $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');

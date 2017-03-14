@@ -101,9 +101,7 @@ class Albums extends Admin{
                             unlink($full_path);
                             foreach ($styles as $style) {
                                 $path = $file_path_style.$ds.$style['name'].$ds.basename($full_path);
-                                if(file_exists($path)){
-                                    unlink($path);
-                                }
+                                unlink($path);
                             }
                         }
                     }
@@ -124,7 +122,15 @@ class Albums extends Admin{
 
                     if($nameChanged){
 
-                        //sd($db_files, $db_urls);
+                        $med = $this->initOrm('media', true);
+                        foreach ($db_urls as $row) {
+                            $med->load(['album_id=? and file_url=?', $id, $row]);
+                            $new_url = str_replace($old_path, $name_date_path, $med->file_url);
+                            $med->file_url = $new_url;
+                            $med->save();
+                        }
+
+                        //sd($med->id, $d, $new_url, $old_path, $name_date_path);
 
                         $old = str_replace($name_date_path, $old_path, $file_path);
 
