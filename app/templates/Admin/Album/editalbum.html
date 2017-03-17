@@ -206,7 +206,7 @@
 </div>
 {% endblock content %}
 {% block footer %}
-<button type="button" class="btn btn-danger pull-left" data-id="{{item.id}}" data-name="{{item.name}}" data-function="PhotobumAdmin.deleteAlbum">Delete</button>
-<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-<button type="button" class="btn btn-success" data-function="PhotobumAdmin.addAlbum">Save</button>
+<button type="button" class="btn btn-danger delete-button pull-left" data-id="{{item.id}}" data-name="{{item.name}}" data-function="PhotobumAdmin.deleteAlbum">Delete</button>
+<button type="button" class="btn btn-default cancel-button" data-dismiss="modal"><span>Cancel</span></button>
+<button type="button" class="btn btn-success ladda-button save-button" data-style="zoom-out" data-function="PhotobumAdmin.addAlbum"><span class="ladda-label">Save</span></button>
 {% endblock footer %}

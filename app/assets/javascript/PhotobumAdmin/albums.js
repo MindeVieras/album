@@ -7,9 +7,10 @@ PhotobumAdmin.viewAlbums = function() {
 };
 
 PhotobumAdmin.addAlbum = function (info, btn) {
+
     $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
 
-    var data = {
+    var form_data = {
         id: $('#id').val(),
         name: $('#name').val(),
         start_date: $('#start_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
@@ -23,13 +24,37 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         private: $('#add_album #private').bootstrapSwitch('state')
     };
     //console.log(form_data);
+
+    // set ladda for save button
+    countImg = form_data.album_images.length;
+    if(countImg > 0){
+        //console.log(countImg);
+        $('.delete-button').remove();
+        $('.cancel-button').remove();
+
+        // Create a new instance of ladda for the specified button
+        var l = Ladda.create(document.querySelector('.save-button'));
+        // Start loading
+        l.start();
+
+        if(countImg == 1){
+            time = 5000;
+        } else {
+            time = 10000;
+        }    
+        setTimeout(function(){
+            Photobum.closeModal(true);
+        },time);
+    }
+
+    // make ajax post
     $.ajax({
         type: "POST",
-        data: data,
+        data: form_data,
         url: '/admin/albums/add',
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal(true);

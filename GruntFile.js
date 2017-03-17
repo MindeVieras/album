@@ -29,7 +29,7 @@ module.exports = function(grunt) {
                     './assets/css/photobumadmin.min.css': [
                         "./build/css/admin.sass.css",
                         './bower_components/bootstrap/dist/css/bootstrap.css',
-                        './bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
+                        './bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css'
                     ]
                 }
             }
