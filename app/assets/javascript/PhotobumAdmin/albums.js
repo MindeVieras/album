@@ -1,5 +1,33 @@
 PhotobumAdmin.albumsReady = function() {
     //console.log('albums ready');
+
+    // make media sortable
+    if($('#previews').length){
+        var el = document.getElementById('previews');
+        var sortable = Sortable.create(el, {
+            
+            dataIdAttr: 'data-',
+            // Element is chosen
+            onChoose: function (evt) {
+                evt.oldIndex;  // element index within parent
+            },
+
+            // Element dragging started
+            onStart: function (evt) {
+                evt.oldIndex;  // element index within parent
+            },
+
+            // Element dragging ended
+            onEnd: function (evt) {
+                console.log(evt.oldIndex);  // element's old index within parent
+                console.log(evt.newIndex);  // element's new index within parent
+                console.log(evt.item);
+                index = $(evt.item).attr('data-index');
+                $('.img_weight[data-weight="'+evt.newIndex+'"]').attr('data-weight', evt.oldIndex);
+                $('.img_weight[data-index="'+index+'"]').attr('data-weight', evt.newIndex);
+            },
+        });
+    }
 };
 
 PhotobumAdmin.viewAlbums = function() {
@@ -17,13 +45,27 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         end_date: $('#end_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
         location_name: $('#add_album #location_name').val(),
         locations: $('#add_album .album_loc').serializeArray(),
-        album_images: $('#add_album .img_url').serializeArray(),
-        album_images_db: $('#add_album .img_url_db').serializeArray(),
+        album_images: $('#add_album .img_url').map(function(){
+            return {
+                name: $(this).attr('name'),
+                weight: $(this).data('weight'),
+                value: $(this).val()
+            }
+        }).get(),
+        album_images_db: $('#add_album .img_url_db').map(function(){
+            return {
+                media_id: $(this).data('id'),
+                name: $(this).attr('name'),
+                weight: $(this).data('weight'),
+                value: $(this).val()
+            }
+        }).get(),
         album_persons: $('#add_album .album_persons').serializeArray(),
         body: tinyMCE.get('album_body').getContent(),
         private: $('#add_album #private').bootstrapSwitch('state')
     };
-    //console.log(form_data);
+    console.log(form_data);
+    //return false;
 
     // set ladda for save button
     countImg = form_data.album_images.length;

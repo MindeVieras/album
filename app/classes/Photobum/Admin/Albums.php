@@ -85,26 +85,52 @@ class Albums extends Admin{
                     $db_files = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
                     $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
 
-                    $form_urls = array_map(function($row){
-                        $url = substr($row['value'], strlen(getcwd()));
-                        return $url;
+                    $form_fields = array_map(function($row){
+                        $field['id'] = $row['media_id'];
+                        $field['weight'] = $row['weight'];
+                        $field['url'] = substr($row['value'], strlen(getcwd()));
+                        return $field;
                     }, $item['album_images_db']);
 
-                    $diff = array_values(array_diff($db_urls, $form_urls));
+                    $urls = array_map(function($row){
+                        $url = $row['url'];
+                        return $url;
+                    }, $form_fields);
 
-                    //sd($db_urls, $form_urls, $diff);
+                    
+                    // // update weights                    
+                    $w = $this->initOrm('media', true);
+                    foreach ($form_fields as $field) {
+                        $id = $field['id'];
+                        //$data[] = $d;
+                        $w->load(['id=?', $id]);
+                        $w->weight = $field['weight'];
+                        $w->save();
+                    }
+
+                    //sd($data);
+
+                    $diff = array_values(array_diff($db_urls, $urls));
+
+                    //sd($db_urls, $form_fields, $urls, $diff);
                     if(!empty($diff)) {
                         // remove media
                         foreach ($diff as $d) {
                             $this->db->exec("DELETE FROM media WHERE file_url = '$d'");
                             $full_path = getcwd().$d;
-                            unlink($full_path);
+                            if(file_exists($full_path)){
+                                unlink($full_path);
+                            }
                             foreach ($styles as $style) {
                                 $path = $file_path_style.$ds.$style['name'].$ds.basename($full_path);
-                                unlink($path);
+                                if(file_exists($path)){
+                                    unlink($path);
+                                }
                             }
                         }
                     }
+
+                    //sd($db_files);
 
                     // rename dir if album name or date chaged
                     $old_name = \Web::instance()->slug($this->model->name);
@@ -214,10 +240,9 @@ class Albums extends Admin{
 
                 // rename files
                 foreach ($item['album_images'] as $file) {
-            
+                    //sd($file);
                     $tmp_file = $file['value'];
                     $file_name = basename($tmp_file);
-
                     // make image styles
                     foreach ($styles as $style) {
 
@@ -234,6 +259,7 @@ class Albums extends Admin{
                     $urls = $this->initOrm('media', true);
                     $urls->file_url = $media_path.$ds.basename($tmp_file);
                     $urls->album_id = $this->model->id;
+                    $urls->weight = $file['weight'];
                     $urls->save();
 
                 }
@@ -328,11 +354,13 @@ class Albums extends Admin{
 
     private function getMedia($id, $limit){
 
-        $media = $this->db->exec("SELECT file_url from media WHERE album_id = '$id' LIMIT $limit");
+        $media = $this->db->exec("SELECT * from media WHERE album_id = '$id' ORDER BY weight ASC LIMIT $limit");
         
         foreach ($media as $m) {
+            $medi['id'] = $m['id'];
             $medi['url'] = $m['file_url'];
             $medi['name'] = basename($m['file_url']);
+            $medi['weight'] = $m['weight'];
             if(file_exists(getcwd().$m['file_url'])){            
                 $file_size = filesize(getcwd().$m['file_url']);
                 $medi['size'] = General::formatSizeUnits($file_size);

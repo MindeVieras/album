@@ -27,7 +27,8 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.42",
     "dropzone": "^4.3.0",
     "bootstrap-switch": "^3.3.2",
-    "exif-js": "^2.1.1"
+    "exif-js": "^2.1.1",
+    "Sortable": "sortablejs#^1.5.1"
   },
   "resolutions": {
     "jquery": "^3.1.0"

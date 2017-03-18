@@ -118,7 +118,8 @@ Photobum.initDropzone = function() {
             });
             this.on("success", function(file, response) {
                 indx = $(file.previewElement).attr('data-index');
-                field.append('<input name="img_url[]" data-index="'+indx+'" class="img_url" value="'+response.location+'">');
+                w  = indx - 1;
+                field.append('<input name="img_url[]" data-index="'+indx+'" data-weight="'+w+'" class="img_url img_weight" value="'+response.location+'">');
             });
             this.on("removedfile", function(file) {
                 indx = $(file.previewElement).attr('data-index');
