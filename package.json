@@ -1,26 +1,19 @@
 {
   "name": "album",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Album CMS on FatFree",
   "main": "GruntFile.js",
   "directories": {
     "test": "tests"
   },
   "dependencies": {
-    "load-grunt-tasks": "^3.5.2"
+    "grunt-bower-concat": "^1.0.0",
+    "grunt-contrib-uglify": "^2.2.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-bower-concat": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-cssmin": "^1.0.1",
-    "grunt-contrib-less": "^1.4.0",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-uglify": "^2.0.0",
-    "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-ftp-deploy": "^0.1.10",
-    "grunt-notify": "^0.4.5"
+    "grunt-contrib-watch": "^1.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
