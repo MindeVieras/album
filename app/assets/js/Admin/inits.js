@@ -60,20 +60,20 @@ Photobum.initDatepicker = function () {
 };
 
 Photobum.initEditors = function() {
-    tinymce.remove();
-    $("[data-tinymce]").each(function(){
-        tinymce.init({
-            skin_url: '/assets/deps/tinymce/skins/lightgray',
-            theme: 'inlite',
+    // tinymce.remove();
+    // $("[data-tinymce]").each(function(){
+    //     tinymce.init({
+    //         skin_url: '/assets/deps/tinymce/skins/lightgray',
+    //         theme: 'inlite',
 
-            plugins: 'paste contextmenu textpattern autolink',
-            insert_toolbar: false,
-            selection_toolbar: 'bold italic | h2 h3',
-            inline: true,
-            selector: '#'+$(this).attr('id'),
-            height: '400',
-        });
-    });
+    //         plugins: 'paste contextmenu textpattern autolink',
+    //         insert_toolbar: false,
+    //         selection_toolbar: 'bold italic | h2 h3',
+    //         inline: true,
+    //         selector: '#'+$(this).attr('id'),
+    //         height: '400',
+    //     });
+    // });
 };
 
 Photobum.initDropzone = function() {

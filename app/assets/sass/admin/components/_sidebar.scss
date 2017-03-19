@@ -1,0 +1,19 @@
+.main-sidebar{
+	background-color: #222d32;
+	position: fixed;
+	width: 230px;
+	top: 0;
+  left: 0;
+  padding-top: 50px;
+  min-height: 100%;
+  .sidebar{
+  	padding-bottom: 10px;
+  }
+  .user-panel{
+  	position: relative;
+    width: 100%;
+    padding: 10px;
+  	white-space: nowrap;
+    overflow: hidden;
+  }
+}

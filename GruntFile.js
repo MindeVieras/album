@@ -71,7 +71,9 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('admin', [
+        'sass:admin',
         'bower_concat:admin',
+        'uglify:admin',
         'watch'
     ]);
 

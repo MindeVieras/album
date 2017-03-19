@@ -1,0 +1,119 @@
+
+<!-- sidebar -->
+<section class="sidebar">
+    
+    <div class="user-panel">
+        <div class="pull-left image">
+            <img src="../../images/ranjith.png" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+            <p>Ranjithprabhu. K</p>
+            <span class="text-aqua text-sm">Software Engineer</span>
+        </div>
+    </div>
+
+    <!-- search form -->
+    <form action="#" method="get" class="sidebar-form ng-pristine ng-valid">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button type="button" name="search" id="search-btn" class="btn btn-flat" data-ng-click="vm.search();"><i class=" fa fa-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <!-- /.search form -->
+
+    <ul class="sidebar-menu">
+        <!-- ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.dashboard" href="#/app/dashboard">
+                <i class="fa fa-dashboard"></i> <span class="ng-binding">Dashboard</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope active" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.skills" href="#/app/skills">
+                <i class="fa fa-gears"></i> <span class="ng-binding">Skills</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.education" href="#/app/education">
+                <i class="fa fa-graduation-cap"></i> <span class="ng-binding">Education</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.experience" href="#/app/experience">
+                <i class="fa fa-suitcase"></i> <span class="ng-binding">Experience</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.recent" href="#/app/recent-projects">
+                <i class="fa fa-file-code-o"></i> <span class="ng-binding">Recent Projects</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.websites" href="#/app/websites">
+                <i class="fa fa-globe"></i> <span class="ng-binding">Websites</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.portfolio" href="#/app/portfolio">
+                <i class="fa fa-anchor"></i> <span class="ng-binding">Portfolio</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.about" href="#/app/about-me">
+                <i class="fa fa-user-secret"></i> <span class="ng-binding">About Me</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems --><li class="treeview ng-scope" ui-sref-active="active" ng-click="vm.sideBar();" data-ng-repeat="menu in vm.menuItems" role="button" tabindex="0">
+            <a ui-sref="app.contact" href="#/app/contact">
+                <i class="fa fa-phone"></i> <span class="ng-binding">Contact</span>
+            </a>
+        </li><!-- end ngRepeat: menu in vm.menuItems -->
+        <li class="treeview" ui-sref-active="active" ng-click="vm.sideBar();" role="button" tabindex="0">
+            <a href="https://github.com/ranjithprabhuk/Angular-Bootstrap-Dashboard" target="_blank">
+                <i class="fa fa-github"></i> <span>View in Github</span>
+            </a>
+        </li>
+    </ul>
+
+</section>
+<!-- /.sidebar -->
+
+
+
+
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/admin">Photobum</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="adminnav nav navbar-nav">
+            <li class='user'><a href="{{page.approot}}user">Users</a></li>
+            <li class='albums'><a href="{{page.approot}}albums">Albums</a></li>
+            <li class='artists'><a href="{{page.approot}}persons">Persons</a></li>
+            <li class="dropdown tools">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tools <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a style="pointer-events:none;" href="{{page.approot}}pfcclean">No tools yet</a></li>
+                    <li><a href="{{page.approot}}reports">Reports</a></li>
+                    <li><a href="{{page.approot}}f-explorer">F-Explorer</a></li>
+                    {% if page.user.access_level >= 100 %}
+                        <li><a href="{{page.approot}}pagemeta">Page Meta</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/admin/settings"><i class="fa fa-cogs" aria-hidden="true"></i></a></li>
+            <li><a href="/admin/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+        </ul>
+        <p class="navbar-text navbar-right ">Signed in as {{page.user.display_name}}</p>
+    </div>
+    </div>
+</nav>
+<script>
+    $(function() {
+        $('.adminnav .{{page.section}}').addClass('active');
+    });
+</script>

@@ -7,17 +7,29 @@
 
 <body>
 
-{% include 'General/partials/modal.html' %}
-{% include 'Admin/menu.html' %}
+{% include 'Admin/partials/modal.html' %}
 
-<div id="main-content">
-    {% block title %}{% endblock %}
-    {% block content %}{% endblock %}
+<div id="main-wrapper">
+
+	<header class="main-header">
+		{% include 'Admin/partials/header.html' %}
+	</header>
+
+	<aside class="main-sidebar">
+		{% include 'Admin/partials/sidebar.html' %}
+	</aside>
+	
+	<div class="main-content">
+	    {% block content %}{% endblock %}
+	</div>
+
+	<div class="main-footer">
+	    {% include 'Admin/partials/footer.html' %}
+	</div>
 </div>
-<div id="main-content-footer">
-    {% block footer %}{% endblock %}
-</div>
+
 {% include 'General/partials/livereload.html' %}
 {% include 'General/partials/onready.html' %}
+
 </body>
 </html>
