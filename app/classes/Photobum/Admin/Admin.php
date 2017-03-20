@@ -20,7 +20,7 @@ class Admin extends Base
             'session' => $_SESSION,
             'approot' => '/admin/',
             'path' => $this->f3->get('PATH'),
-            'section' => 'home',
+            'section' => 'dashboard',
             'user' => $this->f3->get('SESSION.cw_cms_admin')
         );
         //ddd($this);

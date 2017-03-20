@@ -61,7 +61,8 @@ PhotobumAdmin.addAlbum = function (info, btn) {
             }
         }).get(),
         album_persons: $('#add_album .album_persons').serializeArray(),
-        body: tinyMCE.get('album_body').getContent(),
+        //body: tinyMCE.get('album_body').getContent(),
+        body: 'bodis',
         private: $('#add_album #private').bootstrapSwitch('state')
     };
     console.log(form_data);

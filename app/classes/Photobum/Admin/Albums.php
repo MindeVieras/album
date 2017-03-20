@@ -279,7 +279,7 @@ class Albums extends Admin{
             General::flushJsonResponse($data);
 
         } else {
-            $template = $this->twig->loadTemplate('Admin/Album/addalbum.html');
+            $template = $this->twig->loadTemplate('Admin/Album/add.html');
             echo $template->render([
                 'persons' => $this->getPersons(0),
                 'page' => $this->page
@@ -290,7 +290,7 @@ class Albums extends Admin{
     public function edit($params){
         $this->auth();
         $this->model->load(['id=?', $params['id']]);
-        $template = $this->twig->loadTemplate('Admin/Album/editalbum.html');
+        $template = $this->twig->loadTemplate('Admin/Album/edit.html');
         echo $template->render([
             'locations' => $this->getLocations($params['id']),
             'media' => $this->getMedia($params['id'], 1000),

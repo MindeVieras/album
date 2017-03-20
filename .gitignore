@@ -3,6 +3,7 @@
 bower_components
 /app/assets/stylesheets/css/compiled.less.css
 *.js.map
+*.css.map
 *.orig
 
 node_modules/

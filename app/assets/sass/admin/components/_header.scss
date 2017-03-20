@@ -1,3 +1,33 @@
-header{
-
+header.main-header{
+  position: relative;
+  height: 50px;
+  width: 100%;
+  z-index: 1;
+  .logo{
+  	background-color: #555299;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 50px;
+    text-align: center;
+    width: 200px;
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 0 15px;
+    font-weight: 900;
+    float: left;
+    overflow: hidden;
+  }
+  .navbar{
+  	background-color: #605ca8;
+  	height: 50px;
+  }
+  .sidebar-toggle{
+  	cursor: pointer;
+  	float: left;
+    background-color: transparent;
+    padding: 15px 15px;
+    color: #fff;
+    &:hover{
+    	background-color: #555299;
+    }
+  }
 }

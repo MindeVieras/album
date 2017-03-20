@@ -11,9 +11,79 @@
   }
   .user-panel{
   	position: relative;
-    width: 100%;
+    width: 210px;
     padding: 10px;
   	white-space: nowrap;
     overflow: hidden;
+    .image{
+    	background-color: $white;
+    	width: 45px;
+    	height: 45px;
+    	text-align: center;
+    	line-height: 45px;
+    	float: left;
+    	@include border-radius(50%);
+    }
+    .info{
+	    padding: 5px 5px 5px 15px;
+	    line-height: 1;
+	    position: absolute;
+	    left: 55px;
+	    p{
+	    	color: $white;
+	    	font-weight: 600;
+    		margin-bottom: 9px;
+	    }
+	    span{
+	    	color: #00c0ef;
+	    	font-size: 12px;
+	    }
+    }
+  }
+  .sidebar-search{
+    border: 1px solid #374850;
+    margin: 10px 10px;
+    overflow: hidden;
+    text-overflow: clip;
+    @include border-radius(3px);
+    input[type="text"]{
+      color: #666;
+    	background-color: #374850;
+    	  padding-right: 40px;
+    	  padding-left: 10px;
+    		width: calc(100% - 50px);
+    }
+    .input-btn{
+			color: #999;
+			font-size: 14px;
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 38px;
+			height: 38px;
+    }
   }
 }
+
+ul.sidebar-menu{
+	a{
+    display: block;
+		padding: 12px 5px 12px 15px;
+		color: #b8c7ce;
+		border-left: 3px solid transparent;
+		i{
+			width: 20px;
+		}
+		&:hover, &.active{
+			color: #ffffff;
+			background: #1e282c;
+			border-left-color: #605ca8;
+		}
+	}
+}
+
+
+
+
+
+

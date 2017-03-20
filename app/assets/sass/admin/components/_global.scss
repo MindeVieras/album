@@ -1,5 +1,5 @@
 body{
-  background-color: #ffffff;
+  background-color: #ecf0f5;
 	-webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
@@ -11,7 +11,59 @@ body{
   overflow-y: auto;
 }
 
+a{
+	text-decoration: none;
+}
+
+input[type=date],
+input[type=datetime],
+input[type=datetime-local],
+input[type=email],
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=range],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week]
+{
+  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	width: 90%;
+	padding: 10px 5%;
+}
+
+button{
+	outline: none;
+	cursor: pointer;
+}
+
+h1,h2,h3,h4,h5,h6{
+	font-weight: 500;
+	line-height: 1.1;
+	color: #2d2d2d;
+}
+
+.input-group{
+	position: relative;
+}
+
+.hidden {
+  display: none !important;
+}
+
 .main-content{
 	margin-left: 230px;
+	min-height: 100%;
 
+}
+
+.page-title{
+	padding:15px 15px 0 15px;
+	h1{
+		font-size: 24px;
+	}
 }

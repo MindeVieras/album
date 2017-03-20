@@ -53,6 +53,9 @@ module.exports = function(grunt) {
                     'sass:admin'
                 ]
             },
+            templates: {
+                files: ['./app/templates/**/*.html']
+            },
             options: {
                 livereload: true
             }
