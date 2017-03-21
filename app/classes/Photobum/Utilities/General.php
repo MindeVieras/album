@@ -32,6 +32,19 @@ class General
         return date('Y-m-d H:i:s');
     }
 
+    public static function getColors($type)
+    {
+        $f3 = \Base::instance();
+        $db = $f3->get('DB');
+
+        $colors = $db->exec("SELECT * FROM colors WHERE type = '$type'");
+        // $model = new Mapper($f3->get('DB'), 'colors');
+        // $model->load(['type=?', $type]);
+        
+        return $colors;
+
+    }
+
     public static function makeUrl($title, $area, $count = 0)
     {
         $f3 = \Base::instance();

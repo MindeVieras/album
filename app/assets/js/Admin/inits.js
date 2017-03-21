@@ -5,6 +5,7 @@ Photobum.initFrontend = function() {
 Photobum.initView = function() {
     Photobum.localize();
     Photobum.initSwitches();
+    Photobum.initColorPickers();
     Photobum.initDatepicker();
     Photobum.initEditors();
     Photobum.initDropzone();
@@ -29,6 +30,20 @@ Photobum.initSwitches = function() {
             offColor: 'danger'
         }
     );
+};
+
+Photobum.initColorPickers = function () {
+    
+
+    $('.color-person').spectrum({
+        preferredFormat: 'hex',
+
+        change: function(color){
+            $(this).attr('data-code', color.toHex()).addClass('color-changed');
+            //console.log(color.toName());
+        }
+    });
+  
 };
 
 Photobum.initDatepicker = function () {

@@ -6,9 +6,11 @@
 @import 'components/header';
 @import 'components/sidebar';
 @import 'components/persons';
+@import 'components/colors';
 
 @import 'plugins/bootstrap-custom';
 @import 'plugins/ladda';
+@import 'plugins/spectrum';
 
 .kint{
 	    display: inline-block;

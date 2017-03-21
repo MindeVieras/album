@@ -18,11 +18,7 @@ module.exports = function(grunt) {
         bower_concat: {
             admin: {
                 dest: {
-                    js: './app/assets/js/Admin/plugins/bower.js',
-                    css: './app/assets/sass/admin/plugins/bower.css'
-                },
-                mainFiles: {
-                    package: ['./bower_components/font-awesome/css/font-awesome.css']
+                    js: './app/assets/js/Admin/plugins/bower.js'
                 }
             }
         },
