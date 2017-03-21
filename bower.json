@@ -25,7 +25,8 @@
     "eonasdan-bootstrap-datetimepicker": "^4.17.47",
     "Sortable": "sortablejs#^1.5.1",
     "exif-js": "^2.1.1",
-    "tinymce": "^4.5.5"
+    "tinymce": "^4.5.5",
+    "freewall": "^1.0.6"
   },
   "resolutions": {
     "jquery": "^3.2.0"

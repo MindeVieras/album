@@ -5,6 +5,12 @@
 
 @import 'components/header';
 @import 'components/sidebar';
+@import 'components/persons';
 
 @import 'plugins/bootstrap-custom';
 @import 'plugins/ladda';
+
+.kint{
+	    display: inline-block;
+    width: 100%;
+}

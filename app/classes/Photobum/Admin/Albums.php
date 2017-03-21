@@ -19,6 +19,7 @@ class Albums extends Admin{
         $this->initOrm('albums');
         $this->model->url = 'SELECT url FROM urls WHERE urls.type_id = albums.id AND urls.type = \'album\'';
         $this->twig->onReady('PhotobumAdmin.albumsReady');
+        $this->page['title']= 'Albums Manager';
         $this->page['section']= 'albums';
     }
 

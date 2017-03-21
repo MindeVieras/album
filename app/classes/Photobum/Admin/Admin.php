@@ -20,6 +20,7 @@ class Admin extends Base
             'session' => $_SESSION,
             'approot' => '/admin/',
             'path' => $this->f3->get('PATH'),
+            'title' => 'Dashboard',
             'section' => 'dashboard',
             'user' => $this->f3->get('SESSION.cw_cms_admin')
         );
@@ -30,7 +31,7 @@ class Admin extends Base
     {
         $this->auth();
 
-        $template = $this->twig->loadTemplate('Admin/home.html');
+        $template = $this->twig->loadTemplate('Admin/dashboard.html');
         echo $template->render(array(
             'page' => $this->page,
         ));

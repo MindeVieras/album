@@ -16,6 +16,8 @@ class Persons extends Admin
         $this->initOrm('persons');
         $this->model->url = 'SELECT url FROM urls WHERE urls.type_id = persons.id AND urls.type = \'person\'';
         $this->twig->onReady('PhotobumAdmin.personsReady');
+        $this->page['title']= 'Persons Manager';
+        $this->page['body_class']= 'persons';
         $this->page['section']= 'persons';
 
     }
@@ -31,10 +33,12 @@ class Persons extends Admin
                                                 persons
                                                 JOIN urls ON persons.id = urls.type_id AND urls.type = \'person\'
                                             ORDER BY created DESC LIMIT 10');
-        $template = $this->twig->loadTemplate('Admin/Person/persons.html');
+        $this->letters = $this->db->exec("SELECT DISTINCT(LOWER(SUBSTRING(person_name, 1,1))) FROM persons");
+        $template = $this->twig->loadTemplate('Admin/Person/view.html');
         echo $template->render([
             'page' => $this->page,
             'data' => $this->results,
+            'letters' => $this->letters,
             'user' => $this->user
         ]);
     }
@@ -81,12 +85,6 @@ class Persons extends Admin
             }
 
             $this->model->person_name = $item['name'];
-            // $this->model->headline_image = $item['headline_image'];
-            // $this->model->hilite_para = $item['hilite_para'];
-            // $this->model->body = $item['body'];
-            // $this->model->attribution_id = $item['attribution_id'];
-            // $this->model->publish_date = $item['publish_date'];
-            // $this->model->publish = intval($item['publish'] == 'true');
             $this->model->save();
             
             if (!$editMode) {
@@ -104,7 +102,7 @@ class Persons extends Admin
             General::flushJsonResponse($data);
 
         }else{
-            $template = $this->twig->loadTemplate('Admin/Person/addperson.html');
+            $template = $this->twig->loadTemplate('Admin/Person/add.html');
             echo $template->render([
                 'page' => $this->page
             ]);
@@ -115,7 +113,7 @@ class Persons extends Admin
     {
         $this->auth();
         $this->model->load(['id=?', $params['id']]);
-        $template = $this->twig->loadTemplate('Admin/Person/editperson.html');
+        $template = $this->twig->loadTemplate('Admin/Person/edit.html');
         echo $template->render([
             'item' => $this->model->cast(),
             'page' => $this->page

@@ -1,4 +1,3 @@
-
 Photobum.initFrontend = function() {
 
 };

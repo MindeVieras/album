@@ -7,14 +7,15 @@ use Photobum\Utilities\General;
 use DB\SQL\Mapper;
 use Photobum\Config;
 
-class User extends Admin
+class Users extends Admin
 {
 
     public function __construct()
     {
         parent::__construct();
         $this->model = New Mapper($this->db, 'admin_users');
-        $this->page['section']= 'user';
+        $this->page['title']= 'Users Manager';
+        $this->page['section']= 'users';
 
     }
 
@@ -22,7 +23,7 @@ class User extends Admin
     {
         $this->auth();
         $this->results = $this->db->exec('select * from admin_users');
-        $template = $this->twig->loadTemplate('Admin/user.html');
+        $template = $this->twig->loadTemplate('Admin/User/view.html');
         echo $template->render(array(
             'page' => $this->page,
             'data' => $this->results,

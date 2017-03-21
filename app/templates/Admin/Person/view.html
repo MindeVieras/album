@@ -1,35 +1,27 @@
 {% extends 'Admin/base.html' %}
 {% block content %}
 <div class="container">
-    
-  <div class="page-title">
-      <h1>Persons Manager</h1>
-  </div>
 
-    <table class="table table-hover table-bordered table-condensed table-responsive" data-table="true">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Created</th>
-            <td></td>
-        </tr>
-        </thead>
-        <tbody>
+    <div class="col-xs-12">
+        <button type="button" class="btn btn-primary " data-size="person-small" data-remote="/admin/persons/add">Add Person</button>
+    </div>
 
+    <ul class="persons-list">
         {% for row in data %}
-        <tr>
-            <td>{{row.person_name}}</td>
-            <td><time data-no-date="Never" data-utc="{{row.created}}" class="localdate timeago" datetime="{{row.created}}"></time></td>
-            <td>
+        <li class="item">
+            <span>{{row.person_name}}</span>
+            <div><time data-no-date="Never" data-utc="{{row.created}}" class="localdate timeago" datetime="{{row.created}}"></time></div>
+            <div>
                 <button type="button" class="btn btn-primary pull-right" data-size="wide" data-remote="/admin/persons/edit/id/{{row.id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                 <button type="button" class="btn btn-danger pull-right" data-id="{{row.id}}" data-name="{{row.person_name}}" data-function="PhotobumAdmin.deletePerson"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <a type="button" class="btn btn-default pull-right" rel="noopener noreferrer" target="_blank" href="{{row.url}}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
-            </td>
-        </tr>
+            </div>
+        </li>
         {% endfor %}
-        </tbody>
-    </table>
-    <button type="button" class="btn btn-primary " data-size="wide" data-remote="/admin/persons/add">Add Person</button>
+    </div>
+
+    {{ddd(letters)}}
+
 </div>
 
 {% endblock content%}

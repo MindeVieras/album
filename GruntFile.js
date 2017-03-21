@@ -19,7 +19,10 @@ module.exports = function(grunt) {
             admin: {
                 dest: {
                     js: './app/assets/js/Admin/plugins/bower.js',
-                    scss: './app/assets/sass/admin/plugins/_bower.scss'
+                    css: './app/assets/sass/admin/plugins/bower.css'
+                },
+                mainFiles: {
+                    package: ['./bower_components/font-awesome/css/font-awesome.css']
                 }
             }
         },

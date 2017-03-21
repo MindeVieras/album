@@ -11,6 +11,7 @@ class Reports extends Admin{
 
     public function __construct(){
         parent::__construct();
+        $this->page['title']= 'Reports';
         $this->page['section']= 'reports';
     }
 

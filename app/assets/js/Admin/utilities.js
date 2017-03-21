@@ -29,7 +29,7 @@ Photobum.openModal = function (opts, btn) {
     var target = Photobum.makeModalTarget(opts.ident);
 
     ModalList.push(target);
-
+    console.log(target);
     $(target).addClass('modal-' + opts.size);
     if (btn) {
         Photobum.populateModalDataFields($(btn));
