@@ -1,3 +1,55 @@
+body.sidebar-collapsed{
+  .main-header{
+    .logo{
+      width: 50px;
+      font-size: 0px;
+      .small-logo{
+        font-size: 20px;
+      }
+    }
+  }
+  .main-sidebar{
+    width: 50px;
+    .user-panel{
+      .image{
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+      }
+      .info{
+        height: 0;
+        margin: 0;
+        font-size: 0;
+      }
+    }
+    .sidebar-search{
+      margin: 0;
+      width: 0;
+      height: 0;
+    }
+  }
+  ul.sidebar-menu{
+    a{
+      width: 27px;
+      //@include transition(0.1s ease-in);
+      span{
+        font-size: 0;
+      }
+      &:hover{
+        width: 180px;
+        span{
+          font-size: 14px;
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+  .main-content{
+    margin-left: 50px;
+
+  }
+}
+
 header.main-header{
   position: relative;
   height: 50px;
@@ -9,12 +61,19 @@ header.main-header{
     font-size: 20px;
     line-height: 50px;
     text-align: center;
-    width: 200px;
+    width: 230px;
     font-family: Helvetica, Arial, sans-serif;
-    padding: 0 15px;
     font-weight: 900;
     float: left;
     overflow: hidden;
+    @include transition(0.3s ease-in);
+    .small-logo{
+      font-size: 0px;
+      position: absolute;
+      top: 0;
+      width: 50px;
+      @include transition(0.3s ease-in);
+    }
   }
   .navbar{
   	background-color: #605ca8;

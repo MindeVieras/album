@@ -1,6 +1,8 @@
 <div class="logo">
 	Album Dashboard
+	<div class="small-logo">AD</div>
 </div>
+
 
 <nav class="navbar">
 
@@ -8,6 +10,17 @@
   	<i class="fa fa-bars"></i>
     <span class="sr-only">Toggle navigation</span>
   </a>
+
+  <script type="text/javascript">
+    $('.sidebar-toggle').click(function(e){
+        e.stopPropagation();
+        if($('body').hasClass('sidebar-collapsed')){
+            $('body').removeClass('sidebar-collapsed');
+        } else {
+            $('body').addClass('sidebar-collapsed');
+        }
+    });
+  </script>
 
   <div class="page-title">
   	<h1>{{page.title}}</h1>

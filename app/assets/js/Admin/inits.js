@@ -4,12 +4,25 @@ Photobum.initFrontend = function() {
 
 Photobum.initView = function() {
     Photobum.localize();
+    Photobum.Menu();
     Photobum.initSwitches();
     Photobum.initColorPickers();
     Photobum.initDatepicker();
     Photobum.initEditors();
     Photobum.initDropzone();
     Photobum.initMap();
+};
+
+Photobum.Menu = function() {
+    //sidebar = $('.main-sidebar');
+    // $('.sidebar-toggle').click(function(e){
+    //     e.stopPropagation();
+    //     if($('body').hasClass('sidebar-collapsed')){
+    //         $('body').removeClass('sidebar-collapsed');
+    //     } else {
+    //         $('body').addClass('sidebar-collapsed');
+    //     }
+    // });
 };
 
 Photobum.initSwitches = function() {

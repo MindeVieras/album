@@ -6,6 +6,7 @@
   left: 0;
   padding-top: 50px;
   min-height: 100%;
+  @include transition(0.3s ease-in);
   .sidebar{
   	padding-bottom: 10px;
   }
@@ -23,12 +24,16 @@
     	line-height: 45px;
     	float: left;
     	@include border-radius(50%);
+      @include transition(0.3s ease-in);
     }
     .info{
-	    padding: 5px 5px 5px 15px;
+	    margin: 5px 5px 5px 15px;
 	    line-height: 1;
 	    position: absolute;
 	    left: 55px;
+      height: 50px;
+      overflow: hidden;
+      @include transition(0.3s ease-in);
 	    p{
 	    	color: $white;
 	    	font-weight: 600;
@@ -43,9 +48,12 @@
   .sidebar-search{
     border: 1px solid #374850;
     margin: 10px 10px;
+    width: 208px;
+    height: 38px;
     overflow: hidden;
     text-overflow: clip;
     @include border-radius(3px);
+    @include transition(0.3s ease-in);
     input[type="text"]{
       color: #666;
     	background-color: #374850;
@@ -69,11 +77,17 @@ ul.sidebar-menu{
 	a{
     display: block;
 		padding: 12px 5px 12px 15px;
+    width: 207px;
 		color: #b8c7ce;
 		border-left: 3px solid transparent;
+    @include transition(0.3s ease-in);
 		i{
 			width: 20px;
 		}
+    span{
+      font-size: 16px;
+      @include transition(0.3s ease-in);
+    }
 		&:hover, &.active{
 			color: #ffffff;
 			background: #1e282c;

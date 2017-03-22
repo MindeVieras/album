@@ -58,6 +58,7 @@ h1,h2,h3,h4,h5,h6{
 .main-content{
 	margin-left: 230px;
 	min-height: 100%;
+  @include transition(0.3s ease-in);
 
 }
 

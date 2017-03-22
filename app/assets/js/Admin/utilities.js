@@ -41,10 +41,12 @@ Photobum.openModal = function (opts, btn) {
     opts.backgroundClass = typeof opts.backgroundClass !== 'undefined' ? opts.backgroundClass : '';
     opts.loaderHTML = typeof opts.loaderHTML !== 'undefined' ? opts.loaderHTML : '<p class="text-center"><i class="modalspinner fa fa-refresh fa-spin fa-5x"></i></p>';
     var target = Photobum.makeModalTarget(opts.ident);
+    var backdrop = $('.modal-backdrop');
 
     ModalList.push(target);
-    console.log(target);
+    //console.log(target);
     $(target).addClass('modal-' + opts.size);
+    backdrop.addClass('modal-' + opts.size);
     if (btn) {
         Photobum.populateModalDataFields($(btn));
     }
