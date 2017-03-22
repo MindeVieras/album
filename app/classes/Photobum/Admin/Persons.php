@@ -116,6 +116,7 @@ class Persons extends Admin
         $template = $this->twig->loadTemplate('Admin/Person/edit.html');
         echo $template->render([
             'item' => $this->model->cast(),
+            'colors' => General::getColors('person'),
             'page' => $this->page
         ]);
     }

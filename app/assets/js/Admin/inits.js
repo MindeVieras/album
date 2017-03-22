@@ -34,7 +34,6 @@ Photobum.initSwitches = function() {
 
 Photobum.initColorPickers = function () {
     
-
     $('.color-person').spectrum({
         preferredFormat: 'hex',
 
@@ -43,6 +42,19 @@ Photobum.initColorPickers = function () {
             //console.log(color.toName());
         }
     });
+
+    if($('#select-color').length){    
+        colors = $('#select-color').data('pal');
+        palette = colors.split(',');
+
+        //console.log(palette);
+        $('#select-color').spectrum({
+            showPaletteOnly: true,
+            showPalette: true,
+            color: 'blanchedalmond',
+            palette: palette
+        });
+    }
   
 };
 

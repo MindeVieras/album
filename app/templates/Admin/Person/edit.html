@@ -11,6 +11,11 @@
             <input type="text" class="form-control" id="person_name" name ="person_name" placeholder="Name..." value="{{item.person_name}}">
             <small class="form-text text-muted">URL: {{page.base_url}}<span class="slugholder">{{item.url}}</span></small>
         </div>
+
+        <div class="form-group">
+            <label for="chose-color">Colors</label>
+            <input type="text" class="form-control" data-pal="{% for c in colors %}{{c.code}},{% endfor %}" id="select-color">
+        </div>
         
 <!-- 
         <div class="form-group">
