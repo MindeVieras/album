@@ -1,0 +1,19 @@
+#messages{
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+	.msg{
+		overflow: hidden;
+    display: block;
+    max-width: 250px;
+    padding: 5px 15px;
+    margin-top: 10px;
+    &.msg-success{
+    	background-color: #8DEA9C;
+    	&:after{
+    		content: '\f00c';
+    		font-family: FontAwesome;
+    	}
+    }
+	}
+}

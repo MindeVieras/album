@@ -43,8 +43,9 @@ PhotobumAdmin.addColor = function (info, btn) {
         success: function (data) {
             //console.log(data);
             if (data.ack == 'ok') {
-                //$('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
-                //Photobum.closeModal(true);
+
+                Photobum.setMsg(data.msg, 'success', 5);
+
                 colorInput.attr('data-id', data.id);
                 colorInput.attr('data-code', data.msg);
 
@@ -93,7 +94,9 @@ PhotobumAdmin.saveColors = function (info, btn) {
             success: function (data) {
                 //console.log(data);
                 if (data.ack == 'ok') {
+
                     $('.color-changed').removeClass('color-changed');
+                    Photobum.setMsg(data.msg, 'success', 5);
                 }
                 else {
                     //$('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');

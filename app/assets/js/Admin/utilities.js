@@ -19,6 +19,20 @@ Photobum.localize = function () {
     $('time.timeago').timeago();
 };
 
+Photobum.setMsg = function (msg, type, s) {
+    time = s * 1000;
+    //console.log(msg, type, time);
+    container = $('#messages');
+    message = '<span class="msg msg-'+type+'" data-msg="'+msg+'">'+msg+'</span>';
+
+    container.append(message);
+
+    setTimeout(function(){
+        $('*[data-msg="'+msg+'"]').remove();
+    },time);
+
+
+};
 
 Photobum.openModal = function (opts, btn) {
     opts.ladda = typeof opts.ladda !== 'undefined' ? opts.ladda : 1;
