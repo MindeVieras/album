@@ -27,7 +27,8 @@
     "exif-js": "^2.1.1",
     "tinymce": "^4.5.5",
     "freewall": "^1.0.6",
-    "spectrum": "^1.8.0"
+    "spectrum": "^1.8.0",
+    "switchery": "^0.8.2"
   },
   "resolutions": {
     "jquery": "^3.2.0"

@@ -1,0 +1,49 @@
+{% extends 'Admin/base.html' %}
+{% block content %}
+<div class="container">
+    
+  <div class="content-type">
+    
+    <div class="header">
+    	<h1>Site Settings</h1>
+    </div>
+    
+    <div id="albums-colors">
+
+			<button type="button" class="btn btn-default" data-type="album" data-function="PhotobumAdmin.addColor"><span class=""><i class="fa fa-plus-square-o"></i></span></button>
+    	
+    	{% for c in albums_colors %}
+    		<div class="color-item">
+    			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
+    		</div>
+    	{% endfor %}
+    
+    </div>
+	
+	</div>
+    
+  <div class="content-type">
+    
+    <div class="header">
+    	<h1>Albums Settings</h1>
+    </div>
+    
+    <div id="persons-colors">
+
+			<button type="button" class="btn btn-default" data-type="person" data-function="PhotobumAdmin.addColor"><span class=""><i class="fa fa-plus-square-o"></i></span></button>
+    	
+    	{% for c in persons_colors %}
+    		<div class="color-item">
+    			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
+    		</div>
+    	{% endfor %}
+    
+    </div>
+	
+	</div>
+
+
+<button type="button" class="btn btn-success ladda-button save-button" data-style="zoom-out" data-function="PhotobumAdmin.saveColors"><span class="ladda-label">Save</span></button>
+</div>
+
+{% endblock content%}
