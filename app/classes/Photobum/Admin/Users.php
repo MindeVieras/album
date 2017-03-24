@@ -95,7 +95,7 @@ class Users extends Admin
                 General::flushJsonResponse($data);
             }
         }else{
-            $template = $this->twig->loadTemplate('Admin/adduser.html');
+            $template = $this->twig->loadTemplate('Admin/User/add.html');
             echo $template->render([
                 'page' => $this->page
             ]);
@@ -106,7 +106,7 @@ class Users extends Admin
     {
         $this->auth();
         $this->model->load(['id=?', $params['id']]);
-        $template = $this->twig->loadTemplate('Admin/edituser.html');
+        $template = $this->twig->loadTemplate('Admin/User/edit.html');
         echo $template->render([
             'user' => $this->model->cast(),
             'page' => $this->page

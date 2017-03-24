@@ -14,7 +14,7 @@ class Account extends Admin
     {
         parent::__construct();
         $this->initOrm('settings');
-        $this->twig->onReady('PhotobumAdmin.settingsReady');
+        //$this->twig->onReady('PhotobumAdmin.accountReady');
         $this->page['title']= $this->page['user']['display_name'].'\'s account';
         $this->page['body_class']= 'account';
         $this->page['section']= 'account';
@@ -25,7 +25,7 @@ class Account extends Admin
     public function view($params)
     {
         $this->auth();
-        $this->twig->onReady('PhotobumAdmin.viewSettings');
+        //$this->twig->onReady('PhotobumAdmin.viewAccount');
         $this->results = $this->db->exec('SELECT 
                                                 persons.*,
                                                 urls.url
@@ -42,15 +42,15 @@ class Account extends Admin
     }
 
 
-    public function add()
+    public function save()
     {
         $this->auth();
         if ($this->f3->get('VERB') == 'POST') {
             $item = $this->f3->get('POST');
 
-            if (!$item['name'] ) {
-                General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Name is required']);
-            }
+            // if (!$item['name'] ) {
+            //     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Name is required']);
+            // }
 
             // check if exists
             //$isurl = General::makeUrl($item['name'], 'persons');
@@ -62,48 +62,47 @@ class Account extends Admin
             //     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Headline image is required']);
             // }
 
-            $this->model->reset();
+            //$this->model->reset();
 
 
-            $editMode = $item['id'] ? true : false;
+            // $editMode = $item['id'] ? true : false;
 
-            if ($editMode) {
-                $this->model->load(['id=?', $item['id']]);
+            // if ($editMode) {
+            //     $this->model->load(['id=?', $item['id']]);
 
-                // update url
-                $url = General::makeUrl($this->model->person_name, 'persons');
-                $urls = $this->initOrm('urls', true);
-                $urls->load(['type_id=? and type=\'person\'', $item['id']]);
-                $urls->url = $url['url'];
-                $urls->save();
+            //     // update url
+            //     $url = General::makeUrl($this->model->person_name, 'persons');
+            //     $urls = $this->initOrm('urls', true);
+            //     $urls->load(['type_id=? and type=\'person\'', $item['id']]);
+            //     $urls->url = $url['url'];
+            //     $urls->save();
 
-                if ($this->model->dry()) {
-                    General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Couldn\'t edit this person']);
-                }
-            }
+            //     if ($this->model->dry()) {
+            //         General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Couldn\'t edit this person']);
+            //     }
+            // }
 
-            $this->model->person_name = $item['name'];
-            $this->model->save();
+            //$this->model->person_name = $item['name'];
+            //$this->model->save();
             
-            if (!$editMode) {
-                // save urls
-                $url = General::makeUrl($this->model->person_name, 'persons');
-                $urls = $this->initOrm('urls', true);
-                $urls->load(['id=?', $item['id']]);
-                $urls->url = $url['url'];
-                $urls->type = 'person';
-                $urls->type_id = $this->model->id;
-                $urls->save();
-            }
+            // if (!$editMode) {
+            //     // save urls
+            //     $url = General::makeUrl($this->model->person_name, 'persons');
+            //     $urls = $this->initOrm('urls', true);
+            //     $urls->load(['id=?', $item['id']]);
+            //     $urls->url = $url['url'];
+            //     $urls->type = 'person';
+            //     $urls->type_id = $this->model->id;
+            //     $urls->save();
+            // }
 
-            $data = ['ack' => 'OK'];
+            $data = ['ack' => 'ok', 'msg' => $item];
             General::flushJsonResponse($data);
 
         }else{
-            $template = $this->twig->loadTemplate('Admin/Person/add.html');
-            echo $template->render([
-                'page' => $this->page
-            ]);
+            
+            $data = ['ack' => 'error', 'msg' => 'Only post'];
+            General::flushJsonResponse($data);
         }
     }
 
