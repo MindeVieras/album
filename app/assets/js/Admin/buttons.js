@@ -30,10 +30,10 @@ PhotobumAdmin.addUser = function () {
     $.ajax({
         type: "POST",
         data: data,
-        url: '/admin/user/add',
+        url: '/admin/users/add',
         dataType: "json",
         success: function (data) {
-            if (data.ack == 'OK') {
+            if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal(true);
             }

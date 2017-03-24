@@ -38,14 +38,24 @@ class Users extends Admin
         if ($this->f3->get('VERB') == 'POST') {
             $user = $this->f3->get('POST');
             $editMode = $user['id'] ? true : false;
+
             if ($editMode) {
                 $this->model->load(['id=?', $user['id']]);
+
                 if ($this->model->dry()) {
                     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Couldn\'t edit this news item']);
                 }
+
+                // update settings
+                $sett= $this->initOrm('user_settings', true);
+                $sett->load(['user_id=?', $this->model->id]);
+                //$sett->u = $url['url'];
+                $sett->save();
+
             } else {
                 $this->model->load(['username=?', $user['email']]);
             }
+
             //Ensure username is unique.
             if ($this->model->dry() || $editMode) {
                 //Ensure access level is between 1 and 100.
@@ -58,22 +68,22 @@ class Users extends Admin
                     if ($user['password'] !== $user['confirm_password']) {
                         General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Passwords do not match.']);
                     }
-                    //Ensure password is longer than 6 characters.
-                    if (strlen($user['password']) < 8) {
-                        General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must be at least six characters long.']);
-                    }
-                    //Ensure password contains numbers.
-                    if (!preg_match("#[0-9]+#", $user['password'])) {
-                        General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain at least one number.']);
-                    }
-                    //Ensure password contains UPPERCASE characters.
-                    if (!preg_match("#[A-Z]+#", $user['password'])) {
-                        General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain upper case characters.']);
-                    }
-                    //Ensure password lowercase characters.
-                    if (!preg_match("#[a-z]+#", $user['password'])) {
-                        General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain lower case characters.']);
-                    }
+                    // //Ensure password is longer than 6 characters.
+                    // if (strlen($user['password']) < 8) {
+                    //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must be at least six characters long.']);
+                    // }
+                    // //Ensure password contains numbers.
+                    // if (!preg_match("#[0-9]+#", $user['password'])) {
+                    //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain at least one number.']);
+                    // }
+                    // //Ensure password contains UPPERCASE characters.
+                    // if (!preg_match("#[A-Z]+#", $user['password'])) {
+                    //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain upper case characters.']);
+                    // }
+                    // //Ensure password lowercase characters.
+                    // if (!preg_match("#[a-z]+#", $user['password'])) {
+                    //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must contain lower case characters.']);
+                    // }
                     $password = password_hash($user['password'], PASSWORD_DEFAULT);
                 }
 
@@ -87,7 +97,16 @@ class Users extends Admin
                 $this->model->access_level = $user['access_level'];
                 $this->model->active = intval($user['status'] == 'true');
                 if ($this->model->save()) {
-                    $data = ['ack' => 'OK'];
+
+                    // also save settings
+                    if(!$editMode){                    
+                        $sett = $this->initOrm('user_settings', true);                
+                        $sett->user_id = $this->model->id;
+                        $sett->save();
+                    }
+
+                    $data = ['ack' => 'ok'];
+
                 }
                 General::flushJsonResponse($data);
             } else {

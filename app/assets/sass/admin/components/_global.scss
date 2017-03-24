@@ -32,8 +32,9 @@ input[type=week]
 {
   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
 	font-size: 14px;
-	width: 90%;
-	padding: 10px 5%;
+	box-sizing:border-box;
+	//width: 90%;
+	//padding: 10px 5%;
 }
 
 button{
