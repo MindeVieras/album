@@ -11,7 +11,12 @@ class Admin extends Base
 
     public function __construct()
     {
+
         parent::__construct();
+
+        $user = $this->f3->get('SESSION.cw_cms_admin');
+        $uid = $user['id'];
+        
         $this->twig = new Twig();
         $this->page = array(
             'base_url' => Config::get('BASE_URL'),
@@ -22,7 +27,8 @@ class Admin extends Base
             'path' => $this->f3->get('PATH'),
             'title' => 'Dashboard',
             'section' => 'dashboard',
-            'user' => $this->f3->get('SESSION.cw_cms_admin')
+            'user' => $user,
+            'user_settings' => $this->db->exec("SELECT * FROM user_settings WHERE user_id = '$uid'")
         );
         //ddd($this);
     }

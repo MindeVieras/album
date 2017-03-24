@@ -28,6 +28,22 @@ class Utilities extends APIController{
         ));
     }
 
+    public function collapseMenu(){
+        
+        if ($this->f3->get('VERB') == 'POST') {
+            
+            $data = $this->f3->get('POST');
+
+            $men = $this->initOrm('user_settings', true);   
+            $men->load(['user_id=?', $data['id']]);
+            if(!$men->dry()){
+                $men->menu_collapsed = $data['status'];
+                $men->save();
+            }
+
+        }
+    }
+
     public function deleteAlbumDir(){
         
         if ($this->f3->get('VERB') == 'POST') {

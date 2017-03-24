@@ -1,3 +1,21 @@
+PhotobumAdmin.collapseMenu = function (info, btn) {
+    //console.log('gfsgfg');
+    if($('body').hasClass('sidebar-collapsed')){
+        $('body').removeClass('sidebar-collapsed');
+        status = 0;
+    } else {
+        $('body').addClass('sidebar-collapsed');
+        status = 1;
+    }
+    $.ajax({
+        type: "POST",
+        data: {id: info.id, status: status},
+        url: '/api/utilities/collapse-menu',
+        dataType: "json"
+    });
+
+}
+
 PhotobumAdmin.addUser = function () {
     var data = {
         id: $('#add_user #user_id').val(),
