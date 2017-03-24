@@ -13,7 +13,7 @@ class Users extends Admin
     public function __construct()
     {
         parent::__construct();
-        $this->model = New Mapper($this->db, 'admin_users');
+        $this->model = New Mapper($this->db, 'users');
         $this->page['title']= 'Users Manager';
         $this->page['section']= 'users';
 
@@ -22,7 +22,7 @@ class Users extends Admin
     public function view($params)
     {
         $this->auth();
-        $this->results = $this->db->exec('select * from admin_users');
+        $this->results = $this->db->exec('select * from users');
         $template = $this->twig->loadTemplate('Admin/User/view.html');
         echo $template->render(array(
             'page' => $this->page,
