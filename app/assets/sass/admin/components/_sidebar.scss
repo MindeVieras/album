@@ -6,6 +6,7 @@
   left: 0;
   padding-top: 50px;
   min-height: 100%;
+  z-index: 1;
   @include transition(0.3s ease-in);
   .sidebar{
   	padding-bottom: 10px;
