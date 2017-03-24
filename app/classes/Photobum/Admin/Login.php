@@ -15,7 +15,7 @@ class Login extends Admin
     {
 
         if ($this->f3->get('VERB') == 'POST') {
-            $adminmodel = $this->initOrm('admin_users', true);
+            $adminmodel = $this->initOrm('users', true);
             $adminmodel->load(['username=?', $this->f3->get('POST.email')]);
             if ($adminmodel->dry()) {
                 General::flushJsonResponse(['ack'=>'error'], 403);
