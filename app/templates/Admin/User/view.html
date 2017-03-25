@@ -2,33 +2,34 @@
 {% block content %}
 <div class="container">
 
-    <table class="table table-hover table-bordered table-condensed table-responsive">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Display Name</th>
-            <th>Access Level</th>
-            <th>Last Login</th>
-            <td></td>
-        </tr>
-        </thead>
-        <tbody>
-        {% for row in data %}
-        <tr {% if row.active == 0 %} class="text-muted"{% endif %}>
-            <td>{{row.username}}</td>
-            <td>{{row.display_name}}</td>
-            <td>
-                {% if row.access_level == 100 %}Administrator{% endif %}
-                {% if row.access_level == 50 %}Editor{% endif %}
-            </td>
-            <td><time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time></td>
-            <td>
-                <button type="button" class="btn btn-primary pull-right"  data-remote="/admin/users/edit/id/{{row.id}}">Edit</button>
-            </td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <button type="button" class="btn btn-primary " data-remote="/admin/users/add">Add User</button>
+
+    <div class="panel">
+    
+        <div class="header">
+            <h1>
+                Users
+                <button type="button" class="btn btn-default btn-xs" data-remote="/admin/users/add"><i class="fa fa-plus"></i></button>
+            </h1>
+        </div>
+        
+        <div class="panel-content" id="album-users">
+
+            <ul>
+                {% for row in data %}
+                <li>
+                    {{row.username}}
+                    <time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time>
+                    {% if row.access_level == 100 %}Administrator{% endif %}
+                    {% if row.access_level == 50 %}Editor{% endif %}
+                    <button type="button" class=""  data-remote="/admin/users/edit/id/{{row.id}}">Edit</button>
+                </li>
+                {% endfor %}
+
+            </ul>
+        
+        </div>
+    
+    </div>
+
 </div>
 {% endblock content%}

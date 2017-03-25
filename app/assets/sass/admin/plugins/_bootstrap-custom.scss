@@ -695,6 +695,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 // buttons
 
 .btn {
+  outline: 0;
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -715,15 +716,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   -ms-user-select: none;
   user-select: none;
 }
-.btn:focus,
-.btn:active:focus,
-.btn.active:focus,
-.btn.focus,
-.btn:active.focus,
-.btn.active.focus {
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px;
-}
 .btn:hover,
 .btn:focus,
 .btn.focus {
@@ -732,7 +724,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .btn:active,
 .btn.active {
-  outline: 0;
   background-image: none;
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);

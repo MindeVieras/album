@@ -21268,6 +21268,31 @@ return d.keepInvalid=a,l},l.datepickerInput=function(a){if(0===arguments.length)
 
 })(window.Zepto || window.jQuery);
 
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['jQuery'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('jQuery'));
+  } else {
+    root.jquery_dotdotdot_min_js = factory(root.jQuery);
+  }
+}(this, function(jQuery) {
+/*
+ *	jQuery dotdotdot 1.8.3
+ *
+ *	Copyright (c) Fred Heusschen
+ *	www.frebsite.nl
+ *
+ *	Plugin website:
+ *	dotdotdot.frebsite.nl
+ *
+ *	Licensed under the MIT license.
+ *	http://en.wikipedia.org/wiki/MIT_License
+ */
+!function(t,e){function n(t,e,n){var r=t.children(),o=!1;t.empty();for(var i=0,d=r.length;d>i;i++){var l=r.eq(i);if(t.append(l),n&&t.append(n),a(t,e)){l.remove(),o=!0;break}n&&n.detach()}return o}function r(e,n,i,d,l){var s=!1,c="a, table, thead, tbody, tfoot, tr, col, colgroup, object, embed, param, ol, ul, dl, blockquote, select, optgroup, option, textarea, script, style",u="script, .dotdotdot-keep";return e.contents().detach().each(function(){var h=this,f=t(h);if("undefined"==typeof h)return!0;if(f.is(u))e.append(f);else{if(s)return!0;e.append(f),!l||f.is(d.after)||f.find(d.after).length||e[e.is(c)?"after":"append"](l),a(i,d)&&(s=3==h.nodeType?o(f,n,i,d,l):r(f,n,i,d,l)),s||l&&l.detach()}}),n.addClass("is-truncated"),s}function o(e,n,r,o,d){var c=e[0];if(!c)return!1;var h=s(c),f=-1!==h.indexOf(" ")?" ":"　",p="letter"==o.wrap?"":f,g=h.split(p),v=-1,w=-1,b=0,m=g.length-1;for(o.fallbackToLetter&&0==b&&0==m&&(p="",g=h.split(p),m=g.length-1);m>=b&&(0!=b||0!=m);){var y=Math.floor((b+m)/2);if(y==w)break;w=y,l(c,g.slice(0,w+1).join(p)+o.ellipsis),r.children().each(function(){t(this).toggle().toggle()}),a(r,o)?(m=w,o.fallbackToLetter&&0==b&&0==m&&(p="",g=g[0].split(p),v=-1,w=-1,b=0,m=g.length-1)):(v=w,b=w)}if(-1==v||1==g.length&&0==g[0].length){var x=e.parent();e.detach();var C=d&&d.closest(x).length?d.length:0;if(x.contents().length>C?c=u(x.contents().eq(-1-C),n):(c=u(x,n,!0),C||x.detach()),c&&(h=i(s(c),o),l(c,h),C&&d)){var T=d.parent();t(c).parent().append(d),t.trim(T.html())||T.remove()}}else h=i(g.slice(0,v+1).join(p),o),l(c,h);return!0}function a(t,e){return t.innerHeight()>e.maxHeight}function i(e,n){for(;t.inArray(e.slice(-1),n.lastCharacter.remove)>-1;)e=e.slice(0,-1);return t.inArray(e.slice(-1),n.lastCharacter.noEllipsis)<0&&(e+=n.ellipsis),e}function d(t){return{width:t.innerWidth(),height:t.innerHeight()}}function l(t,e){t.innerText?t.innerText=e:t.nodeValue?t.nodeValue=e:t.textContent&&(t.textContent=e)}function s(t){return t.innerText?t.innerText:t.nodeValue?t.nodeValue:t.textContent?t.textContent:""}function c(t){do t=t.previousSibling;while(t&&1!==t.nodeType&&3!==t.nodeType);return t}function u(e,n,r){var o,a=e&&e[0];if(a){if(!r){if(3===a.nodeType)return a;if(t.trim(e.text()))return u(e.contents().last(),n)}for(o=c(a);!o;){if(e=e.parent(),e.is(n)||!e.length)return!1;o=c(e[0])}if(o)return u(t(o),n)}return!1}function h(e,n){return e?"string"==typeof e?(e=t(e,n),e.length?e:!1):e.jquery?e:!1:!1}function f(t){for(var e=t.innerHeight(),n=["paddingTop","paddingBottom"],r=0,o=n.length;o>r;r++){var a=parseInt(t.css(n[r]),10);isNaN(a)&&(a=0),e-=a}return e}if(!t.fn.dotdotdot){t.fn.dotdotdot=function(e){if(0==this.length)return t.fn.dotdotdot.debug('No element found for "'+this.selector+'".'),this;if(this.length>1)return this.each(function(){t(this).dotdotdot(e)});var o=this,i=o.contents();o.data("dotdotdot")&&o.trigger("destroy.dot"),o.data("dotdotdot-style",o.attr("style")||""),o.css("word-wrap","break-word"),"nowrap"===o.css("white-space")&&o.css("white-space","normal"),o.bind_events=function(){return o.bind("update.dot",function(e,d){switch(o.removeClass("is-truncated"),e.preventDefault(),e.stopPropagation(),typeof l.height){case"number":l.maxHeight=l.height;break;case"function":l.maxHeight=l.height.call(o[0]);break;default:l.maxHeight=f(o)}l.maxHeight+=l.tolerance,"undefined"!=typeof d&&(("string"==typeof d||"nodeType"in d&&1===d.nodeType)&&(d=t("<div />").append(d).contents()),d instanceof t&&(i=d)),g=o.wrapInner('<div class="dotdotdot" />').children(),g.contents().detach().end().append(i.clone(!0)).find("br").replaceWith("  <br />  ").end().css({height:"auto",width:"auto",border:"none",padding:0,margin:0});var c=!1,u=!1;return s.afterElement&&(c=s.afterElement.clone(!0),c.show(),s.afterElement.detach()),a(g,l)&&(u="children"==l.wrap?n(g,l,c):r(g,o,g,l,c)),g.replaceWith(g.contents()),g=null,t.isFunction(l.callback)&&l.callback.call(o[0],u,i),s.isTruncated=u,u}).bind("isTruncated.dot",function(t,e){return t.preventDefault(),t.stopPropagation(),"function"==typeof e&&e.call(o[0],s.isTruncated),s.isTruncated}).bind("originalContent.dot",function(t,e){return t.preventDefault(),t.stopPropagation(),"function"==typeof e&&e.call(o[0],i),i}).bind("destroy.dot",function(t){t.preventDefault(),t.stopPropagation(),o.unwatch().unbind_events().contents().detach().end().append(i).attr("style",o.data("dotdotdot-style")||"").removeClass("is-truncated").data("dotdotdot",!1)}),o},o.unbind_events=function(){return o.unbind(".dot"),o},o.watch=function(){if(o.unwatch(),"window"==l.watch){var e=t(window),n=e.width(),r=e.height();e.bind("resize.dot"+s.dotId,function(){n==e.width()&&r==e.height()&&l.windowResizeFix||(n=e.width(),r=e.height(),u&&clearInterval(u),u=setTimeout(function(){o.trigger("update.dot")},100))})}else c=d(o),u=setInterval(function(){if(o.is(":visible")){var t=d(o);c.width==t.width&&c.height==t.height||(o.trigger("update.dot"),c=t)}},500);return o},o.unwatch=function(){return t(window).unbind("resize.dot"+s.dotId),u&&clearInterval(u),o};var l=t.extend(!0,{},t.fn.dotdotdot.defaults,e),s={},c={},u=null,g=null;return l.lastCharacter.remove instanceof Array||(l.lastCharacter.remove=t.fn.dotdotdot.defaultArrays.lastCharacter.remove),l.lastCharacter.noEllipsis instanceof Array||(l.lastCharacter.noEllipsis=t.fn.dotdotdot.defaultArrays.lastCharacter.noEllipsis),s.afterElement=h(l.after,o),s.isTruncated=!1,s.dotId=p++,o.data("dotdotdot",!0).bind_events().trigger("update.dot"),l.watch&&o.watch(),o},t.fn.dotdotdot.defaults={ellipsis:"... ",wrap:"word",fallbackToLetter:!0,lastCharacter:{},tolerance:0,callback:null,after:null,height:null,watch:!1,windowResizeFix:!0},t.fn.dotdotdot.defaultArrays={lastCharacter:{remove:[" ","　",",",";",".","!","?"],noEllipsis:[]}},t.fn.dotdotdot.debug=function(t){};var p=1,g=t.fn.html;t.fn.html=function(n){return n!=e&&!t.isFunction(n)&&this.data("dotdotdot")?this.trigger("update",[n]):g.apply(this,arguments)};var v=t.fn.text;t.fn.text=function(n){return n!=e&&!t.isFunction(n)&&this.data("dotdotdot")?(n=t("<div />").text(n).html(),this.trigger("update",[n])):v.apply(this,arguments)}}}(jQuery),jQuery(document).ready(function(t){t(".dot-ellipsis").each(function(){var e=t(this).hasClass("dot-resize-update"),n=t(this).hasClass("dot-timer-update"),r=0,o=t(this).attr("class").split(/\s+/);t.each(o,function(t,e){var n=e.match(/^dot-height-(\d+)$/);null!==n&&(r=Number(n[1]))});var a=new Object;n&&(a.watch=!0),e&&(a.watch="window"),r>0&&(a.height=r),t(this).dotdotdot(a)})}),jQuery(window).on("load",function(){jQuery(".dot-ellipsis.dot-load-update").trigger("update.dot")});
+return true;
+}));
+
 /**
  * Timeago is a jQuery plugin that makes it easy to support automatically
  * updating fuzzy timestamps (e.g. "4 minutes ago" or "about 1 day ago").
@@ -73653,3 +73678,322 @@ define("tinymce/Register", [
 
 expose(["tinymce/geom/Rect","tinymce/util/Promise","tinymce/util/Delay","tinymce/Env","tinymce/dom/EventUtils","tinymce/dom/Sizzle","tinymce/util/Tools","tinymce/dom/DomQuery","tinymce/html/Styles","tinymce/dom/TreeWalker","tinymce/html/Entities","tinymce/dom/DOMUtils","tinymce/dom/ScriptLoader","tinymce/AddOnManager","tinymce/dom/RangeUtils","tinymce/html/Node","tinymce/html/Schema","tinymce/html/SaxParser","tinymce/html/DomParser","tinymce/html/Writer","tinymce/html/Serializer","tinymce/dom/Serializer","tinymce/util/VK","tinymce/dom/ControlSelection","tinymce/dom/BookmarkManager","tinymce/dom/Selection","tinymce/Formatter","tinymce/UndoManager","tinymce/EditorCommands","tinymce/util/URI","tinymce/util/Class","tinymce/util/EventDispatcher","tinymce/util/Observable","tinymce/ui/Selector","tinymce/ui/Collection","tinymce/ui/ReflowQueue","tinymce/ui/Control","tinymce/ui/Factory","tinymce/ui/KeyboardNavigation","tinymce/ui/Container","tinymce/ui/DragHelper","tinymce/ui/Scrollable","tinymce/ui/Panel","tinymce/ui/Movable","tinymce/ui/Resizable","tinymce/ui/FloatPanel","tinymce/ui/Window","tinymce/ui/MessageBox","tinymce/WindowManager","tinymce/ui/Tooltip","tinymce/ui/Widget","tinymce/ui/Progress","tinymce/ui/Notification","tinymce/NotificationManager","tinymce/EditorObservable","tinymce/Shortcuts","tinymce/Editor","tinymce/util/I18n","tinymce/FocusManager","tinymce/EditorManager","tinymce/util/XHR","tinymce/util/JSON","tinymce/util/JSONRequest","tinymce/util/JSONP","tinymce/util/LocalStorage","tinymce/Compat","tinymce/ui/Layout","tinymce/ui/AbsoluteLayout","tinymce/ui/Button","tinymce/ui/ButtonGroup","tinymce/ui/Checkbox","tinymce/ui/ComboBox","tinymce/ui/ColorBox","tinymce/ui/PanelButton","tinymce/ui/ColorButton","tinymce/util/Color","tinymce/ui/ColorPicker","tinymce/ui/Path","tinymce/ui/ElementPath","tinymce/ui/FormItem","tinymce/ui/Form","tinymce/ui/FieldSet","tinymce/ui/FilePicker","tinymce/ui/FitLayout","tinymce/ui/FlexLayout","tinymce/ui/FlowLayout","tinymce/ui/FormatControls","tinymce/ui/GridLayout","tinymce/ui/Iframe","tinymce/ui/InfoBox","tinymce/ui/Label","tinymce/ui/Toolbar","tinymce/ui/MenuBar","tinymce/ui/MenuButton","tinymce/ui/MenuItem","tinymce/ui/Throbber","tinymce/ui/Menu","tinymce/ui/ListBox","tinymce/ui/Radio","tinymce/ui/ResizeHandle","tinymce/ui/SelectBox","tinymce/ui/Slider","tinymce/ui/Spacer","tinymce/ui/SplitButton","tinymce/ui/StackLayout","tinymce/ui/TabPanel","tinymce/ui/TextBox"]);
 })(window);
+/**
+ * UUID.js: The RFC-compliant UUID generator for JavaScript.
+ *
+ * @fileOverview
+ * @author  LiosK
+ * @version v3.3.0
+ * @license The MIT License: Copyright (c) 2010-2016 LiosK.
+ */
+
+/** @constructor */
+var UUID;
+
+UUID = (function(overwrittenUUID) {
+"use strict";
+
+// Core Component {{{
+
+/** @lends UUID */
+function UUID() {}
+
+/**
+ * The simplest function to get an UUID string.
+ * @returns {string} A version 4 UUID string.
+ */
+UUID.generate = function() {
+  var rand = UUID._getRandomInt, hex = UUID._hexAligner;
+  return  hex(rand(32), 8)          // time_low
+        + "-"
+        + hex(rand(16), 4)          // time_mid
+        + "-"
+        + hex(0x4000 | rand(12), 4) // time_hi_and_version
+        + "-"
+        + hex(0x8000 | rand(14), 4) // clock_seq_hi_and_reserved clock_seq_low
+        + "-"
+        + hex(rand(48), 12);        // node
+};
+
+/**
+ * Returns an unsigned x-bit random integer.
+ * @param {int} x A positive integer ranging from 0 to 53, inclusive.
+ * @returns {int} An unsigned x-bit random integer (0 <= f(x) < 2^x).
+ */
+UUID._getRandomInt = function(x) {
+  if (x <   0) return NaN;
+  if (x <= 30) return (0 | Math.random() * (1 <<      x));
+  if (x <= 53) return (0 | Math.random() * (1 <<     30))
+                    + (0 | Math.random() * (1 << x - 30)) * (1 << 30);
+  return NaN;
+};
+
+/**
+ * Returns a function that converts an integer to a zero-filled string.
+ * @param {int} radix
+ * @returns {function(num&#44; length)}
+ */
+UUID._getIntAligner = function(radix) {
+  return function(num, length) {
+    var str = num.toString(radix), i = length - str.length, z = "0";
+    for (; i > 0; i >>>= 1, z += z) { if (i & 1) { str = z + str; } }
+    return str;
+  };
+};
+
+UUID._hexAligner = UUID._getIntAligner(16);
+
+// }}}
+
+// UUID Object Component {{{
+
+/**
+ * Names of each UUID field.
+ * @type string[]
+ * @constant
+ * @since 3.0
+ */
+UUID.FIELD_NAMES = ["timeLow", "timeMid", "timeHiAndVersion",
+                    "clockSeqHiAndReserved", "clockSeqLow", "node"];
+
+/**
+ * Sizes of each UUID field.
+ * @type int[]
+ * @constant
+ * @since 3.0
+ */
+UUID.FIELD_SIZES = [32, 16, 16, 8, 8, 48];
+
+/**
+ * Generates a version 4 {@link UUID}.
+ * @returns {UUID} A version 4 {@link UUID} object.
+ * @since 3.0
+ */
+UUID.genV4 = function() {
+  var rand = UUID._getRandomInt;
+  return new UUID()._init(rand(32), rand(16), // time_low time_mid
+                          0x4000 | rand(12),  // time_hi_and_version
+                          0x80   | rand(6),   // clock_seq_hi_and_reserved
+                          rand(8), rand(48)); // clock_seq_low node
+};
+
+/**
+ * Converts hexadecimal UUID string to an {@link UUID} object.
+ * @param {string} strId UUID hexadecimal string representation ("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx").
+ * @returns {UUID} {@link UUID} object or null.
+ * @since 3.0
+ */
+UUID.parse = function(strId) {
+  var r, p = /^\s*(urn:uuid:|\{)?([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{2})([0-9a-f]{2})-([0-9a-f]{12})(\})?\s*$/i;
+  if (r = p.exec(strId)) {
+    var l = r[1] || "", t = r[8] || "";
+    if (((l + t) === "") ||
+        (l === "{" && t === "}") ||
+        (l.toLowerCase() === "urn:uuid:" && t === "")) {
+      return new UUID()._init(parseInt(r[2], 16), parseInt(r[3], 16),
+                              parseInt(r[4], 16), parseInt(r[5], 16),
+                              parseInt(r[6], 16), parseInt(r[7], 16));
+    }
+  }
+  return null;
+};
+
+/**
+ * Initializes {@link UUID} object.
+ * @param {uint32} [timeLow=0] time_low field (octet 0-3).
+ * @param {uint16} [timeMid=0] time_mid field (octet 4-5).
+ * @param {uint16} [timeHiAndVersion=0] time_hi_and_version field (octet 6-7).
+ * @param {uint8} [clockSeqHiAndReserved=0] clock_seq_hi_and_reserved field (octet 8).
+ * @param {uint8} [clockSeqLow=0] clock_seq_low field (octet 9).
+ * @param {uint48} [node=0] node field (octet 10-15).
+ * @returns {UUID} this.
+ */
+UUID.prototype._init = function() {
+  var names = UUID.FIELD_NAMES, sizes = UUID.FIELD_SIZES;
+  var bin = UUID._binAligner, hex = UUID._hexAligner;
+
+  /**
+   * List of UUID field values (as integer values).
+   * @type int[]
+   */
+  this.intFields = new Array(6);
+
+  /**
+   * List of UUID field values (as binary bit string values).
+   * @type string[]
+   */
+  this.bitFields = new Array(6);
+
+  /**
+   * List of UUID field values (as hexadecimal string values).
+   * @type string[]
+   */
+  this.hexFields = new Array(6);
+
+  for (var i = 0; i < 6; i++) {
+    var intValue = parseInt(arguments[i] || 0);
+    this.intFields[i] = this.intFields[names[i]] = intValue;
+    this.bitFields[i] = this.bitFields[names[i]] = bin(intValue, sizes[i]);
+    this.hexFields[i] = this.hexFields[names[i]] = hex(intValue, sizes[i] / 4);
+  }
+
+  /**
+   * UUID version number defined in RFC 4122.
+   * @type int
+   */
+  this.version = (this.intFields.timeHiAndVersion >> 12) & 0xF;
+
+  /**
+   * 128-bit binary bit string representation.
+   * @type string
+   */
+  this.bitString = this.bitFields.join("");
+
+  /**
+   * Non-delimited hexadecimal string representation ("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx").
+   * @type string
+   * @since v3.3.0
+   */
+  this.hexNoDelim = this.hexFields.join("");
+
+  /**
+   * UUID hexadecimal string representation ("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx").
+   * @type string
+   */
+  this.hexString = this.hexFields[0] + "-" + this.hexFields[1] + "-" + this.hexFields[2]
+                 + "-" + this.hexFields[3] + this.hexFields[4] + "-" + this.hexFields[5];
+
+  /**
+   * UUID string representation as a URN ("urn:uuid:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx").
+   * @type string
+   */
+  this.urn = "urn:uuid:" + this.hexString;
+
+  return this;
+};
+
+UUID._binAligner = UUID._getIntAligner(2);
+
+/**
+ * Returns UUID string representation.
+ * @returns {string} {@link UUID#hexString}.
+ */
+UUID.prototype.toString = function() { return this.hexString; };
+
+/**
+ * Tests if two {@link UUID} objects are equal.
+ * @param {UUID} uuid
+ * @returns {bool} True if two {@link UUID} objects are equal.
+ */
+UUID.prototype.equals = function(uuid) {
+  if (!(uuid instanceof UUID)) { return false; }
+  for (var i = 0; i < 6; i++) {
+    if (this.intFields[i] !== uuid.intFields[i]) { return false; }
+  }
+  return true;
+};
+
+// }}}
+
+// UUID Version 1 Component {{{
+
+/**
+ * Generates a version 1 {@link UUID}.
+ * @returns {UUID} A version 1 {@link UUID} object.
+ * @since 3.0
+ */
+UUID.genV1 = function() {
+  var now = new Date().getTime(), st = UUID._state;
+  if (now != st.timestamp) {
+    if (now < st.timestamp) { st.sequence++; }
+    st.timestamp = now;
+    st.tick = UUID._getRandomInt(4);
+  } else if (Math.random() < UUID._tsRatio && st.tick < 9984) {
+    // advance the timestamp fraction at a probability
+    // to compensate for the low timestamp resolution
+    st.tick += 1 + UUID._getRandomInt(4);
+  } else {
+    st.sequence++;
+  }
+
+  // format time fields
+  var tf = UUID._getTimeFieldValues(st.timestamp);
+  var tl = tf.low + st.tick;
+  var thav = (tf.hi & 0xFFF) | 0x1000;  // set version '0001'
+
+  // format clock sequence
+  st.sequence &= 0x3FFF;
+  var cshar = (st.sequence >>> 8) | 0x80; // set variant '10'
+  var csl = st.sequence & 0xFF;
+
+  return new UUID()._init(tl, tf.mid, thav, cshar, csl, st.node);
+};
+
+/**
+ * Re-initializes version 1 UUID state.
+ * @since 3.0
+ */
+UUID.resetState = function() {
+  UUID._state = new UUID._state.constructor();
+};
+
+/**
+ * Probability to advance the timestamp fraction: the ratio of tick movements to sequence increments.
+ * @type float
+ */
+UUID._tsRatio = 1 / 4;
+
+/**
+ * Persistent state for UUID version 1.
+ * @type UUIDState
+ */
+UUID._state = new function UUIDState() {
+  var rand = UUID._getRandomInt;
+  this.timestamp = 0;
+  this.sequence = rand(14);
+  this.node = (rand(8) | 1) * 0x10000000000 + rand(40); // set multicast bit '1'
+  this.tick = rand(4);  // timestamp fraction smaller than a millisecond
+};
+
+/**
+ * @param {Date|int} time ECMAScript Date Object or milliseconds from 1970-01-01.
+ * @returns {object}
+ */
+UUID._getTimeFieldValues = function(time) {
+  var ts = time - Date.UTC(1582, 9, 15);
+  var hm = ((ts / 0x100000000) * 10000) & 0xFFFFFFF;
+  return  { low: ((ts & 0xFFFFFFF) * 10000) % 0x100000000,
+            mid: hm & 0xFFFF, hi: hm >>> 16, timestamp: ts };
+};
+
+// }}}
+
+// Misc. Component {{{
+
+/**
+ * Reinstalls {@link UUID.generate} method to emulate the interface of UUID.js version 2.x.
+ * @since 3.1
+ * @deprecated Version 2.x. compatible interface is not recommended.
+ */
+UUID.makeBackwardCompatible = function() {
+  var f = UUID.generate;
+  UUID.generate = function(o) {
+    return (o && o.version == 1) ? UUID.genV1().hexString : f.call(UUID);
+  };
+  UUID.makeBackwardCompatible = function() {};
+};
+
+/**
+ * Preserves the value of 'UUID' global variable set before the load of UUID.js.
+ * @since 3.2
+ * @type object
+ */
+UUID.overwrittenUUID = overwrittenUUID;
+
+// }}}
+
+return UUID;
+
+})(UUID);
+
+// vim: et ts=2 sw=2 fdm=marker fmr&

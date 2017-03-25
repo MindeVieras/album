@@ -17,6 +17,7 @@
     padding: 10px;
   	white-space: nowrap;
     overflow: hidden;
+    @include transition(0.3s ease-in);
     .image{
     	background-color: $white;
     	width: 45px;
