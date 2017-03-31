@@ -23,7 +23,7 @@ class Users extends Admin
     public function view($params)
     {
         $this->auth();
-        $this->results = $this->db->exec('select * from users');
+        $this->results = $this->db->exec("SELECT * FROM users ORDER BY id ASC");
         $template = $this->twig->loadTemplate('Admin/User/view.html');
         echo $template->render(array(
             'page' => $this->page,
@@ -96,6 +96,7 @@ class Users extends Admin
                 $this->model->display_name = $user['display_name'];
                 $this->model->attribution_name = $user['attribution_name'];
                 $this->model->access_level = $user['access_level'];
+                $this->model->person = $user['person_id'];
                 $this->model->active = intval($user['status'] == 'true');
                 if ($this->model->save()) {
 
@@ -117,6 +118,7 @@ class Users extends Admin
         }else{
             $template = $this->twig->loadTemplate('Admin/User/add.html');
             echo $template->render([
+                'persons' => General::getPersons(),
                 'page' => $this->page
             ]);
         }
@@ -129,6 +131,7 @@ class Users extends Admin
         $template = $this->twig->loadTemplate('Admin/User/edit.html');
         echo $template->render([
             'user' => $this->model->cast(),
+            'persons' => General::getPersons($params['id']),
             'page' => $this->page
         ]);
     }

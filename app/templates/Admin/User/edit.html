@@ -38,10 +38,14 @@
             </div>
 
             <div class="form-group">
-                <label for="access_level">Assign Person</label>
-                <select class="form-control" id="access_level">
-                  <option value="100" {% if user.access_level == 100 %}selected{% endif %}>Administrator</option>
-                  <option value="50" {% if user.access_level == 50 %}selected{% endif %}>Editor</option>
+                <label for="assign_person">Assign Person</label>
+                <select class="form-control" id="assign_person">
+                    <option value="">-NONE-</option>
+                    {% for p in persons %}
+                    <option value="{{p.person_id}}" {% if user.person == p.person_id %}selected{% endif %}>
+                        {{p.person_name}}
+                    </option>
+                    {% endfor %}
                 </select>
             </div>
 

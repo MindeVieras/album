@@ -25,6 +25,7 @@ PhotobumAdmin.addUser = function () {
         confirm_password: $('#add_user #confirm_password').val(),
         attribution_name: $('#add_user #attribution_name').val(),
         access_level: $('#add_user #access_level').val(),
+        person_id: $('#add_user #assign_person').val(),
         status: $('#add_user #status').bootstrapSwitch('state')
     };
     $.ajax({
