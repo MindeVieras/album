@@ -10,7 +10,9 @@ body{
   overflow-x: hidden;
   overflow-y: auto;
 }
-
+* { 
+   transition: all 200ms ease;
+}
 a{
 	text-decoration: none;
 }

@@ -3,6 +3,7 @@
 }
 .user-block{
 	background-color: $white;
+	position: relative;
 	display: inline-block;
 	float: left;
 	width: 23%;
@@ -14,5 +15,17 @@
 	}
 	.inner{
 		padding: 5px 10px;
+	}
+	button.edit{
+    background-color: lighten(#ddd, 10%);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 18px;
+    padding: 15px 5px 5px 15px;
+    border-top-left-radius: 100%;
+    &:hover{
+    	background-color: #ddd;
+    }
 	}
 }

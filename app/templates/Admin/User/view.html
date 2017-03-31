@@ -23,7 +23,9 @@
                         {% if row.access_level == 100 %}Administrator{% endif %}
                         {% if row.access_level == 50 %}Editor{% endif %}
                         {{row.display_name}}
-                        <button type="button" class=""  data-remote="/admin/users/edit/id/{{row.id}}">Edit</button>
+                        <button type="button" class="edit"  data-remote="/admin/users/edit/id/{{row.id}}">
+                            <i class="fa fa-edit"></i>
+                        </button>
                     </div>
                 </li>
                 {% endfor %}
