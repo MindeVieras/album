@@ -13,10 +13,10 @@ PhotobumAdmin.addColor = function (info, btn) {
     input = '<div class="color-item"><input type="text" class="color-person-new hidden"></div>';
 
     if(info.type == 'album'){
-        $('#albums-colors').append(input);
+        $('#albums-colors .add-item').before(input);
     }
     if(info.type == 'person'){
-        $('#persons-colors').append(input);
+        $('#persons-colors .add-item').before(input);
     }
 
     colorInput = $('.color-person-new');

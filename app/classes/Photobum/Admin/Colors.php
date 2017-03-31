@@ -47,7 +47,7 @@ class Colors extends Admin{
 
             $id = $c->id;
 
-            $data = ['ack' => 'ok', 'id' => $id, 'msg' => $color];
+            $data = ['ack' => 'ok', 'id' => $id, 'msg' => 'Color #'.$color.' added.'];
             General::flushJsonResponse($data);
 
         }
