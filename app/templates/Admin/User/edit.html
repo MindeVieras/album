@@ -38,6 +38,14 @@
             </div>
 
             <div class="form-group">
+                <label for="access_level">Assign Person</label>
+                <select class="form-control" id="access_level">
+                  <option value="100" {% if user.access_level == 100 %}selected{% endif %}>Administrator</option>
+                  <option value="50" {% if user.access_level == 50 %}selected{% endif %}>Editor</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="status">Status</label>
                 <input type="checkbox" id="status" name="status" data-checkbox="activeToggle" {% if user.active == 1 %}checked{% endif %}>
             </div>

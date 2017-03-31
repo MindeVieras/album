@@ -16,12 +16,15 @@
 
             <ul>
                 {% for row in data %}
-                <li>
-                    {{row.username}}
-                    <time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time>
-                    {% if row.access_level == 100 %}Administrator{% endif %}
-                    {% if row.access_level == 50 %}Editor{% endif %}
-                    <button type="button" class=""  data-remote="/admin/users/edit/id/{{row.id}}">Edit</button>
+                <li class="user-block">
+                    <div class="inner">
+                        {{row.username}}
+                        <time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time>
+                        {% if row.access_level == 100 %}Administrator{% endif %}
+                        {% if row.access_level == 50 %}Editor{% endif %}
+                        {{row.display_name}}
+                        <button type="button" class=""  data-remote="/admin/users/edit/id/{{row.id}}">Edit</button>
+                    </div>
                 </li>
                 {% endfor %}
 

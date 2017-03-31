@@ -1,0 +1,18 @@
+.user-blocks{
+
+}
+.user-block{
+	background-color: $white;
+	display: inline-block;
+	float: left;
+	width: 23%;
+	height: 80px;
+	margin-right: 2%;
+	margin-bottom: 15px;
+	&:nth-child(4n){
+		margin-right: 0;
+	}
+	.inner{
+		padding: 5px 10px;
+	}
+}

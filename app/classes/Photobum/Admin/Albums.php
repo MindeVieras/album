@@ -282,7 +282,7 @@ class Albums extends Admin{
         } else {
             $template = $this->twig->loadTemplate('Admin/Album/add.html');
             echo $template->render([
-                'persons' => $this->getPersons(0),
+                'persons' => General::getPersons(),
                 'page' => $this->page
             ]);
         }
@@ -295,7 +295,7 @@ class Albums extends Admin{
         echo $template->render([
             'locations' => $this->getLocations($params['id']),
             'media' => $this->getMedia($params['id'], 1000),
-            'persons' => $this->getPersons($params['id']),
+            'persons' => General::getPersons($params['id']),
             'item' => $this->model->cast(),
             'page' => $this->page
         ]);
@@ -385,32 +385,6 @@ class Albums extends Admin{
     private function getLocations($id){
         $locations = $this->db->exec("SELECT id, lat, lng from locations WHERE album_id = '$id'");
         return $locations;
-    }
-
-    private function getPersons($id){
-        $persons = $this->db->exec("SELECT id, person_name FROM persons ORDER BY person_name");
-        if ($id == 0){
-            return $persons;
-        } else {
-            foreach ($persons as $p) {
-                $d['person_id'] = $p['id'];
-                $d['person_name'] = $p['person_name'];
-                $d['checked'] = $this->personChecked($id, $p['id']);
-                $data[] = $d;
-            }
-            return $data;
-        }
-    }
-
-    private function personChecked($album_id, $person_id){
-        
-        $persons = $this->db->exec("SELECT id FROM persons_rel WHERE album_id = '$album_id' AND person_id = '$person_id'");
-        if(!empty($persons)){
-            $is_chcked = 1;
-        } else {
-            $is_chcked = 0;
-        }
-        return $is_chcked;
     }
 
 }

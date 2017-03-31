@@ -45,6 +45,39 @@ class General
 
     }
 
+    public static function getPersons($id = NULL){
+
+        $f3 = \Base::instance();
+        $db = $f3->get('DB');
+
+        $persons = $db->exec("SELECT id, person_name FROM persons ORDER BY person_name");
+        if (!$id){
+            return $persons;
+        } else {
+            foreach ($persons as $p) {
+                $d['person_id'] = $p['id'];
+                $d['person_name'] = $p['person_name'];
+                $d['checked'] = General::personChecked($id, $p['id']);
+                $data[] = $d;
+            }
+            return $data;
+        }
+    }
+
+    public static function personChecked($album_id, $person_id){
+        
+        $f3 = \Base::instance();
+        $db = $f3->get('DB');
+
+        $persons = $db->exec("SELECT id FROM persons_rel WHERE album_id = '$album_id' AND person_id = '$person_id'");
+        if(!empty($persons)){
+            $is_chcked = 1;
+        } else {
+            $is_chcked = 0;
+        }
+        return $is_chcked;
+    }
+
     public static function makeUrl($title, $area, $count = 0)
     {
         $f3 = \Base::instance();

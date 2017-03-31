@@ -15,6 +15,7 @@ class Users extends Admin
         parent::__construct();
         $this->model = New Mapper($this->db, 'users');
         $this->page['title']= 'Users Manager';
+        $this->page['body_class']= 'users';
         $this->page['section']= 'users';
 
     }
