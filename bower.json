@@ -29,7 +29,8 @@
     "freewall": "^1.0.6",
     "spectrum": "^1.8.0",
     "jQuery.dotdotdot": "dotdotdot#^1.8.3",
-    "uuid.js": "^3.3.0"
+    "uuid.js": "^3.3.0",
+    "select2": "^4.0.3"
   },
   "resolutions": {
     "jquery": "^3.2.0"

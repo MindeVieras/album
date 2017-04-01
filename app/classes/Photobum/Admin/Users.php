@@ -23,7 +23,7 @@ class Users extends Admin
     public function view($params)
     {
         $this->auth();
-        $this->results = $this->db->exec("SELECT * FROM users ORDER BY id ASC");
+        $this->results = $this->db->exec("SELECT * FROM users ORDER BY id ASC LIMIT 45");
         $template = $this->twig->loadTemplate('Admin/User/view.html');
         echo $template->render(array(
             'page' => $this->page,

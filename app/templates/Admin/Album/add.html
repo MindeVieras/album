@@ -97,13 +97,7 @@
         {# persons selection #}
         <div class="form-group">
             <label for="album_body">Persons</label>
-
-            {% set cols = 3 %}
             {% for p in persons %}
-
-                {% if loop.index0 % cols == 0 %}
-                    <div class="row">
-                {% endif %}
                 <div class="col-xs-3">
                     <div class="checkbox">
                         <label>
@@ -111,11 +105,6 @@
                         </label>
                     </div>
                 </div>
-
-                {% if (loop.index0 % cols == cols - 1 or loop.last) %}
-                    </div>
-                {% endif %}
-
             {% endfor %}
         </div>
 

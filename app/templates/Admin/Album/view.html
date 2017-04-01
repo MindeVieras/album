@@ -1,20 +1,10 @@
 {% extends 'Admin/base.html' %}
 {% block content %}
 <div class="container">
-    
-    <table class="table table-hover table-bordered table-condensed table-responsive" data-table="true">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Media</th>
-            <th>Date</th>
-            <th>Created</th>
-            <td></td>
-        </tr>
-        </thead>
-        <tbody>
+    <div class="albums-container">
+
         {% for row in data %}
-        <tr {% if row.private == 0 %} class="text-muted"{% endif %}>
+        <div class="item{% if row.private == 0 %} private{% endif %}">
             {% set media = row.media %}
             <td>{{row.name}}</td>
 
@@ -30,10 +20,11 @@
                 <button type="button" class="btn btn-danger pull-right" data-dir="{{row.media_dir}}" data-id="{{row.id}}" data-url="{{row.url}}" data-name="{{row.name}}" data-function="PhotobumAdmin.deleteAlbum"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                 <a type="button" class="btn btn-default pull-right" rel="noopener noreferrer" target="_blank" href="{{row.url}}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
             </td>
-        </tr>
+        </div>
         {% endfor %}
-        </tbody>
-    </table>
+
+    </div>
+
     <button type="button" class="btn btn-primary " data-size="wide" data-remote="/admin/albums/add">Add Album</button>
     
 </div>

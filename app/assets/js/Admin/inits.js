@@ -7,6 +7,8 @@ Photobum.initView = function() {
     Photobum.Menu();
     Photobum.initSwitches();
     Photobum.initColorPickers();
+    Photobum.initSelect();
+    Photobum.initFreewall();
     Photobum.initDatepicker();
     Photobum.initEditors();
     Photobum.initDropzone();
@@ -68,6 +70,42 @@ Photobum.initColorPickers = function () {
             palette: palette
         });
     }
+  
+};
+
+Photobum.initSelect = function () {
+    
+    $(".select2-simple").select2();
+    $(".select2-multiple").select2();
+  
+};
+
+Photobum.initFreewall = function () {    
+
+    var usersWall = new Freewall('#album-users');
+    usersWall.fitWidth();
+    usersWall.reset({
+        selector: '.user-block',
+        animate: true,
+        cellW: 200,
+        cellH: 'auto',
+        onResize: function() {
+            usersWall.fitWidth();
+        }
+    });
+
+    var albumsWall = new Freewall('.albums-container');
+    albumsWall.fitWidth();
+    albumsWall.reset({
+        selector: '.item',
+        animate: true,
+        cellW: 200,
+        cellH: 'auto',
+        onResize: function() {
+            albumsWall.fitWidth();
+        }
+    });
+
   
 };
 

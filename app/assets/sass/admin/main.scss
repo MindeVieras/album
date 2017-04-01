@@ -11,11 +11,13 @@
 @import 'components/persons';
 @import 'components/colors';
 @import 'components/users';
+@import 'components/albums';
 
 @import 'plugins/bootstrap-custom';
 @import 'plugins/switch';
 @import 'plugins/ladda';
 @import 'plugins/spectrum';
+@import 'plugins/select2';
 
 .kint{
 	    display: inline-block;

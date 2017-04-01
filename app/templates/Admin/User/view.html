@@ -14,23 +14,20 @@
         
         <div class="panel-content" id="album-users">
 
-            <ul>
-                {% for row in data %}
-                <li class="user-block">
-                    <div class="inner">
-                        {{row.username}}
-                        <time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time>
-                        {% if row.access_level == 100 %}Administrator{% endif %}
-                        {% if row.access_level == 50 %}Editor{% endif %}
-                        {{row.display_name}}
-                        <button type="button" class="edit"  data-remote="/admin/users/edit/id/{{row.id}}">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                    </div>
-                </li>
-                {% endfor %}
-
-            </ul>
+            {% for row in data %}
+            <div class="user-block">
+                <div class="inner">
+                    {{row.username}}
+                    <time data-no-date="Never" data-utc="{{row.last_login}}" class="localdate timeago" datetime="{{row.last_login}}"></time>
+                    {% if row.access_level == 100 %}Administrator{% endif %}
+                    {% if row.access_level == 50 %}Editor{% endif %}
+                    {{row.display_name}}
+                    <button type="button" class="edit"  data-remote="/admin/users/edit/id/{{row.id}}">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
         
         </div>
     

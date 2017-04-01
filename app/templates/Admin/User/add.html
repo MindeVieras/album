@@ -38,7 +38,7 @@
 
             <div class="form-group">
                 <label for="assign_person">Assign Person</label>
-                <select class="form-control" id="assign_person">
+                <select class="form-control select2-simple" id="assign_person">
                     <option value="" selected>-NONE-</option>
                     {% for p in persons %}
                     <option value="{{p.person_id}}">
