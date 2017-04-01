@@ -13,12 +13,20 @@ module.exports = function(grunt) {
                 files: {
                     './assets/css/admin.min.css': './app/assets/sass/admin/main.scss'
                 }
+            },
+            deploy: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './assets/css/admin.min.css': './app/assets/sass/admin/main.scss'
+                }
             }
         },
         bower_concat: {
             admin: {
                 dest: {
-                    js: './app/assets/js/Admin/plugins/bower.js'
+                    js: './assets/js/bower.js'
                 }
             }
         },
@@ -27,7 +35,6 @@ module.exports = function(grunt) {
             admin: {
                 files: {
                     './assets/js/admin.min.js': [
-                        './app/assets/js/Admin/plugins/*.js',
                         './app/assets/js/Admin/*.js'
                     ]
                 },
@@ -49,29 +56,19 @@ module.exports = function(grunt) {
             src: '/Users/mindevieras/sites/album/',
             dest: '/public_html/album',
             exclusions: [
-
-                // '/Users/mindevieras/sites/album/app/assets',
-
-                // '/Users/mindevieras/sites/album/app/assets/images/**',
-                // '/Users/mindevieras/sites/album/app/assets/fonts/**',
-                // '/Users/mindevieras/sites/album/app/assets/deps/**',
-                // '/Users/mindevieras/sites/album/assets/js/photobum.js.map',
-                // '/Users/mindevieras/sites/album/assets/js/photobumadmin.js.map',
-
-
-                // '/Users/mindevieras/sites/album/uploads/**',
-                // '/Users/mindevieras/sites/album/media/albums/**',
-                // '/Users/mindevieras/sites/album/media/styles/**',
                 '/Users/mindevieras/sites/album/bower_components',
                 '/Users/mindevieras/sites/album/node_modules',
                 '/Users/mindevieras/sites/album/build',
                 '/Users/mindevieras/sites/album/vendor',
 
                 '/Users/mindevieras/sites/album/media',
-                '/Users/mindevieras/sites/album/app/assets',
-                '/Users/mindevieras/sites/album/assets',
                 '/Users/mindevieras/sites/album/uploads',
+                '/Users/mindevieras/sites/album/app/assets',
+                '/Users/mindevieras/sites/album/assets/fonts',
+                '/Users/mindevieras/sites/album/assets/css/font-awesome.min.css',
+                '/Users/mindevieras/sites/album/assets/js/bower.js',
 
+                '/Users/mindevieras/sites/album/**/*.map',
                 '/Users/mindevieras/sites/album/**/.DS_Store',
                 '/Users/mindevieras/sites/album/**/Thumbs.db',
                 '/Users/mindevieras/sites/album/.git',
@@ -126,12 +123,8 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('deploy', [
-        // 'bower_concat',
-        // 'uglify:dev',
-        // 'uglify:prod',
-        // 'concat',
-        // 'sass',
-        // 'cssmin',
+        'sass:deploy',
+        'uglify:admin',
         'ftp-deploy'
     ]);
 

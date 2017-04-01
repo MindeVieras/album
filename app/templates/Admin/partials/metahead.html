@@ -3,10 +3,6 @@
 
 <title>Album | {{page.title}}</title>
 
-{% if page.environment != 'production' %}
-<meta name="robots" content="noindex, nofollow" />
-{% endif %}
-
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <meta name="application-name" content="Album Admin" />
 <meta property="title" content="{{page.meta.title}}" />
@@ -17,12 +13,39 @@
 
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900" rel="stylesheet">
 
-{# <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> #}
+{% if page.environment == 'production' %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endif %}
+{% if page.environment == 'development' %}
+	<link rel="stylesheet" type="text/css" href="{{page.base_url}}/assets/css/font-awesome.min.css">
+{% endif %}
 
 <link rel="stylesheet" type="text/css" href="{{page.base_url}}/assets/css/admin.min.css">
-<link rel="stylesheet" type="text/css" href="{{page.base_url}}/assets/css/font-awesome.min.css">
-{# 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js" type="text/javascript"></script> #}
+
+{% if page.environment == 'production' %}
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/dropzone.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.4/jquery.timeago.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.dotdotdot/1.7.4/jquery.dotdotdot.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/js/bootstrap-switch.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/freewall/1.0.5/freewall.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/spin.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ladda-bootstrap/0.9.4/ladda.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sortable/0.8.0/js/sortable.min.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/node-uuid/1.4.8/uuid.min.js" type="text/javascript"></script>
+
+{% endif %}
+
+{% if page.environment == 'development' %}
+	<script src="//localhost:35729/livereload.js"></script>
+	<script src="{{page.base_url}}/assets/js/bower.js" type="text/javascript"></script>
+{% endif %}
 <script src="{{page.base_url}}/assets/js/admin.min.js" type="text/javascript"></script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ-qpuTN0bgzAVcBT9eFdJQcajWk4pQW4&libraries=places" async defer></script>

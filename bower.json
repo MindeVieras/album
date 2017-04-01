@@ -17,7 +17,6 @@
     "jquery": "^3.2.0",
     "dropzone": "^4.3.0",
     "moment": "^2.17.1",
-    "jquery-typewatch": "^3.0.0",
     "jquery-timeago": "^1.5.4",
     "ladda-bootstrap": "^0.1.0",
     "bootstrap-switch": "^3.3.4",

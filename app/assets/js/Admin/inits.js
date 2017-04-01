@@ -4,7 +4,7 @@ Photobum.initFrontend = function() {
 
 Photobum.initView = function() {
     Photobum.localize();
-    Photobum.Menu();
+    Photobum.initDotDtoDot();
     Photobum.initSwitches();
     Photobum.initColorPickers();
     Photobum.initSelect();
@@ -15,17 +15,13 @@ Photobum.initView = function() {
     Photobum.initMap();
 };
 
-Photobum.Menu = function() {
-    //sidebar = $('.main-sidebar');
-    // $('.sidebar-toggle').click(function(e){
-    //     e.stopPropagation();
-    //     if($('body').hasClass('sidebar-collapsed')){
-    //         $('body').removeClass('sidebar-collapsed');
-    //     } else {
-    //         $('body').addClass('sidebar-collapsed');
-    //     }
-    // });
+Photobum.initDotDtoDot = function() {
+
+    $('.title-dot').dotdotdot({
+        //  configuration goes here
+    });
 };
+
 
 Photobum.initSwitches = function() {
     $('[data-checkbox="activeToggle"]').bootstrapSwitch(
@@ -58,9 +54,11 @@ Photobum.initColorPickers = function () {
             showPaletteOnly: true,
             showPalette: true,
             palette: palette,
+            showInput: false,
             change: function(color){
                 $(this).attr('data-code', color.toHex()).addClass('color-changed');
                 $(this).attr('value', color.toHex());
+                $('.modal-header').css('background-color', '#'+color.toHex());
                 console.log(color.toHex());
             }
         });

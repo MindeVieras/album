@@ -47,28 +47,31 @@ class Users extends Admin
                     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Couldn\'t edit this news item']);
                 }
 
-                // update settings
-                $sett= $this->initOrm('user_settings', true);
-                $sett->load(['user_id=?', $this->model->id]);
-                //$sett->u = $url['url'];
-                $sett->save();
+                // if (!$editMode){
+                //     // also save settings               
+                //     $sett = $this->initOrm('user_settings', true);
+                //     $sett->user_id = 1;
+                //     $sett->menu_collapsed = 1;
+                //     $sett->save();
+
+                // }
 
             } else {
                 $this->model->load(['username=?', $user['email']]);
             }
 
             //Ensure username is unique.
-            if ($this->model->dry() || $editMode) {
+            if ($this->model->dry()) {
                 //Ensure access level is between 1 and 100.
                 if (!$user['access_level'] >= 1 && !$user['access_level'] <= 100) {
                     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Access Level Out Of Bounds. (1-100)']);
                 }
                 if (!$editMode || ($editMode && $user['password'])) {
 
-                    //Ensure both password fields match.
-                    if ($user['password'] !== $user['confirm_password']) {
-                        General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Passwords do not match.']);
-                    }
+                    // //Ensure both password fields match.
+                    // if ($user['password'] !== $user['confirm_password']) {
+                    //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Passwords do not match.']);
+                    // }
                     // //Ensure password is longer than 6 characters.
                     // if (strlen($user['password']) < 8) {
                     //     General::flushJsonResponse(['ack' => 'Error', 'msg' => 'Your password must be at least six characters long.']);
@@ -88,28 +91,29 @@ class Users extends Admin
                     $password = password_hash($user['password'], PASSWORD_DEFAULT);
                 }
 
-
                 $this->model->username = $user['email'];
                 if ($password) {
                     $this->model->password = $password;
                 }
-                $this->model->display_name = $user['display_name'];
-                $this->model->attribution_name = $user['attribution_name'];
+                //$this->model->display_name = $user['display_name'];
+                //$this->model->attribution_name = $user['attribution_name'];
                 $this->model->access_level = $user['access_level'];
-                $this->model->person = $user['person_id'];
+                //$this->model->person = $user['person_id'];
                 $this->model->active = intval($user['status'] == 'true');
-                if ($this->model->save()) {
+                $this->model->save();
 
-                    // also save settings
-                    if(!$editMode){                    
-                        $sett = $this->initOrm('user_settings', true);                
-                        $sett->user_id = $this->model->id;
-                        $sett->save();
-                    }
-
-                    $data = ['ack' => 'ok'];
+                if (!$editMode){
+                    // also save settings               
+                    $sett = $this->initOrm('user_settings', true);
+                    $sett->user_id = $this->model->id;
+                    $sett->menu_collapsed = 1;
+                    $sett->save();
 
                 }
+
+                $data = ['ack' => 'ok'];
+
+                
                 General::flushJsonResponse($data);
             } else {
                 $data = ['ack' => 'Error', 'msg' => 'This username is already in use'];

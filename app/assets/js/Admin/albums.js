@@ -33,7 +33,11 @@ PhotobumAdmin.albumsReady = function() {
 PhotobumAdmin.viewAlbums = function() {
     //console.log('Viewing albums');
 };
-
+PhotobumAdmin.albumColorPicker = function() {
+    console.log('cdd');
+    $(".color-album").spectrum("toggle");
+    //return false;
+};
 PhotobumAdmin.addAlbum = function (info, btn) {
 
     $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');

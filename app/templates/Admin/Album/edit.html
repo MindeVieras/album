@@ -2,7 +2,7 @@
 {% set modaltitle %}Edit "{{item.name}}"{% endset %}
 {% set modaltitlecolor %}#{{color}}{% endset %}
 {% set colorpicker %}
-        <button type="button" class="btn btn-default btn-xs color pull-right" aria-hidden="true">
+        <button type="button" data-function="PhotobumAdmin.albumColorPicker" class="btn btn-default btn-xs color pull-right" aria-hidden="true">
             <i class="fa fa-paint-brush"></i>
         </button>
         <input type="text" data-code="{{color}}" data-pal="{% for c in colors %}{{c.code}},{% endfor %}" class="color-album hidden" value="#{{color}}" />
