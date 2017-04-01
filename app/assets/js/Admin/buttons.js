@@ -1,5 +1,9 @@
 PhotobumAdmin.collapseMenu = function (info, btn) {
     //console.log('gfsgfg');
+    setTimeout(function(){
+        Photobum.initFreewall();
+    }, 350);
+    
     if($('body').hasClass('sidebar-collapsed')){
         $('body').removeClass('sidebar-collapsed');
         status = 0;

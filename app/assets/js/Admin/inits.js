@@ -49,6 +49,23 @@ Photobum.initSwitches = function() {
 
 Photobum.initColorPickers = function () {
     
+    if($('.color-album').length){    
+        colors = $('.color-album').data('pal');
+        palette = colors.split(',');
+
+        $('.color-album').spectrum({
+            preferredFormat: 'hex',
+            showPaletteOnly: true,
+            showPalette: true,
+            palette: palette,
+            change: function(color){
+                $(this).attr('data-code', color.toHex()).addClass('color-changed');
+                $(this).attr('value', color.toHex());
+                console.log(color.toHex());
+            }
+        });
+    }
+
     $('.color-person').spectrum({
         preferredFormat: 'hex',
 

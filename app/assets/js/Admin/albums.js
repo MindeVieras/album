@@ -63,6 +63,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         album_persons: $('#add_album .album_persons').serializeArray(),
         //body: tinyMCE.get('album_body').getContent(),
         body: 'bodis',
+        color: $('.color-changed').attr('data-code'),
         private: $('#add_album #private').bootstrapSwitch('state')
     };
     console.log(form_data);
@@ -98,6 +99,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         dataType: "json",
         success: function (data) {
             //console.log(data);
+            //return false;
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal(true);

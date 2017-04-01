@@ -21,6 +21,7 @@ class Albums extends Admin{
         $this->twig->onReady('PhotobumAdmin.albumsReady');
         $this->page['title']= 'Albums Manager';
         $this->page['section']= 'albums';
+        //ddd($color);
     }
 
     public function view($params){
@@ -32,7 +33,6 @@ class Albums extends Admin{
             'data' => $this->getAlbums(),
             'user' => $this->user
         ]);
-        //ddd($this);
     }
 
     public function add(){
@@ -192,11 +192,15 @@ class Albums extends Admin{
                 }
             }
 
+            $ccode = $item['color'];
+            $cid = $this->db->exec("SELECT id FROM colors WHERE code = '$ccode' AND type = 'album'");
+
             $this->model->name = $item['name'];
             $this->model->start_date = $item['start_date'];
             $this->model->end_date = $item['end_date'];
             $this->model->location_name = $item['location_name'];
             $this->model->body = $item['body'];
+            $this->model->color = $cid[0]['id'];
             $this->model->private = intval($item['private'] == 'true');
             $this->model->save();
 
@@ -290,11 +294,16 @@ class Albums extends Admin{
 
     public function edit($params){
         $this->auth();
-        $this->model->load(['id=?', $params['id']]);
+        $id = $params['id'];
+        $this->model->load(['id=?', $id]);
+        $cid = $this->model->color;
+        $this->color = $this->db->exec("SELECT code FROM colors WHERE id = $cid");
         $template = $this->twig->loadTemplate('Admin/Album/edit.html');
         echo $template->render([
             'locations' => $this->getLocations($params['id']),
             'media' => $this->getMedia($params['id'], 1000),
+            'color' => $this->color[0]['code'],
+            'colors' => General::getColors('album'),
             'persons' => General::getPersons($params['id']),
             'item' => $this->model->cast(),
             'page' => $this->page
@@ -326,10 +335,12 @@ class Albums extends Admin{
 
         $albums = $this->db->exec('SELECT 
                                         albums.*,
-                                        urls.url
+                                        urls.url,
+                                        colors.code
                                     FROM
                                         albums
                                         JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
+                                        JOIN colors ON albums.color = colors.id
                                     ORDER BY created DESC LIMIT 10');
 
         foreach ($albums as $a) {
@@ -344,6 +355,7 @@ class Albums extends Admin{
             $d['date'] = $date->format('Y-m-d H:i:s');
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$date_path.$ds.$name;
             $d['url'] = $a['url'];
+            $d['color'] = $a['code'];
             $d['created'] = $a['created'];
             $d['media'] = $this->getMedia($a['id'], 3);
 

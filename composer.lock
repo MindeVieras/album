@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "929c5b26e8af44677823f90ca55f79f7",
+    "content-hash": "5b736ad56ffc4e935aa717e2bf37a2d3",
     "packages": [
         {
             "name": "bcosca/fatfree",
@@ -143,7 +143,58 @@
                 "kint",
                 "php"
             ],
+            "abandoned": "kint-php/kint",
             "time": "2015-09-16T14:09:00+00:00"
+        },
+        {
+            "name": "suncat/php-mobile-detect",
+            "version": "v2.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/suncat2000/php-mobile-detect.git",
+                "reference": "a1b702a470ea24ce42edf71433e27190ea2d90ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/suncat2000/php-mobile-detect/zipball/a1b702a470ea24ce42edf71433e27190ea2d90ef",
+                "reference": "a1b702a470ea24ce42edf71433e27190ea2d90ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Mobile_Detect": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Victor Stanciu",
+                    "email": "vic.stanciu@gmail.com",
+                    "homepage": "https://plus.google.com/112830021345771739573"
+                },
+                {
+                    "name": "Serban Ghita",
+                    "email": "serbanghita@gmail.com",
+                    "homepage": "http://ghita.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lightweight PHP class for detecting mobile devices",
+            "homepage": "https://github.com/suncat2000/php-mobile-detect",
+            "keywords": [
+                "mobile",
+                "mobile detect",
+                "mobile detector",
+                "mobile device"
+            ],
+            "time": "2012-07-23T20:25:18+00:00"
         },
         {
             "name": "twig/extensions",

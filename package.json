@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "grunt-bower-concat": "^1.0.0",
-    "grunt-contrib-uglify": "^2.2.0"
+    "grunt-contrib-uglify": "^2.2.0",
+    "grunt-ftp-deploy": "^0.1.10"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

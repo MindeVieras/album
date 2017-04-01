@@ -5,7 +5,8 @@
         "raveren/kint": "^1.0",
         "twig/twig": "^1.24",
         "twig/extensions": "^1.3",
-        "imagine/imagine": "^0.6.3"
+        "imagine/imagine": "^0.6.3",
+        "suncat/php-mobile-detect": "^2.0"
     },
     "authors": [
         {
