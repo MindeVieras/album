@@ -5,29 +5,21 @@
 
 <div class="container">
 
-    <table class="table table-bordered table-condensed table-responsive" data-table="true">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Message</th>
-        </tr>
-        </thead>
-        <tbody>
-
-            <tr>
-                <td>Directory status</td>
-                <td>
-                    <ul class="list-group">
-                    {% for d in dir_status %}
-                        <li class="list-group-item list-group-item-{% if d.ack == 'ok' %}success{% else %}danger{% endif %}">
-                            {{d.name}}<span class="pull-right">{{d.status}}</span>
-                        </li>
-                    {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+  <div class="panel">
+    
+    <div class="header">
+        <h1>Directory Status</h1>
+    </div>
+    
+    <div class="panel-content" id="albums-colors">
+        {% for st in dir_status %}
+            <div class="dir-item dir-danger">
+                <div class="path pull-left">/{{st.path}}</div>
+                <div class="msg pull-right">{{st.msg}}</div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    </div>
 </div>
 {% endblock content%}
