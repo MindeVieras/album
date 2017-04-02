@@ -26,6 +26,7 @@ class Admin extends Base
             'approot' => '/admin/',
             'path' => $this->f3->get('PATH'),
             'title' => 'Dashboard',
+            'device' => $this->getDevice(),
             'section' => 'dashboard',
             'user' => $user,
             'user_settings' => $this->db->exec("SELECT * FROM user_settings WHERE user_id = '$uid'")
@@ -55,6 +56,22 @@ class Admin extends Base
 
         }
         $this->f3->reroute('/admin/login');
+    }
+    
+    private function getDevice(){
+
+        $detect = new \Mobile_Detect;
+        
+        $device = 'desktop';
+        if ( $detect->isMobile() ) {
+            $device = 'mobile';
+        }
+         
+        if( $detect->isTablet() ){
+            $device = 'tablet';
+        }
+        //ddd($detect);
+        return $device;
     }
 
 }
