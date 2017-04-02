@@ -1,16 +1,13 @@
 <?php
-require_once 'route.php';
-$route = new Route();
-$route->add('/', function() {
-	echo 'HOME';
-});
-$route->add('/name', function() {
-	echo 'Name Home';
-});
-$route->add('/name/.+', function($name) {
-	echo "Name $name";
-});
-$route->add('/this/is/the/.+/story/of/.+', function($first, $second) {
-	echo "This is the $first story of $second";
-});
-$route->listen();
+  //require_once('connection.php');
+  require_once 'templates/layout.php';
+
+  if (isset($_GET['controller']) && isset($_GET['action'])) {
+    $controller = $_GET['controller'];
+    $action     = $_GET['action'];
+  } else {
+    $controller = 'pages';
+    $action     = 'home';
+  }
+
+?>
