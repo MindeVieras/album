@@ -1,3 +1,7 @@
 # Albumas
 
-album on FatFree
+For admin run:
+grunt admin
+
+For Installer run:
+grunt installer

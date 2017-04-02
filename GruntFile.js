@@ -21,6 +21,14 @@ module.exports = function(grunt) {
                 files: {
                     './assets/css/admin.min.css': './app/assets/sass/admin/main.scss'
                 }
+            },
+            install: {
+                options: {
+                    style: 'compressed'
+                },
+                files: {
+                    './install/assets/css/install.min.css': './install/assets/css/sass/main.scss'
+                }
             }
         },
         bower_concat: {
@@ -36,6 +44,19 @@ module.exports = function(grunt) {
                 files: {
                     './assets/js/admin.min.js': [
                         './app/assets/js/Admin/*.js'
+                    ]
+                },
+                options: {
+                    beauty: true,
+                    mangle: false,
+                    compress: false,
+                    sourceMap: true
+                }
+            },
+            install: {
+                files: {
+                    './install/assets/js/install.min.js': [
+                        './install/assets/js/dev/*.js'
                     ]
                 },
                 options: {
@@ -68,6 +89,10 @@ module.exports = function(grunt) {
                 '/Users/mindevieras/sites/album/assets/css/font-awesome.min.css',
                 '/Users/mindevieras/sites/album/assets/js/bower.js',
 
+                //'/Users/mindevieras/sites/album/install',
+                '/Users/mindevieras/sites/album/install/assets/css/sass',
+                '/Users/mindevieras/sites/album/install/assets/js/dev',
+
                 '/Users/mindevieras/sites/album/**/*.map',
                 '/Users/mindevieras/sites/album/**/.DS_Store',
                 '/Users/mindevieras/sites/album/**/Thumbs.db',
@@ -77,7 +102,6 @@ module.exports = function(grunt) {
                 '/Users/mindevieras/sites/album/.gitignore',
                 '/Users/mindevieras/sites/album/npm-debug.log',
                 '/Users/mindevieras/sites/album/bower.json',
-                '/Users/mindevieras/sites/album/composer.json',
                 '/Users/mindevieras/sites/album/composer.lock',
                 '/Users/mindevieras/sites/album/GruntFile.js',
                 '/Users/mindevieras/sites/album/LICENSE',
@@ -96,13 +120,23 @@ module.exports = function(grunt) {
                 ]
             },
             sass: {
-                files: ['./app/assets/sass/admin/**/*.scss'],
+                files: ['./app/assets/sass/**/*.scss'],
                 tasks: [
                     'sass:admin'
                 ]
             },
             templates: {
                 files: ['./app/templates/**/*.html']
+            },
+            classes: {
+                files: ['./app/classes/**/*.php']
+            },
+            install: {
+                files: ['./install/assets/css/sass/**/*.scss', './install/assets/js/dev/**/*.js'],
+                tasks: [
+                    'sass:install',
+                    'uglify:install'
+                ]
             },
             options: {
                 livereload: true
@@ -123,7 +157,9 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('deploy', [
+        'sass:install',
         'sass:deploy',
+        'uglify:install',
         'uglify:admin',
         'ftp-deploy'
     ]);
@@ -133,6 +169,12 @@ module.exports = function(grunt) {
         'bower_concat:admin',
         'uglify:admin',
         'watch'
+    ]);
+
+    grunt.registerTask('installer', [
+        'sass:install',
+        'uglify:install',
+        'watch:install'
     ]);
 
 };
