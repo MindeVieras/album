@@ -14,7 +14,16 @@
     <p class="lead">Database setup.</p>
   </div>
       
-  <h3>Server information</h3>
+  <h3>Database information</h3>
+
+  <div class="well">
+    <?php
+      if(!file_exists('../LocalConfig.php')){
+        echo 'LocalConfig.php not found, please go to start <a href="/install">page</a> to fix issue.';
+      }
+    ?>
+  </div>
+
 	<ul class="list-group">
 	  <li class="list-group-item list-group-item-{% if page.phpVersion[1] == 'ok' %}success{% else %}danger{% endif %}">
 	  	PHP Version
@@ -22,15 +31,6 @@
 	  </li>
 	</ul>
 	<hr>
-
-  <h3>Libraries</h3>
-	<ul class="list-group">
-	  <li class="list-group-item list-group-item-{% if page.phpVersion[1] == 'ok' %}success{% else %}danger{% endif %}">
-	  	PHP Version
-	  	<span class="pull-right">GD Image library: {{page.phpVersion[0]}}, required: atleast 5.6.28</span>
-	  </li>
-	</ul>
-  <hr>
 
   <a href="/install" class="btn btn-info pull-left">Go Back</a>
   <a href="/install/db-setup" class="btn btn-success pull-right">Next</a>
