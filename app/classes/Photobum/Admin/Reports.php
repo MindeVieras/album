@@ -17,7 +17,7 @@ class Reports extends Admin{
 
     public function view($params){
         $this->auth();
-        $template = $this->twig->loadTemplate('Admin/reports.html');
+        $template = $this->twig->loadTemplate('Admin/Reports/reports.html');
         echo $template->render([
         	'dir_status' => $this->getDirStatus(),
             'page' => $this->page,

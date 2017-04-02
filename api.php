@@ -15,6 +15,6 @@ $f3->route('POST /api/utilities/collapse-menu', '\Photobum\API\Utilities->collap
 $f3->route('POST /api/utilities/delete-files', '\Photobum\API\Utilities->deleteAlbumDir');
 
 // Installr API
-$f3->route('POST /api/installer/composer-get-status', '\Photobum\API\Installer->composerCheckStatus');
+//$f3->route('POST /api/installer/composer-get-status', '\Photobum\API\Installer->composerCheckStatus');
 
 $f3->run();

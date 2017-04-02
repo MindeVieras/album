@@ -11,6 +11,7 @@
     <div class="panel-content" id="albums-colors">
     	{% for c in albums_colors %}
     		<div class="color-item">
+                <div class="color-name">{{c.name}}</div>
     			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
     		</div>
     	{% endfor %}
@@ -28,14 +29,10 @@
     	
     	{% for c in persons_colors %}
     		<div class="color-item">
+                <div class="color-name">{{c.name}}</div>
     			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
     		</div>
     	{% endfor %}
-        <div class="color-item add-item">
-
-            <button type="button" class="btn btn-default" data-type="person" data-function="PhotobumAdmin.addColor"><i class="fa fa-plus-square-o"></i></button>
-        </div>
-    
     </div>
 	
 	</div>
