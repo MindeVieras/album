@@ -26,6 +26,7 @@ class Config
             Config::get('DB_HOSTNAME'),
             Config::get('DB_DATABASE')
         );
+
         $dbconStr = str_replace('"', '', $dbconStr);
         $dboptions = [];
         if (!array_key_exists('EB_ROOT', $_ENV)) {
@@ -61,6 +62,7 @@ class Config
             $hostarray = explode('/', $host);
             $host = array_pop($hostarray);
         }
+        
         DEFINE('HOST_TYPE', explode('.', $host)[0]);
         ini_set('error_log', sprintf('/tmp/php-%s-errors.log', $router));
 
