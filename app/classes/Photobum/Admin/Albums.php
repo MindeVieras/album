@@ -335,13 +335,12 @@ class Albums extends Admin{
 
         $albums = $this->db->exec('SELECT 
                                         albums.*,
-                                        urls.url,
-                                        colors.code
+                                        urls.url
                                     FROM
                                         albums
                                         JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
-                                        JOIN colors ON albums.color = colors.id
                                     ORDER BY created DESC LIMIT 10');
+        //ddd($albums);
 
         foreach ($albums as $a) {
 
@@ -355,7 +354,7 @@ class Albums extends Admin{
             $d['date'] = $date->format('Y-m-d H:i:s');
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$date_path.$ds.$name;
             $d['url'] = $a['url'];
-            $d['color'] = $a['code'];
+            //$d['color'] = $a['code'];
             $d['created'] = $a['created'];
             $d['media'] = $this->getMedia($a['id'], 3);
 
