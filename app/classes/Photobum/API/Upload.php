@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: carey
- * Date: 07/09/16
- * Time: 16:28
- */
 
 namespace Photobum\API;
 
 use Photobum\Utilities\General;
 
-class Image extends APIController
+class Upload extends APIController
 {
 
     public function get()
@@ -50,26 +44,19 @@ class Image extends APIController
                 ]);
             }
 
-            $ds = DIRECTORY_SEPARATOR;
-            $storeFolder = 'uploads';
-            $tempFile = $file['tmp_name'];
-            $base_path = getcwd();
-            $targetPath = $base_path.$ds.$storeFolder.$ds;
-             
-            $targetFile =  $targetPath.$file['name'];
-         
-            move_uploaded_file($tempFile, $targetFile);
+            $targetPath = $this->f3->get('ROOT').DS.'uploads'.DS;
+            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            $newFilename = time().'-'.rand(1, 999999).'.'.$ext;
 
+            $targetFile = $targetPath.$newFilename;
             
-            // $t = '/private/var/tmp/1.jpg';
+            move_uploaded_file($file['tmp_name'], $targetFile);
 
-            //rename($tmp_name, '/Users/mindevieras/sites/album/images/image.jpg');
-
+            General::flushJsonResponse([
+                'ack' => 'ok',
+                'location' => $targetFile
+            ]);
         }
-        General::flushJsonResponse([
-            'ack' => 'ok',
-            'location' => $targetFile
-        ]);
     }
 
     public function put()

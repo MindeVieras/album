@@ -1,32 +1,3 @@
-PhotobumAdmin.personsReady = function() {
-    var options = {
-        callback: function (value) {
-            data = {
-                section: 'persons',
-                value: value
-            };
-            $.ajax({
-                type: 'GET',
-                url: '/api/utilities/generateslug',
-                data: data,
-                dataType: 'json',
-                success: function (response) {
-                    $('.slugholder').text(response.url);
-                }
-            });
-        },
-        wait: 250,
-        highlight: true,
-        allowSubmit: false,
-        captureLength: 3
-    };
-
-    $("#add_person #person_name").typeWatch(options);
-
-
-
-};
-
 PhotobumAdmin.viewPersons = function() {
     console.log('Viewing artists');
 };
@@ -34,23 +5,16 @@ PhotobumAdmin.viewPersons = function() {
 PhotobumAdmin.addPerson = function (info, btn) {
     $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
     var data = {
-        id: $('#add_person #person_id').val(),
-        name: $('#add_person #person_name').val(),
-        // headline_image: $('#add_news .single-dropzone').attr('data-image'),
-        // hilite_para: tinyMCE.get('hilite_para').getContent(),
-        // body: tinyMCE.get('news_body').getContent(),
-        // attribution_id: $('#add_news #attrib_id').val(),
-        // publish_date: $('#publish_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
-        // publish: $('#add_news #status').bootstrapSwitch('state')
+        id: $('#add_person #id').val(),
+        name: $('#add_person #name').val()
     };
-    console.log(data);
     $.ajax({
         type: "POST",
         data: data,
         url: '/admin/persons/add',
         dataType: "json",
         success: function (data) {
-            if (data.ack == 'OK') {
+            if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal(true);
             }
@@ -104,10 +68,4 @@ PhotobumAdmin.doDeletePerson = function (info, btn) {
         }
     });
 
-};
-
-PhotobumAdmin.clearHeadlineImage = function(info, btn) {
-    $('.dropzone-previews').html('');
-    $('.single-dropzone').show();
-    $('.single-dropzone').attr('data-image', '');
 };

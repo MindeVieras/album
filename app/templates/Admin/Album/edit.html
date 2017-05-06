@@ -5,7 +5,7 @@
         <button type="button" data-function="PhotobumAdmin.albumColorPicker" class="btn btn-default btn-xs color pull-right" aria-hidden="true">
             <i class="fa fa-paint-brush"></i>
         </button>
-        <input type="text" data-code="{{color}}" data-pal="{% for c in colors %}{{c.code}},{% endfor %}" class="color-album hidden" value="#{{color}}" />
+        <input type="text" data-code="{{color}}" data-pal="{% for c in colors %}{{c.code}},{% endfor %}" class="color-album color-changed" value="#{{color}}" />
 {% endset %}
 
 {% block content %}
@@ -28,7 +28,7 @@
                 <div class='input-group date' id='start_date'>
                     <input type='text' class="form-control" />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <i class="fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                 <div class='input-group date' id='end_date'>
                     <input type='text' class="form-control" />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <i class="fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
@@ -62,20 +62,19 @@
             {% for m in media %}
                 {% set index = index + 1 %}
                 <div class="list-group-item list-group-item-info" data-id="{{m.id}}" data-index="{{index}}"><div class="row">
-                    <div class="col-xs-2">
-                        <span class="preview"><img src="{{img(m.url, 'thumbnail')}}" height="60" class="img-thumbnail" /></span>
+                    <div class="">
+                        <span class="preview"><img height="175" src="{{img(m.url, 240, 175)}}" data-thumb="make" data-thumb-width="240" data-thumb-fit="yes" data-thumb-height="175" data-thumb-org="{{m.url}}"></span>
                     </div>
 
-                    <div class="col-xs-5">
+                    <div class="">
                         <small data-datetaken="{{m.date_taken}}" class="file-date-taken">{{m.date_taken}}</small><br>
                         <small class="album-list-name">{{m.name}}</small><br>
                         <small class="make-model">{{m.camera}}</small>
                     </div>
 
-                    <div class="col-xs-2">
-                        <p class="size">{{m.size}}</p>
-                    </div>
-                    <div class="col-xs-3">
+                    <p class="size">{{m.size}}</p>
+
+                    <div class="">
                         <span class="btn btn-danger btn-xs remove-media-file col-xs-12" data-index="{{index}}">
                             <i class="glyphicon glyphicon-trash"></i>
                             <span>Delete</span>
@@ -85,7 +84,7 @@
             {% endfor %}
 
             {# dropzone preview #}
-            {% include 'General/partials/dropzone-preview.html' %}
+            {% include 'Admin/partials/dropzone-album.html' %}
 
         </div>
 
@@ -95,27 +94,19 @@
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>Add files...</span>
             </span>
-            <span class="btn btn-primary start-upload">
-                <i class="glyphicon glyphicon-upload"></i>
-                <span>Start upload</span>
-            </span>
-            <span class="btn btn-danger cancel-all">
-                <i class="glyphicon glyphicon-trash"></i>
-                <span>Remove all</span>
-            </span>
         </div>
         {% set index = 1000000 %}
-        <div id="img_urls" class="">
+        <div id="img_urls" class="hidden">
             {% for m in media %}
                 {% set index = index + 1 %}
-                <input class="img_url_db img_weight" data-id="{{m.id}}" data-index="{{index}}" data-weight="{{m.weight}}" name="img_url[]" value="{{page.base_path}}{{m.url}}">
+                <input class="img_url_db img_weight" data-id="{{m.id}}" data-index="{{index}}" data-weight="{{m.weight}}" name="img_url[]" value="{{m.url}}">
             {% endfor %}
         </div>
 
         {# location field #}
         <div class="form-group">
             <label for="location_name">Location</label>
-            <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
+            <input value="{{item.location_name}}" type="text" class="form-control" id="location_name" name="location_name" placeholder="Location name...">
         </div>
         
         {# map #}
@@ -140,22 +131,14 @@
 
         {# persons selection #}
         <div class="form-group">
-            <label for="album_persons">Persons</label>
-            {% for p in persons %}
-                <div class="col-xs-3">
-                    <div class="checkbox">
-                        <label>
-                            <input {% if p.checked == 1 %}checked{% endif %} class="album_persons" name="persons[]" type="checkbox" value="{{p.person_id}}"> {{p.person_name}}
-                        </label>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        {# private or not #}
-        <div class="form-group">
-            <label for="private">Private?</label>
-            <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" {% if item.private == 1 %}checked{% endif %}>
+            <label for="assign_person">Assign Persons</label>
+            <select class="form-control select2-multiple" multiple="multiple" id="album_persons">
+                {% for p in persons %}
+                <option value="{{p.id}}" {% if p.checked == 1 %}selected="selected"{% endif %} class="album_person" name="persons[]">
+                    {{p.person_name}}
+                </option>
+                {% endfor %}
+            </select>
         </div>
 
         <script type="text/javascript">
@@ -204,6 +187,9 @@
 {% endblock content %}
 {% block footer %}
 <button type="button" class="btn btn-danger delete-button pull-left" data-id="{{item.id}}" data-name="{{item.name}}" data-function="PhotobumAdmin.deleteAlbum">Delete</button>
+<div class="form-group pull-left">
+    <input type="checkbox" id="album_private" name="album_private" data-checkbox="privateToggle" {% if item.private == 0 %}checked{% endif %}>
+</div>
 <button type="button" class="btn btn-default cancel-button" data-dismiss="modal"><span>Cancel</span></button>
 <button type="button" class="btn btn-success ladda-button save-button" data-style="zoom-out" data-function="PhotobumAdmin.addAlbum"><span class="ladda-label">Save</span></button>
 {% endblock footer %}

@@ -1,8 +1,15 @@
+
 {% extends 'General/modalbase.html' %}
-{% set modaltitle = 'Add a new Album' %}
+{% set modaltitle %}Add a new Album{% endset %}
+{% set modaltitlecolor %}#{{color[0].code}}{% endset %}
+{% set colorpicker %}
+        <button type="button" data-function="PhotobumAdmin.albumColorPicker" class="btn btn-default btn-xs color pull-right" aria-hidden="true">
+            <i class="fa fa-paint-brush"></i>
+        </button>
+        <input type="text" data-code="{{color[0].code}}" data-pal="{% for c in colors %}{{c.code}},{% endfor %}" class="color-album color-changed" value="#{{color[0].code}}" />
+{% endset %}
 {% block content %}
 <div class="modal-body">
-
     <form id="add_album">
 
         {# name field #}
@@ -18,10 +25,7 @@
                 <div class='input-group date' id='start_date'>
                     <input type='text' class="form-control" />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-refresh"></span>
-                    </span>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <i class="fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
@@ -31,10 +35,7 @@
                 <div class='input-group date' id='end_date'>
                     <input type='text' class="form-control" />
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-refresh"></span>
-                    </span>
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
+                        <i class="fa fa-calendar"></i>
                     </span>
                 </div>
             </div>
@@ -54,7 +55,7 @@
         
         {# dropzone preview #}
         <div class="list-group files" id="previews">
-            {% include 'General/partials/dropzone-preview.html' %}
+            {% include 'Admin/partials/dropzone-album.html' %}
         </div>
 
         {# dropzone input #}
@@ -63,21 +64,13 @@
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>Add files...</span>
             </span>
-            <span class="btn btn-primary start-upload">
-                <i class="glyphicon glyphicon-upload"></i>
-                <span>Start upload</span>
-            </span>
-            <span class="btn btn-danger cancel-all">
-                <i class="glyphicon glyphicon-trash"></i>
-                <span>Remove all</span>
-            </span>
         </div>
         <div id="img_urls" class=""></div>
 
         {# location field #}
         <div class="form-group">
             <label for="location_name">Location</label>
-            <input type="text" class="form-control" id="location_name" name ="location_name" placeholder="Location name...">
+            <input type="text" class="form-control" id="location_name" name="location_name" placeholder="Location name...">
         </div>
         
         {# map #}
@@ -96,53 +89,47 @@
 
         {# persons selection #}
         <div class="form-group">
-            <label for="album_body">Persons</label>
-            {% for p in persons %}
-                <div class="col-xs-3">
-                    <div class="checkbox">
-                        <label>
-                            <input class="album_persons" name="persons[]" type="checkbox" value="{{p.id}}"> {{p.person_name}}
-                        </label>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-
-        {# private or not #}
-        <div class="form-group">
-            <label for="private">Private?</label>
-            <input type="checkbox" id="private" name="private" data-checkbox="yesToggle" checked>
+            <label for="assign_person">Assign Persons</label>
+            <select class="form-control select2-multiple" multiple="multiple" id="album_persons">
+                {% for p in persons %}
+                <option value="{{p.id}}" class="album_person" name="persons[]">
+                    {{p.person_name}}
+                </option>
+                {% endfor %}
+            </select>
         </div>
 
         <script type="text/javascript">
             // Start Datepicker
-    $('#start_date').datetimepicker({
-            format: 'DD-MM-YYYY, HH:mm:ss',
-            date: moment()
-        }
-    );
+            $('#start_date').datetimepicker({
+                    format: 'DD-MM-YYYY, HH:mm:ss',
+                    date: moment()
+                }
+            );
+            $('#start_date').on('dp.change', function (e) {
+                $('#end_date').data("DateTimePicker").minDate(e.date);
+            });
 
-    $('#start_date').on('dp.change', function (e) {
-        $('#end_date').data("DateTimePicker").minDate(e.date);
-    });
+            // End Datepicker
+            $('#end_date').datetimepicker({
+                    format: 'DD-MM-YYYY, HH:mm:ss',
+                    date: moment(),
+                    useCurrent: false
+                }
+            );
 
-    // End Datepicker
-    $('#end_date').datetimepicker({
-            format: 'DD-MM-YYYY, HH:mm:ss',
-            date: moment(),
-            useCurrent: false
-        }
-    );
-
-    $("#end_date").on("dp.change", function (e) {
-        $('#start_date').data("DateTimePicker").maxDate(e.date);
-    });
+            $("#end_date").on("dp.change", function (e) {
+                $('#start_date').data("DateTimePicker").maxDate(e.date);
+            });
     </script>
 
     </form>
 </div>
 {% endblock content %}
 {% block footer %}
+<div class="form-group pull-left">
+    <input type="checkbox" id="album_private" name="album_private" data-checkbox="privateToggle">
+</div>
 <button type="button" class="btn btn-default cancel-button" data-dismiss="modal"><span>Cancel</span></button>
 <button type="button" class="btn btn-success ladda-button save-button" data-style="zoom-out" data-function="PhotobumAdmin.addAlbum"><span class="ladda-label">Save</span></button>
 {% endblock footer %}

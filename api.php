@@ -6,13 +6,15 @@ $loader->add('', 'app/classes');
 \Photobum\Config::bootstrap('api');
 $f3 = \Base::instance();
 
-$f3->map('/api/image', '\Photobum\API\Image');
+$f3->map('/api/upload', '\Photobum\API\Upload');
 
 $f3->map('/api/test', '\Photobum\API\Test');
 
 $f3->route('GET /api/utilities/generateslug', '\Photobum\API\Utilities->generateSlug');
 $f3->route('POST /api/utilities/collapse-menu', '\Photobum\API\Utilities->collapseMenu');
-$f3->route('POST /api/utilities/delete-files', '\Photobum\API\Utilities->deleteAlbumDir');
+$f3->route('POST /api/utilities/generate-thumb', '\Photobum\API\Utilities->generateThumb');
+
+$f3->route('POST /api/utilities/fix-dir', '\Photobum\API\Utilities->fixDir');
 
 // Installr API
 //$f3->route('POST /api/installer/composer-get-status', '\Photobum\API\Installer->composerCheckStatus');

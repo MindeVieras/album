@@ -9,7 +9,7 @@
     </div>
     
     <div class="panel-content" id="albums-colors">
-    	{% for c in albums_colors %}
+    	{% for c in colors %}
     		<div class="color-item">
                 <div class="color-name">{{c.name}}</div>
     			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
@@ -17,25 +17,7 @@
     	{% endfor %}
     </div>
 	
-    </div>
-    
-  <div class="panel">
-    
-    <div class="header">
-    	<h1>Person Colors</h1>
-    </div>
-    
-    <div class="panel-content" id="persons-colors">
-    	
-    	{% for c in persons_colors %}
-    		<div class="color-item">
-                <div class="color-name">{{c.name}}</div>
-    			<input type="text" data-id="{{c.id}}" data-code="{{c.code}}" class="color-person hidden" value="{{c.code}}" />
-    		</div>
-    	{% endfor %}
-    </div>
-	
-	</div>
+  </div>
 
 
 <button type="button" class="btn btn-success ladda-button save-button" data-style="zoom-out" data-function="PhotobumAdmin.saveColors"><span class="ladda-label">Save</span></button>

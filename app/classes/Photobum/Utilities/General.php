@@ -32,14 +32,12 @@ class General
         return date('Y-m-d H:i:s');
     }
 
-    public static function getColors($type)
+    public static function getColors()
     {
         $f3 = \Base::instance();
         $db = $f3->get('DB');
 
-        $colors = $db->exec("SELECT * FROM colors WHERE type = '$type'");
-        // $model = new Mapper($f3->get('DB'), 'colors');
-        // $model->load(['type=?', $type]);
+        $colors = $db->exec("SELECT * FROM colors");
         
         return $colors;
 
@@ -55,7 +53,7 @@ class General
             return $persons;
         } else {
             foreach ($persons as $p) {
-                $d['person_id'] = $p['id'];
+                $d['id'] = $p['id'];
                 $d['person_name'] = $p['person_name'];
                 $d['checked'] = General::personChecked($id, $p['id']);
                 $data[] = $d;

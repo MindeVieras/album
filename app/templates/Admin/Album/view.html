@@ -4,14 +4,14 @@
     <div class="albums-container">
     
         {% for row in data %}
-        <div class="item{% if row.private == 0 %} private{% endif %}" style="background-color:#{{row.color}}">
+        <div class="item{% if row.private == 0 %} private{% endif %}" style="border-top:5px solid #{{row.color}}">
             
             <td>{{row.name}}</td>
 
             <td>
             {% set media = row.media %}
             {% for m in media %}
-                <img width="45" src="{{img(m.url, 'thumbnail')}}" class="img-thumbnail">
+                <img width="55" src="{{img(m.url, 500, 500)}}" data-thumb="make" data-thumb-width="500" data-thumb-height="500" data-thumb-fit="no" data-thumb-org="{{m.url}}">
             {% endfor %}
             </td>
             <td>{{row.date}}</td>
@@ -26,7 +26,7 @@
 
     </div>
 
-    <button type="button" class="btn btn-primary " data-size="wide" data-remote="/admin/albums/add">Add Album</button>
+    <button type="button" class="btn btn-primary" data-size="album-edit" data-remote="/admin/albums/add">Add Album</button>
 
 </div>
 

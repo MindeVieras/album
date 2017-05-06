@@ -10,11 +10,14 @@
     <div class="header">
         <h1>Directory Status</h1>
     </div>
-    
     <div class="panel-content" id="albums-colors">
+    
         {% for st in dir_status %}
-            <div class="dir-item dir-danger">
-                <div class="path pull-left">/{{st.path}}</div>
+            <div class="dir-item {% if st.ack == 'error' %}cc-danger{% endif %} {% if st.ack == 'warn' %}cc-warning{% endif %}{% if st.ack == 'ok' %}cc-success{% endif %}">
+                <div class="path pull-left">{{st.path}}</div>
+                {% if st.ack != 'ok' %}
+                <button class="pull-right" data-path="{{st.path}}" data-function="PhotobumAdmin.fixDir"><i class="fa fa-wrench"></i></button>
+                {% endif %}
                 <div class="msg pull-right">{{st.msg}}</div>
             </div>
         {% endfor %}

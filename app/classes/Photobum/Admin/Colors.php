@@ -25,8 +25,7 @@ class Colors extends Admin{
         echo $template->render([
             'page' => $this->page,
             'data' => 'no datakk',
-            'albums_colors' => General::getColors('album'),
-            'persons_colors' => General::getColors('person'),
+            'colors' => General::getColors(),
             'user' => $this->user
         ]);
         //ddd($this);
@@ -58,8 +57,6 @@ class Colors extends Admin{
         if ($this->f3->get('VERB') == 'POST') {
             $item = $this->f3->get('POST');
 
-
-            // save locations
             if (!empty($item['colors'])){
                 
                 $c = $this->initOrm('colors', true);

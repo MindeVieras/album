@@ -36,13 +36,19 @@ class Twig extends \Twig_Environment
 
         $func = new \Twig_SimpleFunction(
             'img',
-            function ($url, $style) {
-                $ds = DIRECTORY_SEPARATOR;
-                $name = basename($url);
-                $path = dirname($url);
-                $style_path = $path.$ds.'styles'.$ds.$style.$ds.$name;
+            function ($url, $width, $height) {
 
-                return $style_path;
+                //$path = dirname($url);
+                $name = basename($url);
+                $style_path = DS.'cache'.DS.'styles'.DS.$width.'x'.$height;
+
+                $cache_file = $style_path.DS.$name;
+
+                if(!file_exists(getcwd().$cache_file)){
+                    return '/default.png';
+                } else {
+                    return $cache_file;
+                }
             }
         );
         $this->addFunction($func);

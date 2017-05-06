@@ -8,10 +8,6 @@ use DB\SQL\Mapper;
 use Photobum\Config;
 use \DateTime;
 
-use Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-
 class Albums extends Admin{
 
     public function __construct(){
@@ -21,6 +17,7 @@ class Albums extends Admin{
         $this->twig->onReady('PhotobumAdmin.albumsReady');
         $this->page['title']= 'Albums Manager';
         $this->page['section']= 'albums';
+        $this->page['body_class']= 'albums';
         //ddd($color);
     }
 
@@ -46,201 +43,106 @@ class Albums extends Admin{
 
             $this->model->reset();
 
-            $ds = DIRECTORY_SEPARATOR;
-            
             $date = new DateTime($item['start_date']);
-            $date_path = $date->format('Y'.$ds.'m'.$ds.'d');
+            $date_path = $date->format('Y'.DS.'m'.DS.'d');
             $name = \Web::instance()->slug($item['name']);
 
-            $name_date_path = $date_path.$ds.$name;
+            $name_date_path = $date_path.DS.$name;
+            $media_path = DS.'media'.DS.'albums'.DS.$name_date_path;
+            $file_path = getcwd().DS.'media'.DS.'albums'.DS.$name_date_path;
 
-            $file_path = getcwd().$ds.'media'.$ds.'albums'.$ds.$name_date_path;
-            $file_path_style = getcwd().$ds.'media'.$ds.'albums'.$ds.$name_date_path.$ds.'styles';
-            $media_path = $ds.'media'.$ds.'albums'.$ds.$name_date_path;
-            $styles = $this->db->exec("SELECT * FROM media_styles");
-            
-            $editMode = $item['id'] ? true : false;
+            // Get album color id
+            $ccode = $item['color'];
+            $cid = $this->db->exec("SELECT id FROM colors WHERE code = '$ccode' AND type = 'album'");
+
+            $id = $item['id'];
+            $editMode = $id ? true : false;
 
             if ($editMode) {
 
-                $id = $item['id'];
-
                 $this->model->load(['id=?', $id]);
 
-                // update url
-                $url = General::makeAlbumUrl($item['name'], $item['start_date']);
-                $urls = $this->initOrm('urls', true);
-                $urls->load(['type_id=? and type=\'album\'', $id]);
-                $urls->url = $url['url'];
-                $urls->save();
-
-                // remove locations before it gats saved
+                // delete locations before it gets saved
                 $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
-                // remove persons relations before save
-                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");    
+                // delete persons relations before save
+                $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
 
                 // remove unvanted media files and db
-                if(!empty($item['album_images_db'])){
+                if(!empty($item['files_remove'])){
+                    foreach ($item['files_remove'] as $f) {
+                        $f_url = $f['value'];
+                        $this->db->exec("DELETE FROM media WHERE file_url = '$f_url'");
+                        $full_path = getcwd().$f_url;
+                        if(file_exists($full_path)){
+                            unlink($full_path);
+                        }
 
+                    }
+                }
+
+                //rename dir if album name or date chaged
+                $old_name = \Web::instance()->slug($this->model->name);
+                $date = new DateTime($this->model->start_date);
+                $old_date = $date->format('Y'.DS.'m'.DS.'d');
+                $old_path = $old_date.DS.$old_name;
+
+                $nameChanged = ($old_path != $name_date_path) ? true : false;
+
+                if($nameChanged && (!empty($item['album_images_db']))){
+                    
                     // get db media files
-                    $db_files = $this->db->exec("SELECT * FROM media WHERE album_id = $id");
+                    $db_files = $this->db->exec("SELECT * FROM media WHERE type_id = $id");
                     $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
 
-                    $form_fields = array_map(function($row){
-                        $field['id'] = $row['media_id'];
-                        $field['weight'] = $row['weight'];
-                        $field['url'] = substr($row['value'], strlen(getcwd()));
-                        return $field;
-                    }, $item['album_images_db']);
-
-                    $urls = array_map(function($row){
-                        $url = $row['url'];
-                        return $url;
-                    }, $form_fields);
-
+                    $med = $this->initOrm('media', true);
+                    foreach ($db_urls as $row) {
+                        $med->load(['type_id=? and file_url=?', $id, $row]);
+                        $new_url = str_replace($old_path, $name_date_path, $med->file_url);
+                        $med->file_url = $new_url;
+                        $med->save();
+                    }
                     
-                    // // update weights                    
-                    $w = $this->initOrm('media', true);
-                    foreach ($form_fields as $field) {
-                        $id = $field['id'];
-                        //$data[] = $d;
-                        $w->load(['id=?', $id]);
-                        $w->weight = $field['weight'];
-                        $w->save();
+                    //rename dir
+                    $old_dir_path = str_replace($name_date_path, $old_path, $file_path);
+
+                    // Get array of all source files
+                    $files = scandir($old_dir_path);
+                    // Create new directory
+                    if (!file_exists($file_path)) {
+                        mkdir($file_path, 0777, true);
                     }
-
-                    //sd($data);
-
-                    $diff = array_values(array_diff($db_urls, $urls));
-
-                    //sd($db_urls, $form_fields, $urls, $diff);
-                    if(!empty($diff)) {
-                        // remove media
-                        foreach ($diff as $d) {
-                            $this->db->exec("DELETE FROM media WHERE file_url = '$d'");
-                            $full_path = getcwd().$d;
-                            if(file_exists($full_path)){
-                                unlink($full_path);
-                            }
-                            foreach ($styles as $style) {
-                                $path = $file_path_style.$ds.$style['name'].$ds.basename($full_path);
-                                if(file_exists($path)){
-                                    unlink($path);
-                                }
-                            }
+                    //sd($old_dir_path, $file_path);
+                    foreach ($files as $file) {
+                        if (in_array($file, array(".",".."))) continue;
+                        // If we copied this successfully, mark it for deletion
+                        if (copy($old_dir_path.DS.$file, $file_path.DS.$file)) {
+                            $delete[] = $old_dir_path.DS.$file;
                         }
                     }
-
-                    //sd($db_files);
-
-                    // rename dir if album name or date chaged
-                    $old_name = \Web::instance()->slug($this->model->name);
-
-                    $date = new DateTime($this->model->start_date);
-                    $old_date = $date->format('Y'.$ds.'m'.$ds.'d');
-
-                    $old_path = $old_date.$ds.$old_name;
-
-                    if($old_path != $name_date_path){
-                        $nameChanged = true;
-                    } else {
-                        $nameChanged = false;
+                    // Delete all successfully-copied files
+                    foreach ($delete as $file) {
+                        if(file_exists($file)){unlink($file);}
                     }
-
-                    if($nameChanged){
-
-                        $med = $this->initOrm('media', true);
-                        foreach ($db_urls as $row) {
-                            $med->load(['album_id=? and file_url=?', $id, $row]);
-                            $new_url = str_replace($old_path, $name_date_path, $med->file_url);
-                            $med->file_url = $new_url;
-                            $med->save();
-                        }
-
-                        //sd($med->id, $d, $new_url, $old_path, $name_date_path);
-
-                        $old = str_replace($name_date_path, $old_path, $file_path);
-
-                        // rename dir
-                        if (is_dir($old)) {
-                            if ($dh = opendir($old)) {
-
-                                // make media DIR
-                                if (!file_exists($file_path)) {
-                                    mkdir($file_path, 0777, true);
-                                }
-
-                                while (($file = readdir($dh)) !== false) {
-                                    //exclude unwanted 
-                                    if ($file==".") continue;
-                                    if ($file=="..")continue;
-                                    rename($old.$ds.$file, $file_path.$ds.$file);
-                                }
-
-                                $command = 'rm -Rf '.$old;
-                                shell_exec($command);
-                            }
-                        }
-                    }
-
-                }
-
-                if(empty($item['album_images_db'])){
-                    $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
-                    $command = 'rm -Rf '.$file_path;
-                    shell_exec($command);
+                    // Delete old directory
+                    if(file_exists($old_dir_path)){rmdir($old_dir_path);}
                 }
             }
-
-            $ccode = $item['color'];
-            $cid = $this->db->exec("SELECT id FROM colors WHERE code = '$ccode' AND type = 'album'");
 
             $this->model->name = $item['name'];
             $this->model->start_date = $item['start_date'];
             $this->model->end_date = $item['end_date'];
             $this->model->location_name = $item['location_name'];
             $this->model->body = $item['body'];
-            $this->model->color = $cid[0]['id'];
-            $this->model->private = intval($item['private'] == 'true');
+            $this->model->color = $cid[0]['id'] ? $cid[0]['id'] : 1;
+            $this->model->private = intval($item['private'] == 'false');
             $this->model->save();
-
-            // save locations
-            if (!empty($item['locations'])){
-                foreach ($item['locations'] as $loc) {
-                    $latLng = explode(',', $loc['value']);
-                    $locs = $this->initOrm('locations', true);            
-                    $locs->lat = $latLng[0];
-                    $locs->lng = $latLng[1];
-                    $locs->album_id = $this->model->id;
-                    $locs->save();
-                }
-            }
-            // save persons
-            if (!empty($item['album_persons'])){
-                foreach ($item['album_persons'] as $per) {
-                    $pers = $this->initOrm('persons_rel', true);            
-                    $pers->person_id = $per['value'];
-                    $pers->album_id = $this->model->id;
-                    $pers->save();
-                }
-            }
 
             // rename files to dir and save media urls
             if(!empty($item['album_images'])){
                 
-                $imagine = new Imagine\Gd\Imagine();
-                
-                    //$id = $data['id'];
-                
                 // make media DIR
                 if (!file_exists($file_path)) {
                     mkdir($file_path, 0777, true);
-                }
-                // make image styles DIR
-                foreach ($styles as $style) {
-                    if (!file_exists($file_path_style.$ds.$style['name'])) {
-                        mkdir($file_path_style.$ds.$style['name'], 0777, true);
-                    }
                 }
 
                 // rename files
@@ -248,45 +150,62 @@ class Albums extends Admin{
                     //sd($file);
                     $tmp_file = $file['value'];
                     $file_name = basename($tmp_file);
-                    // make image styles
-                    foreach ($styles as $style) {
-
-                        $image = $imagine->open($tmp_file);
-
-                        $image->thumbnail(new Box($style['width'], $style['height']))
-                            ->save($file_path_style.$ds.$style['name'].$ds.$file_name);
-                    }
 
                     // move files
-                    rename($tmp_file, $file_path.$ds.$file_name);
+                    rename($tmp_file, $file_path.DS.$file_name);
 
                     // save media urls
-                    $urls = $this->initOrm('media', true);
-                    $urls->file_url = $media_path.$ds.basename($tmp_file);
-                    $urls->album_id = $this->model->id;
-                    $urls->weight = $file['weight'];
-                    $urls->save();
+                    $med = $this->initOrm('media', true);
+                    $med->file_url = $media_path.DS.$file_name;
+                    $med->type = 'album';
+                    $med->type_id = $this->model->id;
+                    $med->weight = $file['weight'];
+                    $med->save();
 
                 }
             }
 
-            if (!$editMode) {
-                // save url
-                $url = General::makeAlbumUrl($item['name'], $item['start_date']);
-                $urls = $this->initOrm('urls', true);
-                $urls->url = $url['url'];
-                $urls->type = 'album';
-                $urls->type_id = $this->model->id;
-                $urls->save();
+            // save locations
+            if (!empty($item['locations'])){
+                foreach ($item['locations'] as $loc) {
+                    $locs = $this->initOrm('locations', true);
+                    $latLng = explode(',', $loc['value']);
+                    $locs->lat = $latLng[0];
+                    $locs->lng = $latLng[1];
+                    $locs->album_id = $this->model->id;
+                    $locs->save();
+                }
             }
 
-            $data = ['ack' => 'ok', 'msg' => $item['album_images_db']];
+            // save persons
+            if (!empty($item['album_persons'])){
+                foreach ($item['album_persons'] as $per) {
+                    $pers = $this->initOrm('persons_rel', true);
+                    $pers->person_id = $per;
+                    $pers->album_id = $this->model->id;
+                    $pers->save();
+                }
+            }
+
+            // save url
+            $url = General::makeAlbumUrl($item['name'], $item['start_date']);
+            $urls = $this->initOrm('urls', true);
+            $urls->load(['type_id=? and type=\'album\'', $id]);
+            $urls->url = $url['url'];
+            $urls->type = 'album';
+            $urls->type_id = $this->model->id;
+            $urls->save();
+
+            // flush response
+            $data = ['ack' => 'ok', 'msg' => $item];
             General::flushJsonResponse($data);
 
         } else {
             $template = $this->twig->loadTemplate('Admin/Album/add.html');
             echo $template->render([
                 'persons' => General::getPersons(),
+                'color' => $this->db->exec("SELECT code FROM colors ORDER BY RAND() LIMIT 1"),
+                'colors' => General::getColors(),
                 'page' => $this->page
             ]);
         }
@@ -303,7 +222,7 @@ class Albums extends Admin{
             'locations' => $this->getLocations($params['id']),
             'media' => $this->getMedia($params['id'], 1000),
             'color' => $this->color[0]['code'],
-            'colors' => General::getColors('album'),
+            'colors' => General::getColors(),
             'persons' => General::getPersons($params['id']),
             'item' => $this->model->cast(),
             'page' => $this->page
@@ -322,7 +241,7 @@ class Albums extends Admin{
             // remove media locations
             $this->db->exec("DELETE FROM locations WHERE album_id = '$id'");
             // remove media urls
-            $this->db->exec("DELETE FROM media WHERE album_id = '$id'");
+            $this->db->exec("DELETE FROM media WHERE type_id = '$id'");
             // remove persons relations
             $this->db->exec("DELETE FROM persons_rel WHERE album_id = '$id'");
 
@@ -335,11 +254,13 @@ class Albums extends Admin{
 
         $albums = $this->db->exec('SELECT 
                                         albums.*,
-                                        urls.url
+                                        urls.url,
+                                        colors.code
                                     FROM
                                         albums
                                         JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
-                                    ORDER BY created DESC LIMIT 10');
+                                        JOIN colors ON albums.color = colors.id
+                                    ORDER BY start_date DESC LIMIT 20');
         //ddd($albums);
 
         foreach ($albums as $a) {
@@ -348,15 +269,16 @@ class Albums extends Admin{
             $date = new DateTime($a['start_date']);
             $date_path = $date->format('Y'.$ds.'m'.$ds.'d');
             $name = \Web::instance()->slug($a['name']);
+            $cid = $a['color'];
 
             $d['id'] = $a['id'];
             $d['name'] = $a['name'];
             $d['date'] = $date->format('Y-m-d H:i:s');
             $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$date_path.$ds.$name;
             $d['url'] = $a['url'];
-            //$d['color'] = $a['code'];
+            $d['color'] = $a['code'];
             $d['created'] = $a['created'];
-            $d['media'] = $this->getMedia($a['id'], 3);
+            $d['media'] = $this->getMedia($a['id'], 2);
 
             $data[] = $d;
         }
@@ -366,7 +288,7 @@ class Albums extends Admin{
 
     private function getMedia($id, $limit){
 
-        $media = $this->db->exec("SELECT * from media WHERE album_id = '$id' ORDER BY weight ASC LIMIT $limit");
+        $media = $this->db->exec("SELECT * from media WHERE type_id = '$id' ORDER BY weight ASC LIMIT $limit");
         
         foreach ($media as $m) {
             $medi['id'] = $m['id'];

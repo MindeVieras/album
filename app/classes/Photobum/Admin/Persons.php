@@ -15,7 +15,6 @@ class Persons extends Admin
         parent::__construct();
         $this->initOrm('persons');
         $this->model->url = 'SELECT url FROM urls WHERE urls.type_id = persons.id AND urls.type = \'person\'';
-        $this->twig->onReady('PhotobumAdmin.personsReady');
         $this->page['title']= 'Persons Manager';
         $this->page['body_class']= 'persons';
         $this->page['section']= 'persons';
@@ -54,16 +53,6 @@ class Persons extends Admin
                 General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Name is required']);
             }
 
-            // check if exists
-            //$isurl = General::makeUrl($item['name'], 'persons');
-
-            // if (!$item['body'] ) {
-            //     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Body is required']);
-            // }
-            // if (!$item['headline_image'] ) {
-            //     General::flushJsonResponse(['ack'=>'Error', 'msg'=>'Headline image is required']);
-            // }
-
             $this->model->reset();
 
 
@@ -98,7 +87,7 @@ class Persons extends Admin
                 $urls->save();
             }
 
-            $data = ['ack' => 'OK'];
+            $data = ['ack' => 'ok'];
             General::flushJsonResponse($data);
 
         }else{

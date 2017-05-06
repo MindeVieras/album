@@ -1,5 +1,18 @@
 // COLORS
 $white: #000000;
+$succsess: #7BC576;
+$warning: yellow;
+$danger: #EF2B2D;
+
+.cc-success{
+  background-color: $succsess;
+}
+.cc-warning{
+  background-color: $warning;
+}
+.cc-danger{
+  background-color: $danger;
+}
 
 /* -------------------------------------------------------------
   Sass CSS3 Mixins! The Cross-Browser CSS3 Sass Library

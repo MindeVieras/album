@@ -13,9 +13,12 @@ RewriteRule (.*) admin.php [L,QSA]
 
 RewriteCond %{REQUEST_URI} !^/web.php
 RewriteCond %{REQUEST_URI} !^/favicon.ico
+RewriteCond %{REQUEST_URI} !^/default.png
+RewriteCond %{REQUEST_URI} !^/error.png
 RewriteCond %{REQUEST_URI} !^/sitemap
 RewriteCond %{REQUEST_URI} !^/admin
 RewriteCond %{REQUEST_URI} !^/media
+RewriteCond %{REQUEST_URI} !^/cache
 RewriteCond %{REQUEST_URI} !^/uploads
 RewriteCond %{REQUEST_URI} !^/assets
 RewriteCond %{REQUEST_URI} !^/install
@@ -25,8 +28,8 @@ RewriteRule (.*) web.php [L,QSA]
 
 
 #set server file sizes
-php_value max_file_uploads 1000
-php_value memory_limit 2G
-php_value upload_max_filesize 1G
-php_value post_max_size 4G
-php_value max_execution_time 3600
+#php_value max_file_uploads 1000
+#php_value memory_limit 2G
+#php_value upload_max_filesize 1G
+#php_value post_max_size 4G
+#php_value max_execution_time 3600

@@ -20,6 +20,28 @@ PhotobumAdmin.collapseMenu = function (info, btn) {
 
 }
 
+PhotobumAdmin.fixDir = function(info, btn) {
+    $.ajax({
+        type: "POST",
+        data: {dir: info.path},
+        url: '/api/utilities/fix-dir',
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            if (data.ack == 'ok') {
+                parent = $(btn).parent();
+                parent.removeClass('cc-danger cc-warning').addClass('cc-success');
+                parent.find('.msg').text('Directory is healthy.');
+                $(btn).remove();
+            }
+            else {
+                $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');
+            }
+        }
+    });
+
+}
+
 PhotobumAdmin.addUser = function () {
     var data = {
         id: $('#add_user #user_id').val(),

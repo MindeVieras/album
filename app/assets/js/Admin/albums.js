@@ -1,42 +1,40 @@
 PhotobumAdmin.albumsReady = function() {
     //console.log('albums ready');
 
-    // make media sortable
-    if($('#previews').length){
-        var el = document.getElementById('previews');
-        var sortable = Sortable.create(el, {
+    // // make media sortable
+    // if($('#previews').length){
+    //     var el = document.getElementById('previews');
+    //     var sortable = Sortable.create(el, {
             
-            dataIdAttr: 'data-',
-            // Element is chosen
-            onChoose: function (evt) {
-                evt.oldIndex;  // element index within parent
-            },
+    //         dataIdAttr: 'data-',
+    //         // Element is chosen
+    //         onChoose: function (evt) {
+    //             evt.oldIndex;  // element index within parent
+    //         },
 
-            // Element dragging started
-            onStart: function (evt) {
-                evt.oldIndex;  // element index within parent
-            },
+    //         // Element dragging started
+    //         onStart: function (evt) {
+    //             evt.oldIndex;  // element index within parent
+    //         },
 
-            // Element dragging ended
-            onEnd: function (evt) {
-                console.log(evt.oldIndex);  // element's old index within parent
-                console.log(evt.newIndex);  // element's new index within parent
-                console.log(evt.item);
-                index = $(evt.item).attr('data-index');
-                $('.img_weight[data-weight="'+evt.newIndex+'"]').attr('data-weight', evt.oldIndex);
-                $('.img_weight[data-index="'+index+'"]').attr('data-weight', evt.newIndex);
-            },
-        });
-    }
+    //         // Element dragging ended
+    //         onEnd: function (evt) {
+    //             console.log(evt.oldIndex);  // element's old index within parent
+    //             console.log(evt.newIndex);  // element's new index within parent
+    //             console.log(evt.item);
+    //             index = $(evt.item).attr('data-index');
+    //             $('.img_weight[data-weight="'+evt.newIndex+'"]').attr('data-weight', evt.oldIndex);
+    //             $('.img_weight[data-index="'+index+'"]').attr('data-weight', evt.newIndex);
+    //         },
+    //     });
+    // }
 };
 
 PhotobumAdmin.viewAlbums = function() {
     //console.log('Viewing albums');
 };
 PhotobumAdmin.albumColorPicker = function() {
-    console.log('cdd');
     $(".color-album").spectrum("toggle");
-    //return false;
 };
 PhotobumAdmin.addAlbum = function (info, btn) {
 
@@ -47,7 +45,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         name: $('#name').val(),
         start_date: $('#start_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
         end_date: $('#end_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
-        location_name: $('#add_album #location_name').val(),
+        location_name: $('#location_name').val(),
         locations: $('#add_album .album_loc').serializeArray(),
         album_images: $('#add_album .img_url').map(function(){
             return {
@@ -56,6 +54,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
                 value: $(this).val()
             }
         }).get(),
+        files_remove: $('#add_album .file_remove').serializeArray(),
         album_images_db: $('#add_album .img_url_db').map(function(){
             return {
                 media_id: $(this).data('id'),
@@ -64,36 +63,13 @@ PhotobumAdmin.addAlbum = function (info, btn) {
                 value: $(this).val()
             }
         }).get(),
-        album_persons: $('#add_album .album_persons').serializeArray(),
-        //body: tinyMCE.get('album_body').getContent(),
-        body: 'bodis',
+        album_persons: $('#album_persons').select2('val'),
+        body: tinyMCE.get('album_body').getContent(),
         color: $('.color-changed').attr('data-code'),
-        private: $('#add_album #private').bootstrapSwitch('state')
+        private: $('#album_private').bootstrapSwitch('state')
     };
     console.log(form_data);
     //return false;
-
-    // set ladda for save button
-    countImg = form_data.album_images.length;
-    if(countImg > 0){
-        //console.log(countImg);
-        $('.delete-button').remove();
-        $('.cancel-button').remove();
-
-        // Create a new instance of ladda for the specified button
-        var l = Ladda.create(document.querySelector('.save-button'));
-        // Start loading
-        l.start();
-
-        if(countImg == 1){
-            time = 5000;
-        } else {
-            time = 10000;
-        }    
-        setTimeout(function(){
-            Photobum.closeModal(true);
-        },time);
-    }
 
     // make ajax post
     $.ajax({
@@ -102,7 +78,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         url: '/admin/albums/add',
         dataType: "json",
         success: function (data) {
-            //console.log(data);
+            console.log(data);
             //return false;
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');

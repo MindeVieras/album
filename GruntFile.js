@@ -43,6 +43,7 @@ module.exports = function(grunt) {
             admin: {
                 files: {
                     './assets/js/admin.min.js': [
+                        './bower_components/tinymce/themes/modern/theme.js',
                         './app/assets/js/Admin/*.js'
                     ]
                 },
@@ -83,9 +84,11 @@ module.exports = function(grunt) {
                 '/Users/minde/Sites/album/vendor',
 
                 '/Users/minde/Sites/album/media',
+                '/Users/minde/Sites/album/cache',
                 '/Users/minde/Sites/album/uploads',
                 '/Users/minde/Sites/album/app/assets',
                 '/Users/minde/Sites/album/assets/fonts',
+                '/Users/minde/Sites/album/assets/tinymce',
                 '/Users/minde/Sites/album/assets/css/font-awesome.min.css',
                 '/Users/minde/Sites/album/assets/js/bower.js',
 

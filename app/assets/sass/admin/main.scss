@@ -5,6 +5,9 @@
 
 @import 'partials/messages';
 @import 'partials/modal';
+@import 'partials/dropzone';
+@import 'partials/maps';
+@import 'partials/footer';
 
 @import 'components/header';
 @import 'components/sidebar';
@@ -14,11 +17,11 @@
 @import 'components/albums';
 @import 'components/reports';
 
-@import 'plugins/bootstrap-custom';
-@import 'plugins/switch';
 @import 'plugins/ladda';
+@import 'plugins/switch';
 @import 'plugins/spectrum';
 @import 'plugins/select2';
+@import 'plugins/bootstrap-custom';
 
 .kint{
 	    display: inline-block;
