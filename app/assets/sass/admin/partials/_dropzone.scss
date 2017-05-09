@@ -1,8 +1,61 @@
+#previews{
+  display: inline-block;
+  color: $white;
+  .image-preview{
+    position: relative;
+    width: 320px;
+    height: 210px;
+    float: left;
+    overflow: hidden;
+  }
+  .preview{
+    background: #666;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .file-date-taken{
+    position: absolute;
+    top: 5px;
+    left: 0;
+    padding: 0 10px;
+    background: rgba(0,0,0,0.5);
+  }
+  .file-size{
+    position: absolute;
+    top: 27px;
+    left: 0;
+    padding: 0 5px;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .file-status{
+    position: absolute;
+    left: 10px;
+    bottom: 5px;
+    color: $green;
+    background: rgba(255,255,255,0.5);
+    padding: 0 5px;
+  }
+  .remove-file{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+  .video-preview-item{
+    .file-status{
+      bottom: 38px;
+    }
+  }
+}
+
 .progress-wrapper{
-  width: 200px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   .progress-bar{
-    background-color: red;
-    display: inline-block;
-    height: 25px;
+    background-color: rgba(0,0,0,.6);
+    height: 12px;
   }
 }

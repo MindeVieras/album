@@ -35,7 +35,10 @@ module.exports = function(grunt) {
             admin: {
                 dest: {
                     js: './assets/js/bower.js'
-                }
+                },
+                exclude: [
+                'exif-js'
+                ]
             }
         },
         //JS
@@ -44,6 +47,7 @@ module.exports = function(grunt) {
                 files: {
                     './assets/js/admin.min.js': [
                         './bower_components/tinymce/themes/modern/theme.js',
+                        './bower_components/exif-js/exif.js',
                         './app/assets/js/Admin/*.js'
                     ]
                 },

@@ -1,7 +1,6 @@
 /vendor/
 .idea/
-bower_components
-/app/assets/stylesheets/css/compiled.less.css
+bower_components/
 *.js.map
 *.css.map
 *.orig
@@ -16,6 +15,7 @@ node_modules/
 
 *.DS_Store
 
+/cache/
 /build/
 /assets/
 /uploads/*

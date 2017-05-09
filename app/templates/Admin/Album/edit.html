@@ -13,6 +13,7 @@
     <form id="add_album">
         
         {# album id #}
+        <input type="hidden" id="base_path" value="{{page.base_path}}">
         <input type="hidden" id="id" value="{{item.id}}">
         
         {# name field #}
@@ -43,6 +44,10 @@
                 </div>
             </div>
         </div>
+
+        <button type="button" class="btn btn-info update-dates" data-function="PhotobumAdmin.updateDates">
+            <i class="fa fa-refresh"></i>
+        </button>
         
         {# label #}
         <div class="form-group">
@@ -54,33 +59,44 @@
                 Memory limit: {{get_ini('memory_limit')}}
             </small></div>
         </div>
-
         {# files in db #}
         <div class="list-group files" id="previews">
             {% set index = 1000000 %}
             {% set weight = 0 %}
             {% for m in media %}
                 {% set index = index + 1 %}
-                <div class="list-group-item list-group-item-info" data-id="{{m.id}}" data-index="{{index}}"><div class="row">
-                    <div class="">
-                        <span class="preview"><img height="175" src="{{img(m.url, 240, 175)}}" data-thumb="make" data-thumb-width="240" data-thumb-fit="yes" data-thumb-height="175" data-thumb-org="{{m.url}}"></span>
-                    </div>
+                <div class="list-group-item image-preview list-group-item-info {% if m.file_type == 'video' %}video-preview-item{% endif %}" data-id="{{m.id}}" data-index="{{index}}">
+                    
+                    <span class="preview">
+                        {% if m.file_type == 'image' %}
+                        <img class="saved-file" src="{{img(m.url, 320, 210)}}" data-thumb="make" data-thumb-width="320" data-thumb-fit="yes" data-thumb-height="210" data-thumb-org="{{m.url}}">
+                        {% endif %}
+                        {% if m.file_type == 'video' %}
+                        <video class="saved-file" width="320" height="210" controls data-thumb-org="{{video(m.url, 'medium')}}">
+                            <source src="{{video(m.url, 'medium')}}" type="video/mp4">
+                            Your browser does not support HTML5 video.
+                        </video>
+                        {% endif %}
+                    </span>
+                    
+                    <div class="file-date-taken">{{m.date_taken}}</div>
+                    <div class="dz-size file-size" data-dz-size>{{m.size}}</div>
 
                     <div class="">
-                        <small data-datetaken="{{m.date_taken}}" class="file-date-taken">{{m.date_taken}}</small><br>
                         <small class="album-list-name">{{m.name}}</small><br>
                         <small class="make-model">{{m.camera}}</small>
+                        <p class="size">{{m.size}}</p>
                     </div>
 
-                    <p class="size">{{m.size}}</p>
-
-                    <div class="">
-                        <span class="btn btn-danger btn-xs remove-media-file col-xs-12" data-index="{{index}}">
-                            <i class="glyphicon glyphicon-trash"></i>
-                            <span>Delete</span>
-                        </span>
+                    <div class="file-status">
+                        <i class="fa fa-database"></i>
                     </div>
-                </div></div>
+
+                    <span class="btn btn-danger btn-xs remove-media-file remove-file" data-index="{{index}}">
+                        <i class="fa fa-remove"></i>
+                    </span>
+
+                </div>
             {% endfor %}
 
             {# dropzone preview #}
@@ -164,19 +180,6 @@
                 $("#end_date").on("dp.change", function (e) {
                     $('#start_date').data("DateTimePicker").maxDate(e.date);
                 });
-
-                var dates = $('.file-date-taken').map(function () {
-                    attr = $(this).attr('data-datetaken');
-                    date = new Date(attr);
-                    return date;
-                });
-
-                var orderedDates = dates.sort(function(a,b){
-                    return new Date(a.date) - new Date(b.date);
-                });
-                //parseInt((new Date('2012.08.10').getTime() / 1000).toFixed(0))
-
-                //console.log(orderedDates);
 
             });
 

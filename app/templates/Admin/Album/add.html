@@ -12,6 +12,9 @@
 <div class="modal-body">
     <form id="add_album">
 
+        {#.base path #}
+        <input type="hidden" id="base_path" value="{{page.base_path}}">
+        
         {# name field #}
         <div class="form-group">
             <label for="name">Name</label>
@@ -41,6 +44,10 @@
             </div>
         </div>
 
+        <button type="button" class="btn btn-info update-dates" data-function="PhotobumAdmin.updateDates">
+            <i class="fa fa-refresh"></i>
+        </button>
+
         {# label #}
         <div class="form-group">
             <label for="album_images">Photos</label>
@@ -65,7 +72,7 @@
                 <span>Add files...</span>
             </span>
         </div>
-        <div id="img_urls" class=""></div>
+        <div id="img_urls" class="hidden"></div>
 
         {# location field #}
         <div class="form-group">

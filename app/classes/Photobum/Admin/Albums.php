@@ -149,6 +149,7 @@ class Albums extends Admin{
                 foreach ($item['album_images'] as $file) {
                     //sd($file);
                     $tmp_file = $file['value'];
+                    $file_type = $file['file_type'];
                     $file_name = basename($tmp_file);
 
                     // move files
@@ -157,6 +158,7 @@ class Albums extends Admin{
                     // save media urls
                     $med = $this->initOrm('media', true);
                     $med->file_url = $media_path.DS.$file_name;
+                    $med->file_type = $file_type;
                     $med->type = 'album';
                     $med->type_id = $this->model->id;
                     $med->weight = $file['weight'];
@@ -278,7 +280,7 @@ class Albums extends Admin{
             $d['url'] = $a['url'];
             $d['color'] = $a['code'];
             $d['created'] = $a['created'];
-            $d['media'] = $this->getMedia($a['id'], 2);
+            //$d['media'] = $this->getMedia($a['id'], 2);
 
             $data[] = $d;
         }
@@ -293,20 +295,22 @@ class Albums extends Admin{
         foreach ($media as $m) {
             $medi['id'] = $m['id'];
             $medi['url'] = $m['file_url'];
+            $medi['file_type'] = $m['file_type'];
             $medi['name'] = basename($m['file_url']);
             $medi['weight'] = $m['weight'];
             if(file_exists(getcwd().$m['file_url'])){            
                 $file_size = filesize(getcwd().$m['file_url']);
                 $medi['size'] = General::formatSizeUnits($file_size);
-
-                $exif = exif_read_data(getcwd().$m['file_url']);
-                if($exif['DateTimeOriginal']){
-                    $ex_date = new DateTime($exif['DateTimeOriginal']);
-                    $date = $ex_date->format('Y-m-d H:i:s');
-                    $medi['date_taken'] = $date;
+                if($m['file_type'] == 'image'){
+                    $exif = @exif_read_data(getcwd().$m['file_url']);
+                    if($exif['DateTimeOriginal']){
+                        $ex_date = new DateTime($exif['DateTimeOriginal']);
+                        $date = $ex_date->format('Y-m-d H:i:s');
+                        $medi['date_taken'] = $date;
+                    }
+                    //$medi['camera'] = $exif['Make'].' ( '.substr($exif['Model'], 0, 10).' )';
+                    //$medi['date_taken'] = $exif;
                 }
-                $medi['camera'] = $exif['Make'].' ( '.substr($exif['Model'], 0, 10).' )';
-                //$medi['date_taken'] = $exif;
             }
 
 

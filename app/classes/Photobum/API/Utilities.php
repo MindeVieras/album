@@ -70,7 +70,7 @@ class Utilities extends APIController{
                 $thumbnail_gd_image = imagecreatetruecolor($thumbnail_image_width, $thumbnail_image_height);
                 imagecopyresampled($thumbnail_gd_image, $source_gd_image, 0, 0, 0, 0, $thumbnail_image_width, $thumbnail_image_height, $source_image_width, $source_image_height);
 
-                imagejpeg($thumbnail_gd_image, $img_dest, 85);
+                imagejpeg($thumbnail_gd_image, $img_dest, 100);
                 imagedestroy($thumbnail_gd_image);
             } else {
             
@@ -99,7 +99,7 @@ class Utilities extends APIController{
                     $height
                 );
 
-                imagejpeg($img_fit, $img_dest, 85);
+                imagejpeg($img_fit, $img_dest, 100);
                 imagedestroy($img_fit);
             }
 

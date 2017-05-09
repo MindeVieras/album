@@ -1,5 +1,6 @@
 <?php
-
+// phpinfo();
+// die();
 $loader = require 'vendor/autoload.php';
 $loader->add('', 'app/classes');
 

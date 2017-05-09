@@ -28,6 +28,33 @@ PhotobumAdmin.albumsReady = function() {
     //         },
     //     });
     // }
+
+};
+
+PhotobumAdmin.updateDates = function() {
+
+    // make array of all dates
+    var dates = $('.file-date-taken').map(function(){
+        date = $(this).text();
+        return date;
+    }).get();
+    
+    dates = dates.filter(Boolean);
+    
+    dates.sort(function(a,b){
+        return moment.utc(a).diff(moment.utc(b));
+    });
+
+    start_date = dates[0];
+    end_date = dates.slice(-1).pop();
+
+    $('#start_date').data("DateTimePicker").date(new Date(start_date));
+    $('#end_date').data("DateTimePicker").date(new Date(end_date));
+
+
+    console.log(dates);
+    console.log(start_date);
+    console.log(end_date);
 };
 
 PhotobumAdmin.viewAlbums = function() {
@@ -43,14 +70,15 @@ PhotobumAdmin.addAlbum = function (info, btn) {
     var form_data = {
         id: $('#id').val(),
         name: $('#name').val(),
-        start_date: $('#start_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
-        end_date: $('#end_date').data("DateTimePicker").date().utc().format("YYYY-MM-DD HH:mm:ss"),
+        start_date: $('#start_date').data("DateTimePicker").date().format("YYYY-MM-DD HH:mm:ss"),
+        end_date: $('#end_date').data("DateTimePicker").date().format("YYYY-MM-DD HH:mm:ss"),
         location_name: $('#location_name').val(),
         locations: $('#add_album .album_loc').serializeArray(),
         album_images: $('#add_album .img_url').map(function(){
             return {
                 name: $(this).attr('name'),
                 weight: $(this).data('weight'),
+                file_type: $(this).data('type'),
                 value: $(this).val()
             }
         }).get(),

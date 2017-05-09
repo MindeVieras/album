@@ -1,6 +1,9 @@
 {% extends 'Admin/base.html' %}
 {% block content %}
 <div class="container">
+
+    <button type="button" class="btn btn-primary" data-size="album-edit" data-remote="/admin/albums/add">Add Album</button>
+    
     <div class="albums-container">
     
         {% for row in data %}
@@ -25,8 +28,6 @@
         {% endfor %}
 
     </div>
-
-    <button type="button" class="btn btn-primary" data-size="album-edit" data-remote="/admin/albums/add">Add Album</button>
 
 </div>
 

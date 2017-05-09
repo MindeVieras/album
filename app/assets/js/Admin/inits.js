@@ -219,6 +219,21 @@ Photobum.initDropzone = function() {
 
             i = 1;
             this.on("addedfile", function(file) {
+                console.log(file);
+
+                if(file.type.includes('image')){                
+                    EXIF.getData(file, function() {
+                        var date = EXIF.getTag(this, 'DateTimeOriginal');
+                        var make = EXIF.getTag(this, 'Make');
+                        var model = EXIF.getTag(this, 'Model');
+                        var allMetaData = EXIF.getAllTags(this);
+                        var allMetaDataSpan = document.getElementById("allMetaDataSpan");
+                        //console.log(allMetaData);
+
+                        $(file.previewElement).find('.file-date-taken').text(Photobum.convertExifDate(date));
+                        $(file.previewElement).find('.make-model').text(make+' ('+model+')');
+                    });
+                }
 
                 var preview = $(file.previewElement);
                 preview.attr('data-index', i++);
@@ -227,7 +242,17 @@ Photobum.initDropzone = function() {
             this.on("success", function(file, response) {
                 indx = $(file.previewElement).attr('data-index');
                 w  = indx - 1;
-                field.append('<input name="img_url[]" data-index="'+indx+'" data-weight="'+w+'" class="img_url img_weight" value="'+response.location+'">');
+                type = file.type.includes('image') ? 'image' : 'video';
+                field.append('<input name="img_url[]" data-type="'+type+'" data-index="'+indx+'" data-weight="'+w+'" class="img_url img_weight" value="'+response.location+'">');
+                if(type == 'video'){
+                    var basePath = $('#base_path').val();
+                    var videoPath = response.location.substring(basePath.length);
+                    var video = '<video class="saved-file" width="320" height="210" controls data-thumb-org="'+videoPath+'"><source src="'+videoPath+'" type="video/mp4">Your browser does not support HTML5 video.</video>';
+                    $(file.previewElement).find('.preview').append(video);
+                    $(file.previewElement).addClass('video-preview-item');
+                }
+                $(file.previewElement).find('.progress-wrapper').hide();
+                $(file.previewElement).find('.file-status').show();
             });
             this.on("removedfile", function(file) {
                 indx = $(file.previewElement).attr('data-index');
@@ -239,9 +264,10 @@ Photobum.initDropzone = function() {
 
         },
         url: "/api/upload",
-        thumbnailWidth: 240,
-        thumbnailHeight: 175,
-        parallelUploads: 10,
+        thumbnailWidth: 320,
+        thumbnailHeight: 210,
+        parallelUploads: 3,
+        acceptedFiles: ".jpg,.jpeg,.png,.gif,.mp4,.mkv,.avi",
         previewTemplate: $('#template').html(),
         headers: { 'Accept': "*/*" },
         previewsContainer: "#previews",

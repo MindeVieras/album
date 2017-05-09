@@ -21,6 +21,7 @@ class Reports extends Admin{
         $template = $this->twig->loadTemplate('Admin/Reports/reports.html');
         echo $template->render([
         	'dir_status' => $this->getDirStatus(),
+            'timezone' => date_default_timezone_get(),
             'page' => $this->page,
             'user' => $this->user
         ]);
@@ -34,8 +35,29 @@ class Reports extends Admin{
         ]);
     }
 
+    public function videos()
+    {
+        $template = $this->twig->loadTemplate('Admin/Reports/videos.html');
+        echo $template->render([
+            'page' => $this->page,
+            'videos' => $this->getVideosStatus()
+        ]);
+    }
+
     public function getDirStatus(){
-        $dirs = array('cache', 'uploads', 'media', 'media'.DS.'albums', 'media'.DS.'persons', 'media'.DS.'users');
+        $dirs = array(
+            'cache',
+            'uploads',
+            'media',
+            'media'.DS.'albums',
+            'media'.DS.'persons',
+            'media'.DS.'users',
+            'media'.DS.'videos',
+            'media'.DS.'videos'.DS.'small',
+            'media'.DS.'videos'.DS.'medium',
+            'media'.DS.'videos'.DS.'hd',
+            'media'.DS.'videos'.DS.'fullhd'
+        );
         
         // check directories
         foreach ($dirs as $d) {
@@ -60,6 +82,12 @@ class Reports extends Admin{
             $data[] = $upl_dir;
         }
 
-    	return $data;
+        return $data;
+    }
+
+    public function getVideosStatus(){
+
+        $videos = $this->db->exec("SELECT * FROM media WHERE file_type = 'video'");
+        return $videos;
     }
 }

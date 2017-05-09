@@ -1,0 +1,26 @@
+{% extends 'Admin/base.html' %}
+{% block content %}
+
+{% set dir_status = dir_status %}
+
+<div class="container">
+
+  <div class="panel">
+    
+    <div class="header">
+        <h1>Video Status</h1>
+    </div>
+    <div class="panel-content" id="albums-colors">
+    
+        {% for v in videos %}
+            <div class="video-item">
+                {{v.file_url}}
+            </div>
+        {% endfor %}
+    </div>
+
+    {{timezone}}
+    
+    </div>
+</div>
+{% endblock content%}

@@ -34,6 +34,7 @@ class Twig extends \Twig_Environment
         $this->addExtension(new \Twig_Extensions_Extension_Text());
         $this->addGlobal('on_ready', null);
 
+        // Image function
         $func = new \Twig_SimpleFunction(
             'img',
             function ($url, $width, $height) {
@@ -48,6 +49,26 @@ class Twig extends \Twig_Environment
                     return '/default.png';
                 } else {
                     return $cache_file;
+                }
+            }
+        );
+        $this->addFunction($func);
+
+        // Video function
+        $func = new \Twig_SimpleFunction(
+            'video',
+            function ($url, $size) {
+
+                //$path = dirname($url);
+                $name = basename($url);
+                $style_path = DS.'media'.DS.'videos'.DS.$size;
+
+                $sized_file = $style_path.DS.$name;
+
+                if(!file_exists(getcwd().$sized_file)){
+                    return $url;
+                } else {
+                    return $sized_file;
                 }
             }
         );
