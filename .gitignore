@@ -1,27 +1,23 @@
-/vendor/
-.idea/
-bower_components/
+vendor
+bower_components
+node_modules
+
 *.js.map
 *.css.map
 *.orig
 
-node_modules/
-/LocalConfig.php
-*.log
-.sass-cache/
-*.scssc
+LocalConfig.php
 
-.ftppass
+*.log
+.sass-cache
+*.scssc
 
 *.DS_Store
 
-/cache/
-/build/
-/assets/
-/uploads/*
-/media/albums/*
-/media/styles/*
-
+cache
+assets
+uploads
+media
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
