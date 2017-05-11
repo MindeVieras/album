@@ -2,7 +2,18 @@
 {% block content %}
 <div class="container">
 
-    <button type="button" class="btn btn-primary" data-size="album-edit" data-remote="/admin/albums/add">Add Album</button>
+    <div id="toolbar">
+        <button type="button" class="btn btn-primary" data-size="album-edit" data-remote="/admin/albums/add">Add Album</button>
+
+        <div class="filters pull-right">
+            <select class="form-control filter-year">
+                {% for y in years %}
+                <option value="{{y.year}}">{{y.year}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
     
     <div class="albums-container">
     

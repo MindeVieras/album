@@ -68,6 +68,9 @@ h1,h2,h3,h4,h5,h6{
 
 .container{
 	padding: 20px 15px;
+  @include mobile {
+    padding: 10px 5px;
+  }
 }
 
 .panel{

@@ -37,7 +37,7 @@ Photobum.initView = function() {
                 type: "POST",
                 data: img_data,
                 url: '/api/utilities/generate-thumb',
-                async: false,
+                async: true,
                 dataType: "json",
                 success: function (data) {
                     //console.log(data);
@@ -56,6 +56,50 @@ Photobum.initView = function() {
     
 
 
+};
+
+Photobum.initFilters = function() {
+    var filterCont = $('#toolbar .filters');
+    if(filterCont.length){
+        filterCont.addClass('scd');
+
+        var yearFilter = filterCont.find('.filter-year');
+
+        // set initial album list filter
+        $('.albums-container').empty().append('<div class="loader-spinner">loading...</div>');
+        $.ajax({
+            url: '/admin/albums/get/date/'+$(yearFilter).val(),
+            success: function(html) {
+                $('.albums-container').empty().append(html);
+                Photobum.initFreewall();
+            }
+        });
+
+        // Year filter event
+        yearFilter.change(function() {
+
+            console.log(this.value);
+
+            //return false;
+
+            //url = $(this).find('a').attr('href');
+
+            $('.albums-container').empty().append('<div class="loader-spinner">loading...</div>');
+
+            //$('ul.letters-tabs li').removeClass('active');
+            //$(this).addClass('active');
+
+            $.ajax({
+                url: '/admin/albums/get/date/'+this.value,
+                success: function(html){
+                    $('.albums-container').empty().append(html);
+                    Photobum.initFreewall();
+                }
+            });
+
+            return false;
+        });
+    }
 };
 
 Photobum.initDotDtoDot = function() {
@@ -155,16 +199,17 @@ Photobum.initFreewall = function () {
     });
 
     var albumsWall = new Freewall('.albums-container');
-    albumsWall.fitWidth();
     albumsWall.reset({
         selector: '.item',
         animate: true,
-        cellW: 200,
-        cellH: 'auto',
+        cellW: 220,
+        cellH: 150,
         onResize: function() {
-            albumsWall.fitWidth();
+            console.log(this);
+            albumsWall.refresh();
         }
     });
+    albumsWall.fitWidth();
 
 };
 
@@ -267,7 +312,7 @@ Photobum.initDropzone = function() {
         thumbnailWidth: 320,
         thumbnailHeight: 210,
         parallelUploads: 3,
-        acceptedFiles: ".jpg,.jpeg,.png,.gif,.mp4,.mkv,.avi",
+        acceptedFiles: ".jpg,.jpeg,.png,.gif,.mp4,.mpg,.mkv,.avi",
         previewTemplate: $('#template').html(),
         headers: { 'Accept': "*/*" },
         previewsContainer: "#previews",

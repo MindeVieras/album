@@ -13,7 +13,6 @@
   }
   .user-panel{
   	position: relative;
-    width: 210px;
     padding: 10px;
   	white-space: nowrap;
     overflow: hidden;
@@ -80,6 +79,7 @@ ul.sidebar-menu{
     display: block;
 		padding: 12px 5px 12px 15px;
     width: 207px;
+    height: 44px;
 		color: #b8c7ce;
 		border-left: 3px solid transparent;
     @include transition(0.3s ease-in);

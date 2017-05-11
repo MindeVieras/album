@@ -1,4 +1,6 @@
 PhotobumAdmin.albumsReady = function() {
+
+    
     //console.log('albums ready');
 
     // // make media sortable
@@ -50,14 +52,10 @@ PhotobumAdmin.updateDates = function() {
 
     $('#start_date').data("DateTimePicker").date(new Date(start_date));
     $('#end_date').data("DateTimePicker").date(new Date(end_date));
-
-
-    console.log(dates);
-    console.log(start_date);
-    console.log(end_date);
 };
 
 PhotobumAdmin.viewAlbums = function() {
+    Photobum.initFilters();
     //console.log('Viewing albums');
 };
 PhotobumAdmin.albumColorPicker = function() {
@@ -110,7 +108,8 @@ PhotobumAdmin.addAlbum = function (info, btn) {
             //return false;
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
-                Photobum.closeModal(true);
+                Photobum.closeModal();
+                Photobum.initFilters();
             }
             else {
                 $('.alertholder').text(data.msg).addClass('alert').addClass('alert-danger');

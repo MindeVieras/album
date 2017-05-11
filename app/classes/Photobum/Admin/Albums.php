@@ -2,7 +2,6 @@
 
 namespace Photobum\Admin;
 
-
 use Photobum\Utilities\General;
 use DB\SQL\Mapper;
 use Photobum\Config;
@@ -24,10 +23,26 @@ class Albums extends Admin{
     public function view($params){
         $this->auth();
         $this->twig->onReady('PhotobumAdmin.viewAlbums');
+        $this->years = $this->db->exec("SELECT DISTINCT(YEAR(start_date)) as year FROM albums ORDER BY start_date DESC");
         $template = $this->twig->loadTemplate('Admin/Album/view.html');
         echo $template->render([
             'page' => $this->page,
-            'data' => $this->getAlbums(),
+            'years' => $this->years,
+            // 'data' => $this->getAlbums(),
+            //'data' => $this->getAlbums(),
+            'user' => $this->user
+        ]);
+    }
+
+    public function get($params){
+
+        $this->auth();
+        //ddd($params);
+        $date = $params['date'];
+        $template = $this->twig->loadTemplate('Admin/Album/list-item.html');
+        echo $template->render([
+            'page' => $this->page,
+            'data' => $this->getAlbums($date),
             'user' => $this->user
         ]);
     }
@@ -252,31 +267,31 @@ class Albums extends Admin{
         General::flushJsonResponse([ack=>'Error', 'msg'=>'Could not delete item']);
     }
 
-    private function getAlbums(){
+    private function getAlbums($date){
 
-        $albums = $this->db->exec('SELECT 
+        $albums = $this->db->exec("SELECT 
                                         albums.*,
                                         urls.url,
                                         colors.code
                                     FROM
                                         albums
-                                        JOIN urls ON albums.id = urls.type_id AND urls.type = \'album\'
+                                        JOIN urls ON albums.id = urls.type_id AND urls.type = 'album'
                                         JOIN colors ON albums.color = colors.id
-                                    ORDER BY start_date DESC LIMIT 20');
+                                    WHERE YEAR(albums.start_date) = '$date'
+                                    ORDER BY created DESC LIMIT 200");
         //ddd($albums);
 
         foreach ($albums as $a) {
 
-            $ds = DIRECTORY_SEPARATOR;
             $date = new DateTime($a['start_date']);
-            $date_path = $date->format('Y'.$ds.'m'.$ds.'d');
+            $date_path = $date->format('Y'.DS.'m'.DS.'d');
             $name = \Web::instance()->slug($a['name']);
             $cid = $a['color'];
 
             $d['id'] = $a['id'];
             $d['name'] = $a['name'];
             $d['date'] = $date->format('Y-m-d H:i:s');
-            $d['media_dir'] = getcwd().$ds.'media'.$ds.'albums'.$ds.$date_path.$ds.$name;
+            $d['media_dir'] = getcwd().DS.'media'.DS.'albums'.DS.$date_path.DS.$name;
             $d['url'] = $a['url'];
             $d['color'] = $a['code'];
             $d['created'] = $a['created'];

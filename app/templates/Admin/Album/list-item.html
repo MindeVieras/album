@@ -1,0 +1,23 @@
+{% for row in data %}
+<div class="item{% if row.private == 0 %} private{% endif %}" style="border-top:5px solid #{{row.color}}">
+    
+    <div class="title">{{row.name}}</div>
+
+    <button type="button" class="btn btn-danger btn-xs btn-delete-album" data-dir="{{row.media_dir}}" data-id="{{row.id}}" data-url="{{row.url}}" data-name="{{row.name}}" data-function="PhotobumAdmin.deleteAlbum">
+        <i class="fa fa-remove" aria-hidden="true"></i>
+    </button>
+
+    {% set media = row.media %}
+    {% for m in media %}
+        <img width="55" src="{{img(m.url, 500, 500)}}" data-thumb="make" data-thumb-width="500" data-thumb-height="500" data-thumb-fit="no" data-thumb-org="{{m.url}}">
+    {% endfor %}
+    
+    {{row.date}}
+    <time data-no-date="Never" data-utc="{{row.created}}" class="localdate timeago" datetime="{{row.created}}"></time>
+
+        <button type="button" class="btn btn-primary pull-right" data-size="album-edit" data-remote="/admin/albums/edit/id/{{row.id}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+        
+        <a type="button" class="btn btn-default pull-right" rel="noopener noreferrer" target="_blank" href="{{row.url}}" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a>
+
+</div>
+{% endfor %}
