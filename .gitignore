@@ -22,3 +22,8 @@ node_modules/
 /media/albums/*
 /media/styles/*
 
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
