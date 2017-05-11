@@ -14,7 +14,6 @@ LocalConfig.sample.php
 LICENSE
 README.md
 
-composer.json
 composer.lock
 
 *.log
