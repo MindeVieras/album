@@ -30,7 +30,7 @@ media
 
 .gitignore
 
-Gruntfile.js
+GruntFile.js
 bower.json
 package.json
 
