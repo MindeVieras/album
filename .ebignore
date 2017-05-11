@@ -24,7 +24,10 @@ composer.lock
 
 cache
 uploads
-/media/*
+media/albums
+media/persons
+media/users
+media/videos
 
 .elasticbeanstalk
 .git
