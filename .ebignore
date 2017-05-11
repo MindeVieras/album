@@ -7,6 +7,13 @@ node_modules
 *.orig
 
 LocalConfig.php
+LocalConfig.sample.php
+
+LICENSE
+README.md
+
+composer.json
+composer.lock
 
 *.log
 .sass-cache
