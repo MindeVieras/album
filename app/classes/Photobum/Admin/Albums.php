@@ -7,6 +7,9 @@ use DB\SQL\Mapper;
 use Photobum\Config;
 use \DateTime;
 
+use Photobum\Utilities\S3\Move;
+use Photobum\Utilities\S3\Delete;
+
 class Albums extends Admin{
 
     public function __construct(){
@@ -28,8 +31,6 @@ class Albums extends Admin{
         echo $template->render([
             'page' => $this->page,
             'years' => $this->years,
-            // 'data' => $this->getAlbums(),
-            //'data' => $this->getAlbums(),
             'user' => $this->user
         ]);
     }
@@ -59,12 +60,11 @@ class Albums extends Admin{
             $this->model->reset();
 
             $date = new DateTime($item['start_date']);
-            $date_path = $date->format('Y'.DS.'m'.DS.'d');
+            $date_path = $date->format('Y/m/d');
             $name = \Web::instance()->slug($item['name']);
 
-            $name_date_path = $date_path.DS.$name;
-            $media_path = DS.'media'.DS.'albums'.DS.$name_date_path;
-            $file_path = getcwd().DS.'media'.DS.'albums'.DS.$name_date_path;
+            $name_date_path = $date_path.'/'.$name;
+            $media_path = 'albums/'.$name_date_path;
 
             // Get album color id
             $ccode = $item['color'];
@@ -86,60 +86,36 @@ class Albums extends Admin{
                 if(!empty($item['files_remove'])){
                     foreach ($item['files_remove'] as $f) {
                         $f_url = $f['value'];
+                        // Remove DB entry
                         $this->db->exec("DELETE FROM media WHERE file_url = '$f_url'");
-                        $full_path = getcwd().$f_url;
-                        if(file_exists($full_path)){
-                            unlink($full_path);
-                        }
-
+                        // Remove file from S3
+                        (new Delete())->deleteObject($f_url);
                     }
                 }
 
                 //rename dir if album name or date chaged
                 $old_name = \Web::instance()->slug($this->model->name);
                 $date = new DateTime($this->model->start_date);
-                $old_date = $date->format('Y'.DS.'m'.DS.'d');
-                $old_path = $old_date.DS.$old_name;
+                $old_date = $date->format('Y/m/d');
+                $old_path = $old_date.'/'.$old_name;
 
                 $nameChanged = ($old_path != $name_date_path) ? true : false;
 
                 if($nameChanged && (!empty($item['album_images_db']))){
                     
                     // get db media files
-                    $db_files = $this->db->exec("SELECT * FROM media WHERE type_id = $id");
+                    $db_files = $this->db->exec("SELECT file_url FROM media WHERE type_id = $id");
                     $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
 
                     $med = $this->initOrm('media', true);
                     foreach ($db_urls as $row) {
                         $med->load(['type_id=? and file_url=?', $id, $row]);
                         $new_url = str_replace($old_path, $name_date_path, $med->file_url);
+                        //rename objects on S3
+                        (new Move())->moveObject($row, $new_url);
                         $med->file_url = $new_url;
                         $med->save();
-                    }
-                    
-                    //rename dir
-                    $old_dir_path = str_replace($name_date_path, $old_path, $file_path);
-
-                    // Get array of all source files
-                    $files = scandir($old_dir_path);
-                    // Create new directory
-                    if (!file_exists($file_path)) {
-                        mkdir($file_path, 0777, true);
-                    }
-                    //sd($old_dir_path, $file_path);
-                    foreach ($files as $file) {
-                        if (in_array($file, array(".",".."))) continue;
-                        // If we copied this successfully, mark it for deletion
-                        if (copy($old_dir_path.DS.$file, $file_path.DS.$file)) {
-                            $delete[] = $old_dir_path.DS.$file;
-                        }
-                    }
-                    // Delete all successfully-copied files
-                    foreach ($delete as $file) {
-                        if(file_exists($file)){unlink($file);}
-                    }
-                    // Delete old directory
-                    if(file_exists($old_dir_path)){rmdir($old_dir_path);}
+                    }    
                 }
             }
 
@@ -154,25 +130,21 @@ class Albums extends Admin{
 
             // rename files to dir and save media urls
             if(!empty($item['album_images'])){
-                
-                // make media DIR
-                if (!file_exists($file_path)) {
-                    mkdir($file_path, 0777, true);
-                }
 
                 // rename files
                 foreach ($item['album_images'] as $file) {
                     //sd($file);
                     $tmp_file = $file['value'];
                     $file_type = $file['file_type'];
-                    $file_name = basename($tmp_file);
+                    $file_name = $file['filename'];
+                    $file_path = $media_path.'/'.$file_name;
 
-                    // move files
-                    rename($tmp_file, $file_path.DS.$file_name);
+                    // move uploaded files in S3
+                    $movres = (new Move())->moveObject($tmp_file, $file_path);
 
                     // save media urls
                     $med = $this->initOrm('media', true);
-                    $med->file_url = $media_path.DS.$file_name;
+                    $med->file_url = $file_path;
                     $med->file_type = $file_type;
                     $med->type = 'album';
                     $med->type_id = $this->model->id;
@@ -180,6 +152,7 @@ class Albums extends Admin{
                     $med->save();
 
                 }
+                //sd($item);
             }
 
             // save locations

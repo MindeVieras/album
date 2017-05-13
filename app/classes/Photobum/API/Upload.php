@@ -3,6 +3,7 @@
 namespace Photobum\API;
 
 use Photobum\Utilities\General;
+use Photobum\Utilities\S3\Put;
 
 class Upload extends APIController
 {
@@ -44,18 +45,13 @@ class Upload extends APIController
                 ]);
             }
 
-            $targetPath = $this->f3->get('ROOT').DS.'uploads'.DS;
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             $newFilename = time().'-'.rand(1, 999999).'.'.$ext;
 
-            $targetFile = $targetPath.$newFilename;
-            
-            move_uploaded_file($file['tmp_name'], $targetFile);
+            $res = (new Put())->uploadAlbum($file['tmp_name'], $newFilename);
 
-            General::flushJsonResponse([
-                'ack' => 'ok',
-                'location' => $targetFile
-            ]);
+            General::flushJsonResponse(['ack'=>'ok', 'location'=> $res['UploadURL'], 'new_filename'=> $newFilename]);
+
         }
     }
 

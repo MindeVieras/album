@@ -14,10 +14,7 @@ LocalConfig.php
 
 *.DS_Store
 
-cache
 assets
-uploads
-media
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

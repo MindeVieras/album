@@ -64,7 +64,6 @@ class Config
         }
         
         DEFINE('HOST_TYPE', explode('.', $host)[0]);
-        ini_set('error_log', sprintf('/tmp/php-%s-errors.log', $router));
 
         if (substr(self::get('BASE_PATH'), -1) != '/') {
             die('BASE_PATH must end with a trailing slash');
@@ -94,6 +93,26 @@ class Config
         } else {
             throw new \Exception('Unknown variable: '.$var);
         }
+    }
+
+    // This function CREATES a AWS credential provider.
+    public static function get_aws_creds()
+    {
+        // This function IS the credential provider.
+        return function () {
+            // Use credentials from environment variables, if available
+            $key = self::get('AWS_ACCESS_KEY_ID');
+            $secret = self::get('AWS_SECRET_KEY');
+            if ($key && $secret) {
+                return Promise\promise_for(
+                    new Credentials($key, $secret)
+                );
+            }
+
+            $msg = 'Could not find environment variable '
+                . 'credentials in AWS_ACCESS_KEY_ID/AWS_SECRET_KEY';
+            return new RejectedPromise(new CredentialsException($msg));
+        };
     }
 
 }

@@ -37,19 +37,21 @@ class Twig extends \Twig_Environment
         // Image function
         $func = new \Twig_SimpleFunction(
             'img',
-            function ($url, $width, $height) {
+            function ($url) {
 
-                //$path = dirname($url);
-                $name = basename($url);
-                $style_path = DS.'cache'.DS.'styles'.DS.$width.'x'.$height;
+                return 'https://s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$url;
 
-                $cache_file = $style_path.DS.$name;
+                // //$path = dirname($url);
+                // $name = basename($url);
+                // $style_path = DS.'cache'.DS.'styles'.DS.$width.'x'.$height;
 
-                if(!file_exists(getcwd().$cache_file)){
-                    return '/default.png';
-                } else {
-                    return $cache_file;
-                }
+                // $cache_file = $style_path.DS.$name;
+
+                // if(!file_exists(getcwd().$cache_file)){
+                //     return '/default.png';
+                // } else {
+                //     return $cache_file;
+                // }
             }
         );
         $this->addFunction($func);

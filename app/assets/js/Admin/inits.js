@@ -14,45 +14,45 @@ Photobum.initView = function() {
     Photobum.initDropzone();
     Photobum.initMap();
 
-    $('*[data-thumb="make"]').each(function(i){
-        image = $(this);
-        src = image.attr('src');
-        image.attr('data-thumb-index', i);
-        if(src == '/default.png'){
+    // $('*[data-thumb="make"]').each(function(i){
+    //     image = $(this);
+    //     src = image.attr('src');
+    //     image.attr('data-thumb-index', i);
+    //     if(src == '/default.png'){
 
-            url = image.data('thumb-org');
-            width = image.data('thumb-width');
-            height = image.data('thumb-height');
-            fit = image.data('thumb-fit');
+    //         url = image.data('thumb-org');
+    //         width = image.data('thumb-width');
+    //         height = image.data('thumb-height');
+    //         fit = image.data('thumb-fit');
             
-            var img_data = {
-                url: url,
-                width: width,
-                height: height,
-                fit: fit
-            };
-            //console.log(img_data);
-            //return false;
-            $.ajax({
-                type: "POST",
-                data: img_data,
-                url: '/api/utilities/generate-thumb',
-                async: true,
-                dataType: "json",
-                success: function (data) {
-                    //console.log(data);
-                    //return false;
-                    if (data.ack == 'ok') {
-                        //console.log(data);
-                        image.attr('src', data.url);
-                    }
-                },
-                error: function(xhr){
-                    console.log(xhr);
-                }
-            });
-        }
-    });
+    //         var img_data = {
+    //             url: url,
+    //             width: width,
+    //             height: height,
+    //             fit: fit
+    //         };
+    //         //console.log(img_data);
+    //         //return false;
+    //         $.ajax({
+    //             type: "POST",
+    //             data: img_data,
+    //             url: '/api/utilities/generate-thumb',
+    //             async: true,
+    //             dataType: "json",
+    //             success: function (data) {
+    //                 //console.log(data);
+    //                 //return false;
+    //                 if (data.ack == 'ok') {
+    //                     //console.log(data);
+    //                     image.attr('src', data.url);
+    //                 }
+    //             },
+    //             error: function(xhr){
+    //                 console.log(xhr);
+    //             }
+    //         });
+    //     }
+    // });
     
 
 
@@ -264,7 +264,7 @@ Photobum.initDropzone = function() {
 
             i = 1;
             this.on("addedfile", function(file) {
-                console.log(file);
+                //console.log(file);
 
                 if(file.type.includes('image')){                
                     EXIF.getData(file, function() {
@@ -288,7 +288,7 @@ Photobum.initDropzone = function() {
                 indx = $(file.previewElement).attr('data-index');
                 w  = indx - 1;
                 type = file.type.includes('image') ? 'image' : 'video';
-                field.append('<input name="img_url[]" data-type="'+type+'" data-index="'+indx+'" data-weight="'+w+'" class="img_url img_weight" value="'+response.location+'">');
+                field.append('<input name="img_url[]" data-type="'+type+'" data-filename="'+response.new_filename+'" data-index="'+indx+'" data-weight="'+w+'" class="img_url img_weight" value="'+response.location+'">');
                 if(type == 'video'){
                     var basePath = $('#base_path').val();
                     var videoPath = response.location.substring(basePath.length);

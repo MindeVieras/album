@@ -75,6 +75,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         album_images: $('#add_album .img_url').map(function(){
             return {
                 name: $(this).attr('name'),
+                filename: $(this).data('filename'),
                 weight: $(this).data('weight'),
                 file_type: $(this).data('type'),
                 value: $(this).val()
@@ -105,7 +106,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         dataType: "json",
         success: function (data) {
             console.log(data);
-            //return false;
+            return false;
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal();
