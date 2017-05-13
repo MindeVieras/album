@@ -67,7 +67,7 @@ class General
         $f3 = \Base::instance();
         $db = $f3->get('DB');
 
-        $persons = $db->exec("SELECT id FROM persons_rel WHERE album_id = '$album_id' AND person_id = '$person_id'");
+        $persons = $db->exec("SELECT * FROM persons_rel WHERE album_id = '$album_id' AND person_id = '$person_id'");
         if(!empty($persons)){
             $is_chcked = 1;
         } else {
