@@ -23,4 +23,16 @@ class Delete extends Aws
         ]); 
     }
 
+    public function deleteObjects($keys)
+    {
+        $bucket = $this->bucket;
+
+        $this->s3->deleteObjects([
+            'Bucket' => $bucket,
+            'Delete' => [
+                'Objects' => $keys
+            ]
+        ]); 
+    }
+
 }

@@ -86,20 +86,25 @@ class Albums extends Admin{
 
                 // remove unvanted media files and db
                 if(!empty($item['files_remove'])){
+                    // Make array of files Urls on S3 
                     foreach ($item['files_remove'] as $f) {
                         $f_url = $f['value'];
-                        // Remove DB entry
+                        // Remove DB entries
                         $this->db->exec("DELETE FROM media WHERE file_url = '$f_url'");
-                        // Remove file from S3
-                        (new Delete())->deleteObject($f_url);
-
-                        // Remove style files on S3
-                        foreach ($styles as $style) {
-                            $style_path_delete = str_replace('albums/', 'styles/'.$style['name'].'/', $f_url);
-                            (new Delete())->deleteObject($style_path_delete);
+                        
+                        $keys[] = array(
+                            'Key' => $f_url
+                        );
+                        foreach ($styles as $s) {
+                            $style_file = str_replace('albums/', 'styles/'.$s['name'].'/', $f_url);
+                            $keys[] = array(
+                                'Key' => $style_file
+                            );
                         }
-
                     }
+                    // Remove files from S3
+                    (new Delete())->deleteObjects($keys);
+
                 }
 
                 //rename dir if album name or date chaged

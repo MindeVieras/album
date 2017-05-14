@@ -113,9 +113,9 @@ module.exports = function(grunt) {
             templates: {
                 files: ['./app/templates/**/*.html']
             },
-            classes: {
-                files: ['./app/classes/**/*.php']
-            },
+            // classes: {
+            //     files: ['./app/classes/**/*.php']
+            // },
             install: {
                 files: ['./install/assets/css/sass/**/*.scss', './install/assets/js/dev/**/*.js'],
                 tasks: [
@@ -128,7 +128,6 @@ module.exports = function(grunt) {
             }
         }
     });
-
 
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-contrib-sass');
