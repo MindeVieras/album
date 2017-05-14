@@ -14,12 +14,12 @@ module.exports = function(grunt) {
                     './assets/css/admin.min.css': './app/assets/sass/admin/main.scss'
                 }
             },
-            deploy: {
+            web: {
                 options: {
-                    style: 'compressed'
+                    style: 'expanded'
                 },
                 files: {
-                    './assets/css/admin.min.css': './app/assets/sass/admin/main.scss'
+                    './assets/css/web.min.css': './app/assets/sass/web/main.scss'
                 }
             },
             install: {
@@ -58,6 +58,19 @@ module.exports = function(grunt) {
                     sourceMap: true
                 }
             },
+            web: {
+                files: {
+                    './assets/js/web.min.js': [
+                        './app/assets/js/Web/*.js'
+                    ]
+                },
+                options: {
+                    beauty: true,
+                    mangle: false,
+                    compress: false,
+                    sourceMap: true
+                }
+            },
             install: {
                 files: {
                     './install/assets/js/install.min.js': [
@@ -72,64 +85,29 @@ module.exports = function(grunt) {
                 }
             }
         },
-        'ftp-deploy': {
-            build: {
-            auth: {
-              host: '194.135.87.101',
-              port: 21,
-              authKey: 'key1'
-            },
-            src: '/Users/minde/Sites/album/',
-            dest: '/public_html/album',
-            exclusions: [
-                '/Users/minde/Sites/album/bower_components',
-                '/Users/minde/Sites/album/node_modules',
-                '/Users/minde/Sites/album/build',
-                '/Users/minde/Sites/album/vendor',
-
-                '/Users/minde/Sites/album/media',
-                '/Users/minde/Sites/album/cache',
-                '/Users/minde/Sites/album/uploads',
-                '/Users/minde/Sites/album/app/assets',
-                '/Users/minde/Sites/album/assets/fonts',
-                '/Users/minde/Sites/album/assets/tinymce',
-                '/Users/minde/Sites/album/assets/css/font-awesome.min.css',
-                '/Users/minde/Sites/album/assets/js/bower.js',
-
-                //'/Users/minde/Sites/album/install',
-                '/Users/minde/Sites/album/install/assets/css/sass',
-                '/Users/minde/Sites/album/install/assets/js/dev',
-
-                '/Users/minde/Sites/album/**/*.map',
-                '/Users/minde/Sites/album/**/.DS_Store',
-                '/Users/minde/Sites/album/**/Thumbs.db',
-                '/Users/minde/Sites/album/.git',
-                '/Users/minde/Sites/album/.sass-cache',
-                '/Users/minde/Sites/album/.ftppass',
-                '/Users/minde/Sites/album/.gitignore',
-                '/Users/minde/Sites/album/npm-debug.log',
-                '/Users/minde/Sites/album/bower.json',
-                '/Users/minde/Sites/album/composer.lock',
-                '/Users/minde/Sites/album/GruntFile.js',
-                '/Users/minde/Sites/album/LICENSE',
-                '/Users/minde/Sites/album/LocalConfig.php',
-                '/Users/minde/Sites/album/LocalConfig.sample.php',
-                '/Users/minde/Sites/album/package.json',
-                '/Users/minde/Sites/album/README.md',
-                ]
-            }
-        },
         watch: {
-            js: {
+            js_admin: {
                 files: ['./app/assets/js/Admin/**/*.js'],
                 tasks : [
                     'uglify:admin'
                 ]
             },
-            sass: {
-                files: ['./app/assets/sass/**/*.scss'],
+            js_web: {
+                files: ['./app/assets/js/Web/**/*.js'],
+                tasks : [
+                    'uglify:web'
+                ]
+            },
+            sass_admin: {
+                files: ['./app/assets/sass/admin/**/*.scss'],
                 tasks: [
                     'sass:admin'
+                ]
+            },
+            sass_web: {
+                files: ['./app/assets/sass/web/**/*.scss'],
+                tasks: [
+                    'sass:web'
                 ]
             },
             templates: {
@@ -155,7 +133,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-concat');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-ftp-deploy');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Task definition
@@ -163,18 +140,16 @@ module.exports = function(grunt) {
         'watch'
     ]);
 
-    grunt.registerTask('deploy', [
-        'sass:install',
-        'sass:deploy',
-        'uglify:install',
-        'uglify:admin',
-        'ftp-deploy'
-    ]);
-
     grunt.registerTask('admin', [
         'sass:admin',
         'bower_concat:admin',
         'uglify:admin',
+        'watch'
+    ]);
+
+    grunt.registerTask('web', [
+        'sass:web',
+        'uglify:web',
         'watch'
     ]);
 

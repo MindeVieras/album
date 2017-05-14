@@ -6,15 +6,12 @@
   "directories": {
     "test": "tests"
   },
-  "dependencies": {
-    "grunt-bower-concat": "^1.0.0",
-    "grunt-contrib-uglify": "^2.2.0",
-    "grunt-ftp-deploy": "^0.1.10"
-  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0"
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-bower-concat": "^1.0.0",
+    "grunt-contrib-uglify": "^2.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
