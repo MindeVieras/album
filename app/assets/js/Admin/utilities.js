@@ -82,6 +82,7 @@ Photobum.openModal = function (opts, btn) {
         success: function (data) {
             $(target).find('.modal-content').html(data);
             Photobum.initView();
+            //window.history.forward();
         },
         error: function () {
             $(target).modal('hide');

@@ -13,17 +13,16 @@ class Put extends Aws
         $this->s3 = $this->getS3();
     }
 
-    public function uploadAlbum($path, $name)
+    public function uploadAlbum($path, $dest)
     {
         $bucket = $this->bucket;
-        $result = self::putObject($bucket, 'uploads/'.$name, $path);
+        $result = self::putObject($bucket, $dest, $path);
         $result['UploadURL'] = $this->localisePath($result['ObjectURL']);
         return $result;
     }
 
     public function putObject($bucket, $key, $source)
     {
-        $mime = image_type_to_mime_type(exif_imagetype($source));
         $result = $this->s3->putObject([
             'ACL' => 'public-read',
             'Bucket' => $bucket,

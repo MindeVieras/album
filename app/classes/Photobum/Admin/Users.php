@@ -22,7 +22,7 @@ class Users extends Admin
 
     public function view($params)
     {
-        $this->auth();
+        $this->auth(100);
         $this->results = $this->db->exec("SELECT * FROM users ORDER BY id ASC LIMIT 45");
         $template = $this->twig->loadTemplate('Admin/User/view.html');
         echo $template->render(array(
@@ -35,7 +35,7 @@ class Users extends Admin
 
     public function add()
     {
-        $this->auth();
+        $this->auth(100);
         if ($this->f3->get('VERB') == 'POST') {
             $user = $this->f3->get('POST');
             $editMode = $user['id'] ? true : false;
@@ -130,7 +130,7 @@ class Users extends Admin
 
     public function edit($params)
     {
-        $this->auth();
+        $this->auth(100);
         $this->model->load(['id=?', $params['id']]);
         $template = $this->twig->loadTemplate('Admin/User/edit.html');
         echo $template->render([
@@ -142,7 +142,7 @@ class Users extends Admin
 
     public function delete($params)
     {
-        $this->auth();
+        $this->auth(100);
         if ($this->f3->get('VERB') == 'DELETE') {
             $this->model->load(['id=?', $params['id']]);
             if(!$this->model->dry()){

@@ -285,6 +285,7 @@ Photobum.initDropzone = function() {
 
             });
             this.on("success", function(file, response) {
+                console.log(response);
                 indx = $(file.previewElement).attr('data-index');
                 w  = indx - 1;
                 type = file.type.includes('image') ? 'image' : 'video';
@@ -311,7 +312,7 @@ Photobum.initDropzone = function() {
         url: "/api/upload",
         thumbnailWidth: 320,
         thumbnailHeight: 210,
-        parallelUploads: 3,
+        parallelUploads: 2,
         acceptedFiles: ".jpg,.jpeg,.png,.gif,.mp4,.mpg,.mkv,.avi",
         previewTemplate: $('#template').html(),
         headers: { 'Accept': "*/*" },

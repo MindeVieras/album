@@ -16,6 +16,19 @@ LocalConfig.php
 
 assets
 
+# Uploads Files
+uploads/*
+!uploads/.htaccess
+!uploads/styles/.htaccess
+!uploads/styles/icon/.htaccess
+!uploads/styles/thumb/.htaccess
+!uploads/styles/small/.htaccess
+!uploads/styles/medium/.htaccess
+!uploads/styles/large/.htaccess
+!uploads/styles/hd/.htaccess
+!uploads/styles/fullhd/.htaccess
+!uploads/styles/uhd/.htaccess
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

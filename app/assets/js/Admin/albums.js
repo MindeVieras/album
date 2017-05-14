@@ -106,7 +106,7 @@ PhotobumAdmin.addAlbum = function (info, btn) {
         dataType: "json",
         success: function (data) {
             console.log(data);
-            return false;
+            //return false;
             if (data.ack == 'ok') {
                 $('.alertholder').text('').removeClass('alert').removeClass('alert-danger');
                 Photobum.closeModal();

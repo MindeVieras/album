@@ -21,8 +21,6 @@ class Delete extends Aws
             'Bucket' => $bucket,
             'Key'    => $key
         ]); 
-
-        //return $result;
     }
 
 }

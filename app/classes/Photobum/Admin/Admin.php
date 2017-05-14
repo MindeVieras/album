@@ -36,7 +36,7 @@ class Admin extends Base
 
     public function home()
     {
-        $this->auth();
+        $this->auth(25);
 
         $template = $this->twig->loadTemplate('Admin/dashboard.html');
         echo $template->render(array(

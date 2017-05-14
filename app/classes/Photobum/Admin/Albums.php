@@ -66,6 +66,8 @@ class Albums extends Admin{
             $name_date_path = $date_path.'/'.$name;
             $media_path = 'albums/'.$name_date_path;
 
+            $styles = $this->db->exec("SELECT * FROM media_styles ORDER BY id ASC");
+            
             // Get album color id
             $ccode = $item['color'];
             $cid = $this->db->exec("SELECT id FROM colors WHERE code = '$ccode' AND type = 'album'");
@@ -90,6 +92,13 @@ class Albums extends Admin{
                         $this->db->exec("DELETE FROM media WHERE file_url = '$f_url'");
                         // Remove file from S3
                         (new Delete())->deleteObject($f_url);
+
+                        // Remove style files on S3
+                        foreach ($styles as $style) {
+                            $style_path_delete = str_replace('albums/', 'styles/'.$style['name'].'/', $f_url);
+                            (new Delete())->deleteObject($style_path_delete);
+                        }
+
                     }
                 }
 
@@ -113,6 +122,12 @@ class Albums extends Admin{
                         $new_url = str_replace($old_path, $name_date_path, $med->file_url);
                         //rename objects on S3
                         (new Move())->moveObject($row, $new_url);
+                        // rename style files on S3
+                        foreach ($styles as $style) {
+                            $style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $med->file_url);
+                            $new_style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $new_url);
+                            (new Move())->moveObject($style_path, $new_style_path);
+                        }
                         $med->file_url = $new_url;
                         $med->save();
                     }    
@@ -139,8 +154,15 @@ class Albums extends Admin{
                     $file_name = $file['filename'];
                     $file_path = $media_path.'/'.$file_name;
 
-                    // move uploaded files in S3
-                    $movres = (new Move())->moveObject($tmp_file, $file_path);
+                    // move uploaded original files in S3
+                    (new Move())->moveObject($tmp_file, $file_path);
+
+                    // Move style files on S3
+                    foreach ($styles as $style) {
+                        $tmpStyleName = 'uploads/styles/'.$style['name'].'/'.$file_name;
+                        $perStyleName = 'styles/'.$style['name'].'/'.str_replace('albums/', '', $file_path);
+                        (new Move())->moveObject($tmpStyleName, $perStyleName);
+                    }
 
                     // save media urls
                     $med = $this->initOrm('media', true);
@@ -268,7 +290,7 @@ class Albums extends Admin{
             $d['url'] = $a['url'];
             $d['color'] = $a['code'];
             $d['created'] = $a['created'];
-            //$d['media'] = $this->getMedia($a['id'], 2);
+            $d['media'] = $this->getMedia($a['id'], 2);
 
             $data[] = $d;
         }

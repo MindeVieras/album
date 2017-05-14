@@ -12,7 +12,7 @@ $f3->map('/api/test', '\Photobum\API\Test');
 
 $f3->route('GET /api/utilities/generateslug', '\Photobum\API\Utilities->generateSlug');
 $f3->route('POST /api/utilities/collapse-menu', '\Photobum\API\Utilities->collapseMenu');
-$f3->route('POST /api/utilities/generate-thumb', '\Photobum\API\Utilities->generateThumb');
+//$f3->route('POST /api/utilities/generate-thumb', '\Photobum\API\Utilities->generateThumb');
 
 $f3->route('POST /api/utilities/fix-dir', '\Photobum\API\Utilities->fixDir');
 

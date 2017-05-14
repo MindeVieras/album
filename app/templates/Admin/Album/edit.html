@@ -69,7 +69,7 @@
                     
                     <span class="preview">
                         {% if m.file_type == 'image' %}
-                        <img class="saved-file" src="{{img(m.url, 320, 210)}}" data-thumb="make" data-thumb-width="320" data-thumb-fit="yes" data-thumb-height="210" data-thumb-org="{{m.url}}">
+                        <img class="saved-file" src="{{img(m.url, 'small')}}">
                         {% endif %}
                         {% if m.file_type == 'video' %}
                         <video class="saved-file" width="320" height="210" controls data-thumb-org="{{video(m.url, 'medium')}}">

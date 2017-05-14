@@ -9,7 +9,7 @@
 
     {% set media = row.media %}
     {% for m in media %}
-        <img width="55" src="{{img(m.url, 500, 500)}}" data-thumb="make" data-thumb-width="500" data-thumb-height="500" data-thumb-fit="no" data-thumb-org="{{m.url}}">
+        <img src="{{img(m.url, 'icon')}}">
     {% endfor %}
     
     {{row.date}}

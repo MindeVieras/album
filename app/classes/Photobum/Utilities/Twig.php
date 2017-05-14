@@ -37,21 +37,9 @@ class Twig extends \Twig_Environment
         // Image function
         $func = new \Twig_SimpleFunction(
             'img',
-            function ($url) {
-
-                return 'https://s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$url;
-
-                // //$path = dirname($url);
-                // $name = basename($url);
-                // $style_path = DS.'cache'.DS.'styles'.DS.$width.'x'.$height;
-
-                // $cache_file = $style_path.DS.$name;
-
-                // if(!file_exists(getcwd().$cache_file)){
-                //     return '/default.png';
-                // } else {
-                //     return $cache_file;
-                // }
+            function ($url, $style) {
+                $style_path = str_replace('albums/', 'styles/'.$style.'/', $url);
+                return 'https://s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$style_path;
             }
         );
         $this->addFunction($func);

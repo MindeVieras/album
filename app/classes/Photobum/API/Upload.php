@@ -16,6 +16,8 @@ class Upload extends APIController
 
     public function post()
     {        
+        $styles = $this->db->exec("SELECT * FROM media_styles ORDER BY id ASC");
+
         foreach($_FILES as $file) {
 
             if ($file['error']) {
@@ -47,10 +49,37 @@ class Upload extends APIController
 
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             $newFilename = time().'-'.rand(1, 999999).'.'.$ext;
+            $bucketDest = 'uploads/'.$newFilename;
+            $ec2Dest = getcwd().'/uploads/'.$newFilename;
 
-            $res = (new Put())->uploadAlbum($file['tmp_name'], $newFilename);
+            if(move_uploaded_file($file['tmp_name'], $ec2Dest)){
 
-            General::flushJsonResponse(['ack'=>'ok', 'location'=> $res['UploadURL'], 'new_filename'=> $newFilename]);
+                // Sent original file to S3
+                $res = (new Put())->uploadAlbum($ec2Dest, $bucketDest);
+
+                // Make temporary local EC2 UHD image to make other thumbs for less memory
+                $uhdImg = General::generateThumb($ec2Dest, $ec2Dest, 3840, 2160, false);
+                $uhdUrl = getcwd().'/uploads/styles/uhd/'.$newFilename;
+                rename($uhdImg, $uhdUrl);
+
+                // Generate styles and send to S3
+                foreach ($styles as $style) {
+                    $crop = ($style['crop'] == 1) ? true : false;
+                    $styleFilePath = 'uploads/styles/'.$style['name'].'/'.$newFilename;
+                    $ec2FilePath = getcwd().'/'.$styleFilePath;
+                    
+                    // Make temporary local thumb
+                    $thumbImg = General::generateThumb($uhdUrl, $ec2FilePath, $style['width'], $style['height'], $crop);
+
+                    (new Put())->uploadAlbum($thumbImg, $styleFilePath);
+                    if(file_exists($thumbImg)){
+                        unlink($thumbImg);
+                    }
+
+                }
+
+                General::flushJsonResponse(['ack'=>'ok', 'location'=> $res['UploadURL'], 'new_filename'=> $newFilename, 'tmp_uhd'=> $thumbImg]);
+            }
 
         }
     }
