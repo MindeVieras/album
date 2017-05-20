@@ -205,7 +205,7 @@ Photobum.initFreewall = function () {
         cellW: 220,
         cellH: 150,
         onResize: function() {
-            console.log(this);
+            //console.log(this);
             albumsWall.refresh();
         }
     });

@@ -4,7 +4,6 @@ namespace Photobum\Utilities\S3;
 use Aws\S3\S3Client;
 use Photobum\Config;
 use Photobum\Utilities\Aws;
-use Photobum\Utilities\S3\Delete;
 
 class Move extends Aws
 {
@@ -24,9 +23,6 @@ class Move extends Aws
             'Key' => $key,
             'CopySource' => "{$bucket}/{$src}"
         ]);
-
-        // deleteobject after copy
-        (new Delete())->deleteObject($src);
 
     }
 

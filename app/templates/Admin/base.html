@@ -5,7 +5,7 @@
 	{% include 'Admin/partials/metahead.html' %}
 </head>
 
-<body class="page-{{page.body_class}} {% if page.user_settings[0]['menu_collapsed'] == 1 %}sidebar-collapsed{% endif %}">
+<body class="page-{{page.body_class}} device-{{page.device}} {% if page.user_settings[0]['menu_collapsed'] == 1 %}sidebar-collapsed{% endif %}">
 
 {% include 'Admin/partials/modal.html' %}
 

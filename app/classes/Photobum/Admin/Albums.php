@@ -125,17 +125,25 @@ class Albums extends Admin{
                     foreach ($db_urls as $row) {
                         $med->load(['type_id=? and file_url=?', $id, $row]);
                         $new_url = str_replace($old_path, $name_date_path, $med->file_url);
+
+                        // make delete array for S3
+                        $del_keys[] = array('Key' => $row);
                         //rename objects on S3
                         (new Move())->moveObject($row, $new_url);
                         // rename style files on S3
                         foreach ($styles as $style) {
                             $style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $med->file_url);
                             $new_style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $new_url);
+                            // make tmp style files delete array for S3
+                            $del_keys[] = array('Key' => $style_path);
                             (new Move())->moveObject($style_path, $new_style_path);
                         }
                         $med->file_url = $new_url;
                         $med->save();
-                    }    
+                    }
+
+                    // Delete renamed old files from S3
+                    (new Delete())->deleteObjects($del_keys);
                 }
             }
 
@@ -159,6 +167,9 @@ class Albums extends Admin{
                     $file_name = $file['filename'];
                     $file_path = $media_path.'/'.$file_name;
 
+                    // make delete array for S3
+                    $del_keys[] = array('Key' => $tmp_file);
+                    
                     // move uploaded original files in S3
                     (new Move())->moveObject($tmp_file, $file_path);
 
@@ -166,6 +177,10 @@ class Albums extends Admin{
                     foreach ($styles as $style) {
                         $tmpStyleName = 'uploads/styles/'.$style['name'].'/'.$file_name;
                         $perStyleName = 'styles/'.$style['name'].'/'.str_replace('albums/', '', $file_path);
+
+                        // make tmp style files delete array for S3
+                        $del_keys[] = array('Key' => $tmpStyleName);
+
                         (new Move())->moveObject($tmpStyleName, $perStyleName);
                     }
 
@@ -179,7 +194,9 @@ class Albums extends Admin{
                     $med->save();
 
                 }
-                //sd($item);
+
+                // Delete tmp files from S3
+                (new Delete())->deleteObjects($del_keys);
             }
 
             // save locations
