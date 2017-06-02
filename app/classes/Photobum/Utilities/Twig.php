@@ -39,7 +39,7 @@ class Twig extends \Twig_Environment
             'img',
             function ($url, $style) {
                 $style_path = str_replace('albums/', 'styles/'.$style.'/', $url);
-                return 'https://s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$style_path;
+                return '//s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$style_path;
             }
         );
         $this->addFunction($func);
@@ -48,18 +48,8 @@ class Twig extends \Twig_Environment
         $func = new \Twig_SimpleFunction(
             'video',
             function ($url, $size) {
-
-                //$path = dirname($url);
-                $name = basename($url);
-                $style_path = DS.'media'.DS.'videos'.DS.$size;
-
-                $sized_file = $style_path.DS.$name;
-
-                if(!file_exists(getcwd().$sized_file)){
-                    return $url;
-                } else {
-                    return $sized_file;
-                }
+                $size_path = str_replace('albums/', 'videos/'.$size.'/', $url);
+                return '//s3-eu-west-1.amazonaws.com/images.album.mindelis.com/'.$size_path;
             }
         );
         $this->addFunction($func);

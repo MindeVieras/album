@@ -81,7 +81,15 @@ PhotobumAdmin.addAlbum = function (info, btn) {
                 value: $(this).val()
             }
         }).get(),
-        files_remove: $('#add_album .file_remove').serializeArray(),
+        files_remove: $('#add_album .file_remove').map(function(){
+            return {
+                name: $(this).attr('name'),
+                filename: $(this).data('filename'),
+                weight: $(this).data('weight'),
+                file_type: $(this).data('type'),
+                value: $(this).val()
+            }
+        }).get(),
         album_images_db: $('#add_album .img_url_db').map(function(){
             return {
                 media_id: $(this).data('id'),

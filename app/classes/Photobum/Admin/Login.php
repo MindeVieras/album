@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: carey
- * Date: 30/08/16
- * Time: 15:07
- */
 
 namespace Photobum\Admin;
 use Photobum\Utilities\General;

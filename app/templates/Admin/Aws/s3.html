@@ -1,0 +1,11 @@
+
+<ul class="s3-uploads directory">
+{% for u in uploads %}
+  <li>
+    {{u}}
+    <button data-url="{{u}}" data-function="PhotobumAdmin.s3DeleteObject" class="btn btn-xs btn-danger pull-right">
+      <i class="fa fa-times"></i>
+    </button>
+  </li>
+{% endfor %}
+</ul>

@@ -1,9 +1,9 @@
 <?php
-namespace Photobum\Utilities\S3;
+namespace Photobum\Utilities\Aws\S3;
 
 use Aws\S3\S3Client;
 use Photobum\Config;
-use Photobum\Utilities\Aws;
+use Photobum\Utilities\Aws\Aws;
 
 class Put extends Aws
 {

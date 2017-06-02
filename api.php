@@ -16,6 +16,9 @@ $f3->route('POST /api/utilities/collapse-menu', '\Photobum\API\Utilities->collap
 
 $f3->route('POST /api/utilities/fix-dir', '\Photobum\API\Utilities->fixDir');
 
+// Aws API
+$f3->route('POST /api/aws/s3/delete-object', '\Photobum\API\AwsAPI->s3_deleteObject');
+
 // Installr API
 //$f3->route('POST /api/installer/composer-get-status', '\Photobum\API\Installer->composerCheckStatus');
 

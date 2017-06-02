@@ -1,11 +1,11 @@
 <?php
-namespace Photobum\Utilities\S3;
+namespace Photobum\Utilities\Aws\S3;
 
 use Aws\S3\S3Client;
 use Photobum\Config;
-use Photobum\Utilities\Aws;
+use Photobum\Utilities\Aws\Aws;
 
-class Move extends Aws
+class Copy extends Aws
 {
 
     public function __construct() {
@@ -13,8 +13,9 @@ class Move extends Aws
         $this->s3 = $this->getS3();
     }
 
-    public function moveObject($src, $key)
+    public function copyObject($src, $key)
     {
+        //return $src.' + '.$key;
         $bucket = $this->bucket;
 
         $this->s3->copyObject([

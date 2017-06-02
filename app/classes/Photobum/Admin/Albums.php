@@ -7,8 +7,9 @@ use DB\SQL\Mapper;
 use Photobum\Config;
 use \DateTime;
 
-use Photobum\Utilities\S3\Move;
-use Photobum\Utilities\S3\Delete;
+use Photobum\Utilities\Aws\S3\Copy;
+use Photobum\Utilities\Aws\S3\Move;
+use Photobum\Utilities\Aws\S3\Delete;
 
 class Albums extends Admin{
 
@@ -49,7 +50,9 @@ class Albums extends Admin{
     }
 
     public function add(){
+        
         $this->auth();
+        
         if ($this->f3->get('VERB') == 'POST') {
             $item = $this->f3->get('POST');
 
@@ -65,12 +68,9 @@ class Albums extends Admin{
 
             $name_date_path = $date_path.'/'.$name;
             $media_path = 'albums/'.$name_date_path;
-
-            $styles = $this->db->exec("SELECT * FROM media_styles ORDER BY id ASC");
             
             // Get album color id
-            $ccode = $item['color'];
-            $cid = $this->db->exec("SELECT id FROM colors WHERE code = '$ccode' AND type = 'album'");
+            $cid = $this->db->exec('SELECT id FROM colors WHERE code = ? AND type = \'album\'', $item['color']);
 
             $id = $item['id'];
             $editMode = $id ? true : false;
@@ -86,25 +86,43 @@ class Albums extends Admin{
 
                 // remove unvanted media files and db
                 if(!empty($item['files_remove'])){
-                    // Make array of files Urls on S3 
+                    // Make array of files Urls on S3
                     foreach ($item['files_remove'] as $f) {
                         $f_url = $f['value'];
                         // Remove DB entries
                         $this->db->exec("DELETE FROM media WHERE file_url = '$f_url'");
                         
-                        $keys[] = array(
-                            'Key' => $f_url
-                        );
-                        foreach ($styles as $s) {
-                            $style_file = str_replace('albums/', 'styles/'.$s['name'].'/', $f_url);
-                            $keys[] = array(
-                                'Key' => $style_file
-                            );
+                        // Org file
+                        $keys[] = array('Key' => $f_url);
+
+                        // image styles array
+                        if ($f['file_type'] == 'image'){                        
+                            foreach ($this->img_styles as $s) {
+                                $style_file = str_replace('albums/', 'styles/'.$s['name'].'/', $f_url);
+                                $keys[] = array('Key' => $style_file);
+                            }
+                        }
+
+                        // Video sizes array
+                        if ($f['file_type'] == 'video'){                        
+                            foreach ($this->video_sizes as $s) {
+                                
+                                $vthumb = explode('.', $f['filename']);
+                                $videoThumbName = $vthumb[0];
+
+                                $size_file = str_replace('albums/', 'videos/'.$s.'/', $f_url);
+
+                                $st = str_replace($f['filename'], $videoThumbName.'-00001.jpg', $f_url);
+                                $size_thumb = str_replace('albums/', 'videos/'.$s.'/', $st);
+                                
+                                $keys[] = array('Key' => $size_file);
+                                $keys[] = array('Key' => $size_thumb);
+                            }
                         }
                     }
+                    //sd($keys);  
                     // Remove files from S3
                     (new Delete())->deleteObjects($keys);
-
                 }
 
                 //rename dir if album name or date chaged
@@ -118,32 +136,25 @@ class Albums extends Admin{
                 if($nameChanged && (!empty($item['album_images_db']))){
                     
                     // get db media files
-                    $db_files = $this->db->exec("SELECT file_url FROM media WHERE type_id = $id");
-                    $db_urls = array_map(function($row){return $row['file_url'];}, $db_files);
+                    $db_files = $this->db->exec('SELECT * FROM media WHERE type_id = ?', $id);
 
                     $med = $this->initOrm('media', true);
-                    foreach ($db_urls as $row) {
-                        $med->load(['type_id=? and file_url=?', $id, $row]);
+                    foreach ($db_files as $row) {
+                        // Rename db entries
+                        $med->load(['type_id=? and file_url=?', $id, $row['file_url']]);
                         $new_url = str_replace($old_path, $name_date_path, $med->file_url);
-
-                        // make delete array for S3
-                        $del_keys[] = array('Key' => $row);
-                        //rename objects on S3
-                        (new Move())->moveObject($row, $new_url);
-                        // rename style files on S3
-                        foreach ($styles as $style) {
-                            $style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $med->file_url);
-                            $new_style_path = str_replace('albums/', 'styles/'.$style['name'].'/', $new_url);
-                            // make tmp style files delete array for S3
-                            $del_keys[] = array('Key' => $style_path);
-                            (new Move())->moveObject($style_path, $new_style_path);
-                        }
                         $med->file_url = $new_url;
                         $med->save();
+
+                        // Make move array for S3
+                        $files['src'] = $row['file_url'];
+                        $files['type'] = $row['file_type'];
+                        $tmp_files[] = $files;
                     }
 
-                    // Delete renamed old files from S3
-                    (new Delete())->deleteObjects($del_keys);
+                    // Move files on S3
+                    (new Move())->moveObjects($tmp_files, $name_date_path);
+                    //sd($movres);
                 }
             }
 
@@ -161,42 +172,29 @@ class Albums extends Admin{
 
                 // rename files
                 foreach ($item['album_images'] as $file) {
-                    //sd($file);
-                    $tmp_file = $file['value'];
-                    $file_type = $file['file_type'];
-                    $file_name = $file['filename'];
-                    $file_path = $media_path.'/'.$file_name;
 
-                    // make delete array for S3
-                    $del_keys[] = array('Key' => $tmp_file);
-                    
-                    // move uploaded original files in S3
-                    (new Move())->moveObject($tmp_file, $file_path);
+                    $file_path = $media_path.'/'.$file['filename'];
 
-                    // Move style files on S3
-                    foreach ($styles as $style) {
-                        $tmpStyleName = 'uploads/styles/'.$style['name'].'/'.$file_name;
-                        $perStyleName = 'styles/'.$style['name'].'/'.str_replace('albums/', '', $file_path);
-
-                        // make tmp style files delete array for S3
-                        $del_keys[] = array('Key' => $tmpStyleName);
-
-                        (new Move())->moveObject($tmpStyleName, $perStyleName);
-                    }
-
-                    // save media urls
+                    //save media urls
                     $med = $this->initOrm('media', true);
                     $med->file_url = $file_path;
-                    $med->file_type = $file_type;
+                    $med->file_type = $file['file_type'];
                     $med->type = 'album';
                     $med->type_id = $this->model->id;
                     $med->weight = $file['weight'];
                     $med->save();
 
+
+                    $files['src'] = $file['value'];
+                    $files['type'] = $file['file_type'];
+
+                    $tmp_files[] = $files;
+
                 }
 
-                // Delete tmp files from S3
-                (new Delete())->deleteObjects($del_keys);
+                // Move files on S3
+                (new Move())->moveObjects($tmp_files, $name_date_path);
+                //sd($movres);
             }
 
             // save locations
@@ -327,13 +325,13 @@ class Albums extends Admin{
         foreach ($media as $m) {
             $medi['id'] = $m['id'];
             $medi['url'] = $m['file_url'];
-            $medi['file_type'] = $m['file_type'];
+            $medi['type'] = $m['file_type'];
             $medi['name'] = basename($m['file_url']);
             $medi['weight'] = $m['weight'];
             if(file_exists(getcwd().$m['file_url'])){            
                 $file_size = filesize(getcwd().$m['file_url']);
                 $medi['size'] = General::formatSizeUnits($file_size);
-                if($m['file_type'] == 'image'){
+                if($m['type'] == 'image'){
                     $exif = @exif_read_data(getcwd().$m['file_url']);
                     if($exif['DateTimeOriginal']){
                         $ex_date = new DateTime($exif['DateTimeOriginal']);

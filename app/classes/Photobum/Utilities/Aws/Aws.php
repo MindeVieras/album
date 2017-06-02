@@ -1,14 +1,15 @@
 <?php
 
-namespace Photobum\Utilities;
+namespace Photobum\Utilities\Aws;
 
 use Photobum\Config;
 use Aws\Sdk;
 
-class Aws
+class Aws extends \Photobum\Base
 {
     public function __construct()
     {
+        parent::__construct();
         $this->version = 'latest';
         $this->region = 'eu-west-1';
         $this->bucket = 'images.album.mindelis.com';
@@ -33,6 +34,10 @@ class Aws
 
     protected function getS3() {
         return $this->sdk->createS3();
+    }
+
+    protected function getTc() {
+        return $this->sdk->createElasticTranscoder();
     }
 
 

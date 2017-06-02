@@ -1,0 +1,14 @@
+{% extends 'Admin/base.html' %}
+{% block content %}
+
+<div id="tabs">
+  <ul>
+    <li data-url="/admin/awsconsole/info" data-function="PhotobumAdmin.changeAwsTab">Info</li>
+    <li data-url="/admin/awsconsole/s3" data-function="PhotobumAdmin.changeAwsTab">S3</li>
+  </ul>
+</div>
+
+<div class="container">
+</div>
+
+{% endblock content%}
