@@ -269,7 +269,7 @@ Photobum.initDropzone = function() {
         url: "/api/upload",
         thumbnailWidth: 320,
         thumbnailHeight: 210,
-        parallelUploads: 2,
+        parallelUploads: 1,
         acceptedFiles: ".jpg,.jpeg,.png,.gif,.mp4,.mpg,.mkv,.avi",
         previewTemplate: $('#template').html(),
         headers: { 'Accept': "*/*" },
